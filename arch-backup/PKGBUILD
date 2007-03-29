@@ -1,0 +1,29 @@
+# Contributor: Sergej Pupykin <ps@lx-ltd.ru>
+pkgname=arch-backup
+pkgver=0.7.1
+pkgrel=2
+pkgdesc="trivial backup scripts (ssh/smb support)"
+url="http://aur.archlinux.org/packages.php?do_Details=1&ID=5857"
+license="GPL"
+depends=(bash)
+backup=(etc/arch-backup.conf)
+source=(arch-backup.sh local-backup.sh smb-backup.sh ssh-backup.sh \
+	arch-backup.conf ssh-example.conf local-example.conf smb-example.conf \
+	common.inc)
+md5sums=('fa8de1d7b12ec71601b9bc1af756c44c' 'da5b8fc5c9b23036da4b9569a689d2f1'\
+         '78753516e432166eb98fb08a539d0ea0' '2e6c8bf6340f7c1b72bae1647bb93fbd'\
+         '1c60a7d764051d1ab7e193f590ea7269' 'e2900768fea0618fb8ecd9d977e95bd4'\
+         '55ef6c25b2a81a07e3f7672bc97f40d4' 'b7bc3693dbbe3f4d7781e6966bbf3f7f'\
+         '0daa8a63028e898d7f77cb81e9be9d77')
+
+build() {
+  install -D -m 0644 $startdir/src/arch-backup.conf $startdir/pkg/etc/arch-backup.conf && \
+  install -D -m 0755 $startdir/src/arch-backup.sh $startdir/pkg/usr/bin/arch-backup && \
+  install -D -m 0755 $startdir/src/ssh-backup.sh $startdir/pkg/usr/libexec/arch-backup/ssh && \
+  install -D -m 0755 $startdir/src/smb-backup.sh $startdir/pkg/usr/libexec/arch-backup/smb && \
+  install -D -m 0755 $startdir/src/local-backup.sh $startdir/pkg/usr/libexec/arch-backup/local && \
+  install -D -m 0644 $startdir/src/common.inc $startdir/pkg/usr/libexec/arch-backup/common.inc && \
+  install -D -m 0644 $startdir/src/local-example.conf $startdir/pkg/etc/arch-backup.d/_local-example && \
+  install -D -m 0644 $startdir/src/ssh-example.conf $startdir/pkg/etc/arch-backup.d/_ssh-example && \
+  install -D -m 0644 $startdir/src/smb-example.conf $startdir/pkg/etc/arch-backup.d/_smb-example
+}

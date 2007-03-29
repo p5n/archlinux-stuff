@@ -1,0 +1,15 @@
+# Contributor: Sergej Pupykin <ps@lx-ltd.ru>
+pkgname=aur-sync
+pkgver=0.1
+pkgrel=1
+pkgdesc="synchronize AUR"
+url="http://archlinux.org/"
+license="GPL"
+depends=(perl bash perl-timedate wget)
+backup=()
+source=(aur-sync.pl)
+md5sums=('6d861b0cff71d556f1f2b826dae01506')
+
+build() {
+  install -D -m 0755 $startdir/src/aur-sync.pl $startdir/pkg/usr/bin/aur-sync
+}
