@@ -1,0 +1,35 @@
+prochat proto
+qchat xor DPACKET_XOR
+tab source formatting (!!!)
+remove DCHARSET DPACKET_QCHAT
+tcp_www simple web server
+^R when buf not empty (!)
+fix client dropped (!)
+SIGWINCH, SIGHUP (!)
+fix nick, top, users with zero len (!)
+commands completion (space /i == /info, second space - nick completion)
+sock_make() & sock_pars() funcs (?)
+`packet_mcast' (!)
+FreeBSD sounds
+`/tcp' command `tcp' configuration
+gender support (?)
+message quoting `mq' `mquote' (?)
+filter unused channels in routing (???)
+-DSERVER, `server' configuration
+TAB - select nick-channel, ^Y - get nick
+IP select bug when multiple ifaces
+IPX protocol (???)
+dynamic malloc()-free() for users and channels
+-f <rc file> configuration (???)
+screen history search (?)
+screen percents count (?)
+nick collisions (?)
+fix favor, ignore, ban when /load used (?)
+vypress messenger udp receive (?) & send (???) (`packet_vym')
+\ escaping in input line (?) and configuration file (???)
+word wrapping (`word_wrap') (?)
+normal active handling (???)
+mouse support (?)
+Slang port
+GTK+ port
+win32 port (???)

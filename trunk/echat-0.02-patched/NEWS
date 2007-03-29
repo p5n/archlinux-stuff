@@ -1,0 +1,164 @@
+
+v0.02 release:
+Jul 1 2003
+
+    - unbinded F6-F8, F5 now refresh users, as in Vypress Chat
+    - removed -DSOUND, -DPACKET_QCHAT, -DPACKET_XOR as useless
+    - fixed /add topic segfault (thx 2 wu2ftpd@medeina.lt)
+    - fixed default topic on new channels (thx 2 Andy)
+    - fixed bug with user leaves #Main channel (thx 2 Andy)
+    - updated docs
+
+v0.02r beta8:
+Jan 1 2002
+
+    - CygWin32 version
+    - `head_nick', `head_top', `head_users' configuration
+    - new `ec' sample script
+    - changed `-v' parameter to `show version'
+    - added private rejoin
+    - simple TCP server (laggy)
+    - `/status' command
+    - `/favorite  ', `/ignore  ', `/ban  ' commands clear proper list
+    - fixed user sort with favorites
+    - turkish `README.tu' (kafein <mustog@yahoo.com>)
+    - turkish interface `mesg_tu.h' (kafein <mustog@yahoo.com>) (-DTU)
+    - fixed BUG with info in qChat protocol (Genix <genix@sendmail.ru>)
+    - fixed BUG with autoanswers in qChat protocol (Genix <genix@sendmail.ru>)
+    - some cleanup code for FreeBSD
+    - continue development, now on FreeBSD
+
+v0.02r beta4:
+Sep 20 2001
+
+    - man page (Genix <genix@sendmail.ru>) (!)
+    - favorite users
+    - `/favorite' command and `favorite' configuration
+    - added `mesg_??.h' for easy interface translation (-DEN) (-DRU)
+    - fixed -DPACKET_XOR BUG (Genix <genix@sendmail.ru>)
+    - `/version' command
+    - `/dnd  ', `/away  ', `/off  ' commands clear proper autoanswers
+    - `/topic  ' command clear the topic
+    - `topic' configuration removed
+    - `beep_*' configuration
+    - `beep' configuration removed
+    - system sound on `nick', `topic', `mode', `info'
+    - fixed bug with qC packet length < 10 bytes (<viocudinti@yahoo.com>)
+    - `/!' shell command (-DEXEC) (BUGGY! ;)
+    - `/load' & `/save' without parameters uses ~/.echatrc
+    - fixed -1 user BUG
+    - fixed leave channel #Main BUG
+    - added short commands `/dd', `/aw', `/of', `/o'
+    - `/normal' command
+    - `packet_bcast' configuration
+    - support multiple addresses (!!!)
+
+v0.01r release:
+Nov 1 2000
+
+    - fixed some docs
+    - fixed address in info
+    - F1-F8 switch channels
+    - little interface impovements
+    - ^B bottom of screen history
+    - rewritten .rc parser
+    - fixed `/gender' command
+    - first release
+
+v0.01r pre4:
+Sep 27 2000
+
+    - single command line history for all channels
+    - removed bug with ` ' in nicks
+    - `/load' and `/save' commands now must be with filename
+    - `/reload' command changed to `/load'
+    - changed rc load sequence to $HOME -> ./ -> /etc
+    - `color_msge' configuration changed to `color_mesg'
+    - `style' configuration inverted
+    - cosmetical changes in interface
+    - sending to single IP (!!!)
+    - fixed bug with showing message > 500 bytes
+    - IP banning
+    - `ban' configuration, `/ban' command
+    - quickChat protocol support (Pavel <shpac@mail.ru>)
+    - `packet_qchat' configuration
+
+v0.01r pre3:
+Sep 3 2000
+
+    - eliminated nasty BUG in window_init()
+    - XOR "encrypt" packets - no plain text on the wire ;)
+    - `packet_xor' configuration
+    - `/ignore', `/info', `/beep' commands without a nick
+    - `ignore' configuration separator changed from `#' to `:'
+    - FreeBSD port (Eugene E. Zaitsev <eugene@zaitsev.org>) (!!!)
+    - `/save' command - config file saving
+    - `/reload' command - config file reloading
+    - auto refresh users list
+    - `log_*' files may start with ~
+    - now you can use multiple nicks with `ignore', `info' and `beep'
+    - changed autoanswers configuration (sorry...)
+    - one... may be two bugs fixed... we going to be stable ;)
+
+v0.01r pre2:
+Aug 8 2000
+
+    - `chat_busy' configuration removed ;)
+    - `seconds' configuration
+    - normal channels & chats support (!!!)
+    - ^K invert sort of userlist
+    - packets dupe-check buffer
+    - separate logging for main, messages, privates
+    - `/ignore' command isn't buggy anymore ;)
+    - removed bug with rename on private chat
+    - fixed bug with ` ' & `:' in nicks
+    - as usual a lot of bugs fixed
+
+v0.01r pre1:
+Jun 28 2000
+
+    - `/clear' command
+    - `/exec' command (one way only ;)
+    - `/talk' command - private chat (!!!)
+    - `/verbose' command
+    - line editing (!!!)
+    - atomic write to the logfile
+    - added SO_REUSEADDR option to the binded socket (-DPORTREUSE)
+    - organized help command
+    - fixed some bugs
+    - >100kb sources ;)
+
+v0.01r beta9:
+Jun 8 2000
+
+    - `/join' command
+    - `/leave' command
+    - `/channel' command
+    - simple channels support
+    - `chat_busy' configuration
+    - `ignore' configuration
+    - command line parameters (!!!)
+    - `/my' command
+    - `/gender' command
+    - `/add' command
+    - enhanced Makefile (just like in Samba)
+    - totally rewritten screen history
+    - terminal sounds (-DSOUND)
+    - added `ec' simple shell script
+    - distinct autoanswers for dnd,away and offline
+    - `/ignore' command (buggy :( )
+    - `/me' command
+    - `/here' command
+    - ^E charset recoding (-DCHARSET)
+    - `color_*' configuration
+    - `status_str' configuration
+
+v0.01r beta8:
+May 20 2000
+
+    - bug fixing
+
+v0.01r beta7:
+May 16 2000
+
+    - first record in NEWS
