@@ -1,0 +1,160 @@
+## sample configuration for eChat
+# eChat load `$HOME/.echatrc', then `./.echatrc', then `/etc/echatrc'
+#
+## format of options:
+#
+## all options are case insensitive
+## `#' and `;' - start of comments
+#
+## string option:
+#   <option> "value"    or
+#   <option> = "value"   or
+#   <option> value   (if no `#' or `;' in value)
+## all strings default to "" (with exceptions ;)
+#
+## integer option:
+#   <option> value   or
+#   <option> = value
+## all integers sets to default
+#
+## boolean option: (true variants, all others will be false)
+#   <option> [1|on|yes|true]   or
+#   <option> = 1   or
+#   <option> (without value)
+## all booleans default to false
+
+# your nick (string) (default: "Nick")
+nick "Nick"
+
+## gender: 0 - male, 1 - female (integer)
+gender = 0
+
+## channels list (string) (default: "#Main") (example: "#Main#Tech#Humor")
+channel "#Main"
+
+## 0 - normal, 1 - dnd, 2 - away, 3 - offline (integer)
+mode = 0
+
+## active (boolean)
+active
+
+## default autoanswer messages in dnd,away,offline mode (string)
+answer_dnd "Do NOT Disturb me!"
+answer_away "I'm away from my computer..."
+answer_off "User is absent."
+
+## default /me action (string)
+me_action "Rolling on floor laughing!"
+
+## favorite nicks (string) (example: "Nick1:Nick2:")
+favorite ""
+
+## ignore these nicks (string) (example: "Nick1:Nick2:")
+ignore ""
+
+## ban these addresses (string) (example: "192.168.1.123 192.168.2.231")
+ban ""
+
+## broadcast send address (string) (example: "192.168.1.255 192.168.2.255")
+address "192.168.1.255"
+
+## udp/tcp port (integer)
+port = 8167
+
+## broadcast messages sending (boolean)
+;packet_bcast
+
+## packet forwarding between addresses (boolean)
+;packet_route
+
+## quickChat protocol (boolean) (will disable "packet_xor") (dont compatible with the Vypress Chat!!!)
+;packet_qchat
+
+## packets "encrypt" XOR-byte (integer) (default: 0) (dont compatible with the Vypress Chat!!!)
+;packet_xor 231
+
+# header nick (string) (default: " nick: ")
+head_nick " nick: "
+# header topic (string) (default: " top: ")
+head_top " top: "
+# header users (string) (default: " users: ")
+head_users " users: "
+
+## input line prompt (string) (default: "eChat> ")
+ps "eChat> "
+
+## interface style (boolean)
+style off
+
+## ascii graphics (boolean)
+ascii off
+
+## status string (work only with `style') (boolean)
+status_str off
+
+## show seconds (boolean)
+seconds
+
+## users window width in chars (integer)
+users_width = 12
+
+## users refresh timeout in seconds (integer)
+users_timeout = 300
+
+## screen scroll step in strings (integer)
+scroll_step = 2
+
+## charset translation (boolean) (russian version: koi8-r -> cp1251)
+charset
+
+## enable beeps (boolean)
+# nick, topic, mode, info
+beep_system
+# chat, me
+beep_chat
+# join, leave
+beep_join
+# message
+beep_mesg
+# beep
+beep_beep
+
+## beeps on channels (boolean)
+my_only
+
+## verbosity (boolean)
+verbose
+
+## server mode (boolean)
+server off
+
+## default shell command (string)
+shell ""
+
+## log files (string) (default: no logging)
+log_main "~/echat.log"
+log_message "~/echat.log"
+log_private "~/epriv.log"
+
+## interface colors (integer)
+#   black - 0, red - 1, green - 2, yellow - 3,
+#   blue - 4, magenta - 5, cyan - 6, white - 7
+
+# background
+color_bkgr = 0
+# borders
+color_border = 7
+# headers
+color_head = 7
+# status string
+color_status = 7
+# system messages
+color_system = 6
+# error messages
+color_error = 1
+# personal messages & beeps
+color_msge = 6
+# my messages & /me's
+color_my = 3
+# others messages & /me's
+color_chat = 2

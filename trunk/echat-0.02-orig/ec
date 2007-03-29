@@ -1,0 +1,12 @@
+#! /bin/sh
+# start eChat on new console (default - /dev/tty11)
+
+ec_tty=$1
+
+[ "x${ec_tty}" == "x" ] && ec_tty=11
+
+# switch kernel keymap (for linux russian version)
+# echo -ne "\033(K" >/dev/tty${ec_tty}
+
+echo -n "eChat - "
+open -vc${ec_tty} -- echat

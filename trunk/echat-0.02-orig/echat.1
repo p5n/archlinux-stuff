@@ -1,0 +1,292 @@
+.\"
+.\"  echat.1
+.\"
+.\"  copyright (c) 2000-2003 SeaD
+.\"  see GPL for copying info
+.\"
+.\"  original by Genix <genix@sendmail.ru>
+.\"
+.TH echat 1
+
+.SH NAME
+eChat \- network conversations
+
+.SH SYNOPSIS
+.B echat
+[\-tsvdh]
+[\-n \fInick\fP]
+[\-g \fIgender\fP]
+[\-c \fIchannel\fP]
+[\-m \fImode\fP]
+[\-i \fIactivity\fP]
+[\-a \fIaddress\fP]
+[\-p \fIport\fP]
+[\-l \fIfilename\fP]
+
+.SH DESCRIPTIPON
+eChat is a serverless messaging system dedicated to chat
+and messages exchange over the TCP/IP networks
+
+compatible with Vypress Chat and quickChat for Windows9x/ME/NT/2000/XP
+
+.SH OPTIONS
+.TP
+.B \-n " \fInick\fP"
+your nick
+.TP
+.B \-g " \fI0|1\fP"
+your gender: \fB0\fP - male, \fB1\fP - female
+.TP
+.B \-c " \fIchannel\fP"
+main channel
+.TP
+.B \-m " \fI0|1|2|3\fP"
+your mode: \fB0\fP - normal, \fB1\fP - dnd, \fB2\fP - away, \fB3\fP - offline
+.TP
+.B \-i " \fI0|1\fP"
+your activity: \fB0\fP - not active, \fB1\fP - active
+.TP
+.B \-a " \fIaddress\fP"
+broadcast send address (only one)
+.TP
+.B \-p " \fIport\fP"
+listen port
+.TP
+.B \-l " \fIfilename\fP"
+name of logfile (only one)
+.TP
+.B \-t
+start tcp server
+.TP
+.B \-s
+enable server mode
+.TP
+.B \-v
+be verbose
+.TP
+.B \-d
+show compiled in defines
+.TP
+.B \-h
+this help
+
+.SH KEYS
+.TP
+.B F1-F8
+\- switch to channel
+.TP
+.B ^O or TAB
+\- next channel
+.TP
+.B ^D
+\- exit chat
+.TP
+.B ^A
+\- change activity
+.TP
+.B ^K
+\- reverse users
+.TP
+.B ^L or INS
+\- update users
+.TP
+.B ^R
+\- refresh screen
+.TP
+.B ^T
+\- top of screen history
+.TP
+.B ^B
+\- bottom of screen history
+.TP
+.B ^P or PGUP
+\- scroll up
+.TP
+.B ^N or PGDN
+\- scroll down
+.TP
+.B ^E
+\- recode input line after cursor (-DCHARSET)
+.TP
+.B '`' , [1-9]
+\- put nick \fI#[1-9]\fP into input line:
+\fI `1 \fP \- will be replaced with first nick,
+\fI `2 \fP \- with second nick, etc
+.TP
+.B '/' , [1-9]
+- message to nick \fI#[1-9]\fP:
+\fI /1 \fP \- message to first nick,
+\fI /2 \fP \- message to second nick, etc
+
+.SH COMMANDS
+.TP
+.B quit
+\- quit eChat
+.TP
+.B help
+\- help on commands
+.TP
+.B version
+\- show version
+.TP
+.B status
+\- show current status
+.TP
+.B keys
+\- show working keys
+.TP
+.B verbose
+\- toggle verbosity
+.TP
+.B clear
+\- clear command and screen history
+.TP
+.B !
+\- shell command
+.TP
+.B load
+\- load configuration from file
+.TP
+.B save
+\- save current configuration to file
+.TP
+.B answer
+\- show/change current autoanswer
+.TP
+.B gender
+\- change gender
+.TP
+.B my
+\- change beeps mode
+.TP
+.B favorite
+\- show/favorite/unfavorite nick(s)
+.TP
+.B ignore
+\- show/ignore/unignore nick(s)
+.TP
+.B ban
+\- show/ban/unban address(es)
+.TP
+.B join
+\- join channel
+.TP
+.B leave
+\- leave channel
+.TP
+.B nick
+\- change current nick
+.TP
+.B message
+\- send message to nick
+.TP
+.B mass
+\- send mass message
+.TP
+.B exec
+\- execute command
+.TP
+.B me
+\- me action
+.TP
+.B topic
+\- show/change current topic
+.TP
+.B add
+\- add to current topic
+.TP
+.B mode
+\- change current mode
+.TP
+.B normal
+\- change current mode to normal
+.TP
+.B dnd
+\- change current mode to dnd
+.TP
+.B away
+\- change current mode to away
+.TP
+.B off
+\- change current mode to offline
+.TP
+.B info
+\- get info on nick(s)
+.TP
+.B beep
+\- beep to nick(s)
+.TP
+.B talk
+\- private chat with nick
+.TP
+.B here
+\- who here
+.TP
+.B active
+\- change current activity
+
+.TP
+.B note:
+some command may be used with double space for cleaning entire list:
+.TP
+\- `/favorite  ', `/ignore  ', `/ban  ' - clear user lists
+.TP
+\- `/dnd  ', `/away  ', `/off  ' -  clear autoanswer lists
+.TP
+\- `/topic  ' - clear current topic
+
+.SH USERS MENU
+.TP
+.B + 
+\- normal mode
+.TP
+.B - 
+\- dnd mode
+.TP
+.B =
+\- away mode
+.TP
+.B *
+\- offline mode
+
+.SH ENVIRONMENT
+.TP
+.B HOME
+home directory
+
+.SH FILES
+.TP
+.B /etc/echatrc
+general configuration
+.TP
+.B ~/.echatrc
+user configuration
+.TP
+.B ./.echatrc
+current configuration
+
+.SH CREDITS
+\fBVyPRESS Research, LLC <http://www.vypress.com>\fP - for nice program
+.br
+\fBSergey Barkov <sergey@vypress.com>\fP - for technical support
+.br
+\fBGenix <genix@sendmail.ru>\fP - quickChat port, first man page
+.br
+\fBsibkot <sibkot@mail.ru>\fP - author of VyperChat for linux
+.br
+\fBall the FreeZNet\fP for testing assistance, and personally Andy, Mouse
+.br
+
+.SH COPYING
+see \fBGPL\fP for copying info
+
+.SH BUGS
+quickChat and Vypress Chat protocols are basically insecure
+and contains no any protection against spoofing, flooding or sniffing.
+.br
+it's not a bug, it's a feature
+.TP
+send bug-reports to SeaD <sead@mail.ru>
+
+.SH AUTHOR
+SeaD <sead@mail.ru>

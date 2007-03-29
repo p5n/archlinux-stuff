@@ -1,0 +1,153 @@
+##  eChat
+
+    eChat v0.02
+    copyright (c) 2000-2003 SeaD
+
+    see GPL for copying info
+
+
+##  what is eChat
+
+    eChat is a serverless messaging system dedicated to
+    chat and messages exchange over the TCP/IP networks
+
+    compatible with Vypress Chat and quickChat for Windows9x/ME/NT/2000/XP
+
+
+##  installation
+
+    download from: http://deep.perm.ru/files/echat/
+    or from: http://www.vypress.com/products/chat/unix/
+
+    % edit Makefile for your system
+    note: you'll need ncurses library
+        (ftp://ftp.clark.net/pub/dickey/ncurses)
+
+    % make
+    % make install
+
+    % cp /usr/local/doc/.echatrc.sample ~/.echatrc
+
+    % edit ~/.echatrc
+    % echat
+
+    my recommendation to use open, for example:
+    % open -c11 /usr/local/bin/echat
+
+
+##  usage
+
+    keyboard:
+	F1-F8 - switch to channel
+	^O or TAB - next channel
+	^D - exit chat
+	^A - change activity
+	^K - reverse users
+	^L or INS - update users
+	^R - refresh screen
+	^T - top of screen history
+	^B - bottom of screen history
+	^P or PGUP - scroll up
+	^N or PGDN - scroll down
+	^E - recode input line after cursor (-DCHARSET)
+	'`' , [1-9] - put nick #[1-9] into input line:
+	    `1 - will be replaced with first nick,
+	    `2 - with second nick, etc
+	'/' , [1-9] - message to nick #[1-9]:
+	    /1 - message to first nick,
+	    /2 - message to second nick, etc
+
+    available commands:
+	quit - quit eChat
+	help - help on commands
+	version - show version
+	status - show current status
+	keys - show working keys
+	verbose - toggle verbosity
+	clear - clear command and screen history
+	! - shell command
+	load - load configuration from file
+	save - save current configuration to file
+	answer - show/change current autoanswer
+	gender - change gender
+	my - change beeps mode
+	favorite - show/favorite/unfavorite nick(s)
+	ignore - show/ignore/unignore nick(s)
+	ban - show/ban/unban address(es)
+	join - join channel
+	leave - leave channel
+	nick - change current nick
+	message - send message to nick
+	mass - send mass message
+	exec - execute command
+	me - me action
+	topic - show/change current topic
+	add - add to current topic
+	mode - change current mode
+	normal - change current mode to normal
+	dnd - change current mode to dnd
+	away - change current mode to away
+	off - change current mode to offline
+	info - get info on nick(s)
+	beep - beep to nick(s)
+	talk - private chat with nick
+	here - who here
+	active - change current activity
+
+    note: some command may be used with double space
+        for cleaning entire list:
+        `/favorite  ', `/ignore  ', `/ban  ' - clear user lists
+        `/dnd  ', `/away  ', `/off  ' -  clear autoanswer lists
+        `/topic  ' - clear current topic
+
+    users menu:
+	+ - normal mode
+	- - dnd mode
+	= - away mode
+	* - offline mode
+
+
+##  tips
+
+    - if your nick change activity without your action - refresh users list
+    - you can silently change autoanswer by `/answer <new autoanswer>' command
+    - if you use `/!' command with some output - you'll need press ^R
+    - `echat -d' will show compile defines
+    - when -DTCP enabled you can telnet to echat port from any machine
+
+
+##  platforms
+
+    eChat was developed on:
+    Linux kernel 2.2.15, glibc-2.1.2, gcc-2.95.2, ncurses-4.2
+    FreeBSD 4.6-RELEASE, gcc-2.95.3, ncurses-5
+
+    compiled and worked on:
+    Debian GNU/Linux 2.1
+    RedHat Linux 5.2
+    ASP Linux 7.1
+    Corel Linux 1.0
+    FreeBSD 4.0-RELEASE-1, gcc-2.95.2, ncurses-3.1
+
+    any reports and patches for other platforms are welcome
+
+
+##  credits
+
+    VyPRESS Research, LLC <http://www.vypress.com> - for nice program
+    Sergey Barkov <sergey@vypress.com> - for technical support
+    Genix <genix@sendmail.ru> - quickChat port, first man page
+    sibkot <sibkot@mail.ru> - author of VyperChat for linux
+    all the FreeZNet for testing assistance, and personally Andy, Mouse
+
+
+##  bugs
+
+    quickChat and Vypress Chat protocols are basically insecure
+    and contains no any protection against spoofing, flooding or sniffing.
+    it's not a bug, it's a feature
+
+    send bug-reports to SeaD <sead@mail.ru>
+
+
+SeaD <sead@mail.ru>
