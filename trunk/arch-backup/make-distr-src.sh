@@ -17,3 +17,13 @@ cp ssh-example.conf $DIR/
 tar czf $DIR.tar.gz $DIR/
 
 rm -rf $DIR
+
+#
+#
+#
+
+DIRP=arch-backup
+mkdir $DIRP
+cp PKGBUILD $DIRP/
+tar czf $DIRP.tar.gz $DIRP/
+rm -rf $DIRP
