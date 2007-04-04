@@ -5,7 +5,7 @@
 #   $0 /path/to/config
 #
 
-source /etc/arch-backup.conf
+source /etc/arch-backup/arch-backup.conf
 source $LIBEXEC_DIR/common.inc
 
 [ "x$1" == "x" ] && exit 1
