@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=arch-backup-0.7.1
+DIR=arch-backup-0.7.2
 
 mkdir $DIR
 
