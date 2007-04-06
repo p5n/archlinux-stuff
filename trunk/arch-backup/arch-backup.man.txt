@@ -1,0 +1,17 @@
+NAME
+
+    arch-backup - simple backup script
+
+SYNOPSIS
+
+    arch-backup [backup-config1 [backup-config2 [...]]]
+
+DESCRIPTION
+
+    q
+
+SEE ALSO
+    ssh(1), tar(1)
+
+AUTHOR
+    Sergej Pupykin <pupykins@gmail.com>
