@@ -8,7 +8,65 @@ SYNOPSIS
 
 DESCRIPTION
 
-    q
+    arch-backup do following:
+
+    - reads main config (/etc/arch-backup/arch-backup.conf)
+    - executes backup for all configs included in command line or in BACKUP variable
+    from main config if no command line parameters given. config search directory is
+    /etc/arch-backup by default.
+
+    There are three types of backup configurations:
+    - localhost
+    - through SSH
+    - through Samba
+
+LOCALHOST BACKUP
+
+    TYPE = "local" - localhost type
+
+    USERS = ("root" "user") - user list to backup. .backup-list file with file and dir list should be placed
+    in ~root/ and ~user/ directories. One path per line.
+
+    PACKAGES = "pacman" - type of package manager to backup installed packages list.
+
+    DIRS = ("/etc" "/opt/mydir") - list of system-wide dirs to backup.
+
+    AFTER_BACKUP = "/bin/true" - execute this command before backup
+
+    BEFORE_BACKUP = "/bin/true" - execute this command after backup
+
+    COMMANDS = ("file-name" "mysqldump dbname") - dump output of
+    mysqldump command into file-name file.
+
+
+SSH BACKUP
+
+    SSH config is like localhost, but have additional parameters:
+
+    HOST="myserver" - host to connect with SSH
+
+    SSH_USER="root" - SSH username
+
+    SSH_KEY="/path/to/private/key" - SSH key to authorize
+
+
+SAMBA BACKUP
+
+    Samba config is like localhost, but have additional parameters:
+
+    HOST="myserver" - host to connect with Samba
+
+    SMB_USER="root" - Samba username
+
+    SMB_PASSWD="password" - Samba password to authorize
+
+EXAMPLES
+    Backup all:
+	arch-backup
+
+    Backup only localhost and myserver according to /etc/arch-backup/localhost and
+    /etc/arch-backup/myserver:
+	arch-backup localhost myserver
 
 SEE ALSO
     ssh(1), tar(1)
