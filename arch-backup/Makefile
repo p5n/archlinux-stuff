@@ -1,4 +1,4 @@
-AVER=0.7.3
+AVER=0.7.4
 DIR=arch-backup-$(AVER)
 DIRP=arch-backup
 
