@@ -9,7 +9,7 @@ license="GPL"
 depends=()
 backup=(etc/arch-backup/arch-backup.conf)
 source=(http://archlinux-stuff.googlecode.com/files/arch-backup-$pkgver.tar.gz)
-md5sums=('4fbf99ec0317d9883ced67c678e0c39a')
+md5sums=('d6fe4e93bcded45fbec597f32f92350d')
 
 build() {
   install -D -m 0644 $startdir/src/arch-backup-$pkgver/arch-backup.conf \
@@ -30,4 +30,6 @@ build() {
 		     $startdir/pkg/etc/arch-backup/_ssh-example && \
   install -D -m 0644 $startdir/src/arch-backup-$pkgver/smb-example.conf \
 		     $startdir/pkg/etc/arch-backup/_smb-example
+  install -D -m 0644 $startdir/src/arch-backup-$pkgver/arch-backup.1 \
+		     $startdir/pkg/usr/man/man1/arch-backup.1
 }
