@@ -1,11 +1,13 @@
-DIR=arch-backup-0.7.2
+AVER=0.7.3
+DIR=arch-backup-$(AVER)
+DIRP=arch-backup
 
-all: src-tar aur-tar
+all: arch-backup.1 $(DIR).tar.gz $(DIRP).tar.gz
 
-man:
+arch-backup.1:
 	LANG= LC_ALL= txt2man -t arch-backup arch-backup.man.txt >arch-backup.1
 
-src-tar: man \
+$(DIR).tar.gz: arch-backup.1 \
  arch-backup.conf arch-backup.sh \
  common.inc \
  local-backup.sh local-example.conf \
@@ -26,9 +28,12 @@ src-tar: man \
 	rm -rf $(DIR)
 
 
-aur-tar:
-	DIRP=arch-backup
+$(DIRP).tar.gz: $(DIR).tar.gz
 	mkdir $(DIRP)
+	sed -i "s|md5sums=(.*$$|md5sums=('`md5sum $(DIR).tar.gz | cut -f 1 -d \ `')|g" PKGBUILD
 	cp PKGBUILD $(DIRP)/
 	tar czf $(DIRP).tar.gz $(DIRP)/
 	rm -rf $(DIRP)
+
+clean:
+	rm -f *.tar.gz *.1
