@@ -1,0 +1,6 @@
+#!/bin/bash
+
+xterm -bg LightGoldenRod -fn 9x15 -geometry 34x4 \
+      -vb +sb -T "root permission" \
+      -e sh -c "echo \"Run command with root privileges\"; echo \"Command: $*\"; sux -c \"/usr/bin/env LANG=${LANG} $*\""
+
