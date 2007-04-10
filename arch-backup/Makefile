@@ -1,11 +1,10 @@
-AVER=0.7.4
+AVER=0.7.5
 DIR=arch-backup-$(AVER)
-DIRP=arch-backup
 
-all: arch-backup.8 $(DIR).tar.gz $(DIRP).tar.gz
+all: arch-backup.8 $(DIR).tar.gz
 
 arch-backup.8:
-	LANG= LC_ALL= txt2man -r 0.7.3 -t arch-backup -s 8 arch-backup.man.txt >arch-backup.8
+	LANG= LC_ALL= txt2man -r $(AVER) -t arch-backup -s 8 arch-backup.man.txt >arch-backup.8
 
 $(DIR).tar.gz: arch-backup.8 \
  arch-backup.conf arch-backup.sh \
@@ -26,14 +25,8 @@ $(DIR).tar.gz: arch-backup.8 \
 	cp arch-backup.8 $(DIR)/
 	tar czf $(DIR).tar.gz $(DIR)/
 	rm -rf $(DIR)
-
-
-$(DIRP).tar.gz: $(DIR).tar.gz
-	mkdir $(DIRP)
 	sed -i "s|md5sums=(.*$$|md5sums=('`md5sum $(DIR).tar.gz | cut -f 1 -d \ `')|g" PKGBUILD
-	cp PKGBUILD $(DIRP)/
-	tar czf $(DIRP).tar.gz $(DIRP)/
-	rm -rf $(DIRP)
+	sed -i "s|pkgver=.*$$|pkgver=$(AVER)|g" PKGBUILD
 
 clean:
 	rm -f *.tar.gz *.8
