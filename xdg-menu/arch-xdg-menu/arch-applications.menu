@@ -1,0 +1,160 @@
+<!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 1.0//EN" "http://www.freedesktop.org/standards/menu-spec/1.0/menu.dtd">
+
+<Menu>
+
+  <Name>Applications</Name>
+  <Directory>Arch-Applications.directory</Directory>
+  <DefaultAppDirs/>
+  <DefaultDirectoryDirs/>
+  <DefaultMergeDirs/>
+
+  <Menu>
+    <Name>Archlinux</Name>
+    <Directory>Archlinux.directory</Directory>
+    <Include>
+      <Category>Archlinux</Category>
+    </Include>
+  </Menu>
+
+  <Menu>
+    <Name>Accessories</Name>
+    <Directory>Arch-Accessories.directory</Directory>
+    <Include>
+      <And>
+        <Category>Utility</Category>
+        <Not>
+          <Category>System</Category>
+        </Not>
+      </And>
+    </Include>
+  </Menu>
+
+  <Menu>
+    <Name>Accessibility</Name>
+    <Directory>Arch-Accessibility.directory</Directory>
+    <Include>
+      <And>
+        <Category>Accessibility</Category>
+        <Not>
+          <Category>Settings</Category>
+        </Not>
+      </And>
+    </Include>
+  </Menu>
+
+  <Menu>
+    <Name>Development</Name>
+    <Directory>Arch-Development.directory</Directory>
+    <Include>
+      <And>
+        <Category>Development</Category>
+      </And>
+      <Filename>emacs.desktop</Filename>
+    </Include>
+  </Menu>
+
+  <Menu>
+    <Name>Education</Name>
+    <Directory>Arch-Education.directory</Directory>
+    <Include>
+      <And>
+        <Category>Education</Category>
+      </And>
+    </Include>
+  </Menu>
+
+  <Menu>
+    <Name>Games</Name>
+    <Directory>Arch-Games.directory</Directory>
+    <Include>
+      <And>
+        <Category>Game</Category>
+      </And>
+    </Include>
+  </Menu>
+
+  <Menu>
+    <Name>Graphics</Name>
+    <Directory>Arch-Graphics.directory</Directory>
+    <Include>
+      <And>
+        <Category>Graphics</Category>
+      </And>
+    </Include>
+  </Menu>
+
+  <Menu>
+    <Name>Internet</Name>
+    <Directory>Arch-Internet.directory</Directory>
+    <Include>
+      <And>
+        <Category>Network</Category>
+      </And>
+    </Include>
+  </Menu>
+
+  <Menu>
+    <Name>Multimedia</Name>
+    <Directory>Arch-Multimedia.directory</Directory>
+    <Include>
+      <And>
+        <Category>AudioVideo</Category>
+      </And>
+    </Include>
+  </Menu>
+
+  <Menu>
+    <Name>Office</Name>
+    <Directory>Arch-Office.directory</Directory>
+    <Include>
+      <And>
+        <Category>Office</Category>
+      </And>
+    </Include>
+  </Menu>
+
+    <Menu>
+	<Name>Science</Name>
+	<Directory>Arch-Science.directory</Directory>
+	<Include>
+		<And>
+			<Or>
+				<Category>Astronomy</Category>
+				<Category>Biology</Category>
+				<Category>Chemistry</Category>
+				<Category>Geology</Category>
+				<Category>MedicalSoftware</Category>
+				<Category>Physics</Category>
+				<Category>Math</Category>
+				<Category>Science</Category>
+			</Or>
+			<Not><Category>Education</Category></Not>
+		</And>
+	</Include>
+    </Menu>
+
+  <Menu>
+    <Name>System</Name>
+    <Directory>Arch-System-Tools.directory</Directory>
+    <Include>
+      <And>
+        <Category>System</Category>
+        <Not><Category>Settings</Category></Not>
+      </And>
+    </Include>
+  </Menu>
+
+  <Menu>
+    <Name>Other</Name>
+    <Directory>Arch-Other.directory</Directory>
+    <OnlyUnallocated/>
+    <Include>
+      <And>
+        <Category>Application</Category>
+        <Not><Category>Core</Category></Not>
+        <Not><Category>Settings</Category></Not>
+      </And>
+    </Include>
+  </Menu>
+
+</Menu>

@@ -12,7 +12,7 @@ use Encode;
 use I18N::Langinfo qw(langinfo CODESET);
 use POSIX qw(locale_h);
 
-my $Version = "0.2";
+my $Version = "0.3";
 
 my $DefaultAppDirs;
 my $DefaultDirectoryDirs;
