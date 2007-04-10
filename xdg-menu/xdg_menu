@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -w
 
 # Copyright (c) 2003 SuSE Linux AG, Nuernberg, Germany. All rights reserved.
 #
@@ -1634,6 +1634,57 @@ sub output_ion3_menu ($;$)
     return $output;
 }
 
+sub output_twm_menu ($;$)
+{
+    my ($menu, $indent) = @_;
+
+    my $output = '';
+
+    my @pending_list = ();
+
+    $indent = 0 unless defined $indent;
+
+    my $menu_name = $menu->{'PrepName'};
+
+    $output .= ' ' x $indent;
+    $output = "menu \"".$menu_name."\"\n{\n";
+
+    foreach my $entry (@{$menu->{'entries'}})
+    {
+        if ($entry->{type} eq 'desktop')
+        {
+            my $desktop = $entry->{desktop};
+
+            my $name = $desktop->{'PrepName'};
+            my $exec = $desktop->{'PrepExec'};
+
+	    $exec =~ s/"/\\"/g;
+
+            $output .= ' ' x $indent;
+            $output .= "    \"$name\"  f.exec \"exec $exec &\"\n";
+        }
+        elsif ($entry->{type} eq 'menu')
+        {
+            push @pending_list, $entry;
+            $output .= "    \"".$entry->{'menu'}->{'PrepName'}."\"  f.menu \"".$entry->{'menu'}->{'PrepName'}."\"\n";
+        }
+        else
+        {
+            print STDERR "wrong menu entry type: $entry->{type}";
+        }
+
+    }
+    $output .= ' ' x $indent;
+    $output .= "}\n";
+
+    foreach my $entry (@pending_list)
+    {
+        $output .= output_twm_menu ($entry->{'menu'}, $indent + 1);
+    }
+
+    return $output;
+}
+
 sub prepare_exec_xfce4 ($$)
 {
     my ($exec, $desktop) = @_;
@@ -2172,7 +2223,7 @@ if ($help)
 
       format - output format
 
-      possible formats: WindowMaker, fvwm2, icewm,  ion3,
+      possible formats: twm, WindowMaker, fvwm2, icewm,  ion3,
                         blackbox, fluxbox, openbox,
                         xfce4, openbox3, openbox3-pipe,
                         readable
@@ -2238,6 +2289,10 @@ elsif ($format eq 'icewm')
 elsif ($format eq 'ion3')
 {
     $output = output_ion3_menu($menu);
+}
+elsif ($format eq 'twm')
+{
+    $output = output_twm_menu($menu);
 }
 elsif ($format eq 'xfce4')
 {
