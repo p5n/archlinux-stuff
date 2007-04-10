@@ -6,7 +6,7 @@ pkgrel=1
 pkgdesc="generate WM menu from xdg files"
 url="http://archlinux.org/"
 license="GPL"
-depends=()
+depends=(perlxml)
 source=(xdg_menu xdg_menu_su)
 md5sums=('f6049f438fab021d10b57fc66ced5c8b' '528d7330dc6a7b3938a30588036417bd')
 
