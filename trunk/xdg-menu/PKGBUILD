@@ -1,15 +1,14 @@
 # Contributor: Sergej Pupykin <ps@lx-ltd.ru>
 arch=(i686 x86_64)
 pkgname=xdg-menu
-pkgver=0.4
+pkgver=0.5
 pkgrel=1
 pkgdesc="generate WM menu from xdg files"
-url="http://archlinux.org/"
+url="http://wiki.archlinux.org/index.php/XdgMenu"
 license="GPL"
 depends=(perlxml)
-source=(xdg_menu xdg_menu_su arch-xdg-menus.tar.gz)
-md5sums=('a466e85e67c51fa4b44f3961d7b43a12' '528d7330dc6a7b3938a30588036417bd'\
-         'c66abdab3e0106a3a67e805d9dc097c7')
+source=(arch-xdg-menu-$pkgver.tar.gz)
+md5sums=('5b8da0f971c36940e95af262091f41d6')
 
 build() {
   cd $startdir/src
