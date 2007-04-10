@@ -1,0 +1,64 @@
+#!/usr/bin/perl -w
+
+$XDG_CFG="/etc/xdg/menus/arch-applications.menu";
+$CACHE_DIR="/var/cache/xdg-menu";
+
+open(FH, "</etc/update-menus.conf") || die("No config file!");
+
+while(<FH>)
+{
+    chomp;
+    if(/^icewm$/)
+    {
+	# icewm
+	print "Generating icewm\n";
+	mkdir("$CACHE_DIR/icewm") && system("xdg_menu --format icewm --root-menu $XDG_CFG >$CACHE_DIR/icewm/programs");
+    }
+    elsif(/^ion3$/)
+    {
+	# ion3
+	print "Generating ion3\n";
+	mkdir("$CACHE_DIR/ion3") && system("xdg_menu --format ion3  --root-menu $XDG_CFG >$CACHE_DIR/ion3/xdg-menu.lua");
+    }
+    elsif(/^twm$/)
+    {
+	# twm
+	print "Generating twm\n";
+	mkdir("$CACHE_DIR/twm") && system("xdg_menu --format twm  --root-menu $XDG_CFG >$CACHE_DIR/twm/twmrc");
+    }
+    elsif(/^WindowMaker$/)
+    {
+	# WindowMaker
+	print "Generating WindowMaker\n";
+    }
+    elsif(/^fvwm2$/)
+    {
+	# fvwm2
+	print "Generating fvwm2\n";
+    }
+    elsif(/^blackbox$/)
+    {
+	# blackbox
+	print "Generating blackbox/\n";
+    }
+    elsif(/^fluxbox$/)
+    {
+	# fluxbox
+	print "Generating fluxbox\n";
+    }
+    elsif(/^openbox$/)
+    {
+	# openbox
+	print "Generating openbox\n";
+    }
+    elsif(/^openbox3$/)
+    {
+	# openbox3
+	print "Generating openbox3\n";
+    }
+    else
+    {
+    }
+}
+
+close FH;
