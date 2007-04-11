@@ -9,7 +9,7 @@ license="GPL"
 depends=(perlxml)
 backup=(etc/update-menus.conf)
 source=(arch-xdg-menu-$pkgver.tar.gz)
-md5sums=('bb7cbd8c9b7fcca9d358b22302d08201')
+md5sums=('92fc43fa036e64ee326bd407364085ac')
 
 build() {
   cd $startdir/src
