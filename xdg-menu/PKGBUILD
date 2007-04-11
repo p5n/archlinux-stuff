@@ -7,8 +7,9 @@ pkgdesc="generate WM menu from xdg files"
 url="http://wiki.archlinux.org/index.php/XdgMenu"
 license="GPL"
 depends=(perlxml)
+backup=(etc/update-menus.conf)
 source=(arch-xdg-menu-$pkgver.tar.gz)
-md5sums=('0a20786ec3775bef03b5df3722660dc6')
+md5sums=('bb7cbd8c9b7fcca9d358b22302d08201')
 
 build() {
   cd $startdir/src
