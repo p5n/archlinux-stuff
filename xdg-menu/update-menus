@@ -28,7 +28,7 @@ while(<FH>)
     {
 	# twm
 	print "Generating twm\n";
-	mkdir("$CACHE_DIR/twm") && system("xdg_menu --format twm  --root-menu $XDG_CFG >$CACHE_DIR/twm/twmrc 2>>$LOG_FILE");
+	mkdir("$CACHE_DIR/twm") && system("cp /etc/X11/twm/system.twmrc $CACHE_DIR/twm/twmrc && xdg_menu --format twm  --root-menu $XDG_CFG >>$CACHE_DIR/twm/twmrc 2>>$LOG_FILE");
     }
     elsif(/^WindowMaker$/)
     {
@@ -58,13 +58,7 @@ while(<FH>)
     {
 	# openbox
 	print "Generating openbox\n";
-	mkdir("$CACHE_DIR/openbox") && system("xdg_menu --format openbox --root-menu $XDG_CFG >$CACHE_DIR/openbox/boxrc 2>>$LOG_FILE");
-    }
-    elsif(/^openbox3$/)
-    {
-	# openbox3
-	print "Generating openbox3\n";
-	mkdir("$CACHE_DIR/openbox3") && system("xdg_menu --format openbox3 --root-menu $XDG_CFG >$CACHE_DIR/openbox3/boxrc 2>>$LOG_FILE");
+	mkdir("$CACHE_DIR/openbox") && system("xdg_menu --format openbox3-pipe --root-menu $XDG_CFG >$CACHE_DIR/openbox/menu.xml 2>>$LOG_FILE");
     }
     elsif(/^#.*$/)
     {

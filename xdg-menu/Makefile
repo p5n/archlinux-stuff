@@ -1,4 +1,4 @@
-AVER=0.5
+AVER=0.6
 
 all: arch-xdg-menu-$(AVER).tar.gz
 
