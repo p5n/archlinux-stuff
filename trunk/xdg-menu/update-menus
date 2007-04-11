@@ -2,8 +2,10 @@
 
 $XDG_CFG="/etc/xdg/menus/arch-applications.menu";
 $CACHE_DIR="/var/cache/xdg-menu";
+$LOG_FILE="/var/log/update-menus.log";
 
 system("rm -rf ~/.xdg_menu_cache/");
+(system("rm -rf $CACHE_DIR/*") == 0) || die("Cannot purge cache!");
 
 open(FH, "</etc/update-menus.conf") || die("No config file!");
 
@@ -14,55 +16,55 @@ while(<FH>)
     {
 	# icewm
 	print "Generating icewm\n";
-	mkdir("$CACHE_DIR/icewm") && system("xdg_menu --format icewm --root-menu $XDG_CFG >$CACHE_DIR/icewm/programs");
+	mkdir("$CACHE_DIR/icewm") && system("xdg_menu --format icewm --root-menu $XDG_CFG >$CACHE_DIR/icewm/programs 2>>$LOG_FILE");
     }
     elsif(/^ion3$/)
     {
 	# ion3
 	print "Generating ion3\n";
-	mkdir("$CACHE_DIR/ion3") && system("xdg_menu --format ion3  --root-menu $XDG_CFG >$CACHE_DIR/ion3/xdg-menu.lua");
+	mkdir("$CACHE_DIR/ion3") && system("xdg_menu --format ion3  --root-menu $XDG_CFG >$CACHE_DIR/ion3/xdg-menu.lua 2>>$LOG_FILE");
     }
     elsif(/^twm$/)
     {
 	# twm
 	print "Generating twm\n";
-	mkdir("$CACHE_DIR/twm") && system("xdg_menu --format twm  --root-menu $XDG_CFG >$CACHE_DIR/twm/twmrc");
+	mkdir("$CACHE_DIR/twm") && system("xdg_menu --format twm  --root-menu $XDG_CFG >$CACHE_DIR/twm/twmrc 2>>$LOG_FILE");
     }
     elsif(/^WindowMaker$/)
     {
 	# WindowMaker
 	print "Generating WindowMaker\n";
-	mkdir("$CACHE_DIR/WindowMaker") && system("xdg_menu --format WindowMaker --root-menu $XDG_CFG >$CACHE_DIR/WindowMaker/wmrc");
+	mkdir("$CACHE_DIR/WindowMaker") && system("xdg_menu --format WindowMaker --root-menu $XDG_CFG >$CACHE_DIR/WindowMaker/wmrc 2>>$LOG_FILE");
     }
     elsif(/^fvwm2$/)
     {
 	# fvwm2
 	print "Generating fvwm2\n";
-	mkdir("$CACHE_DIR/fvwm2") && system("xdg_menu --format fvwm2 --root-menu $XDG_CFG >$CACHE_DIR/fvwm2/fvwm2rc");
+	mkdir("$CACHE_DIR/fvwm2") && system("xdg_menu --format fvwm2 --root-menu $XDG_CFG >$CACHE_DIR/fvwm2/fvwm2rc 2>>$LOG_FILE");
     }
     elsif(/^blackbox$/)
     {
 	# blackbox
 	print "Generating blackbox\n";
-	mkdir("$CACHE_DIR/blackbox") && system("xdg_menu --format blackbox --root-menu $XDG_CFG >$CACHE_DIR/blackbox/boxrc");
+	mkdir("$CACHE_DIR/blackbox") && system("xdg_menu --format blackbox --root-menu $XDG_CFG >$CACHE_DIR/blackbox/boxrc 2>>$LOG_FILE");
     }
     elsif(/^fluxbox$/)
     {
 	# fluxbox
 	print "Generating fluxbox\n";
-	mkdir("$CACHE_DIR/fluxbox") && system("xdg_menu --format fluxbox --root-menu $XDG_CFG >$CACHE_DIR/fluxbox/boxrc");
+	mkdir("$CACHE_DIR/fluxbox") && system("xdg_menu --format fluxbox --root-menu $XDG_CFG >$CACHE_DIR/fluxbox/boxrc 2>>$LOG_FILE");
     }
     elsif(/^openbox$/)
     {
 	# openbox
 	print "Generating openbox\n";
-	mkdir("$CACHE_DIR/openbox") && system("xdg_menu --format openbox --root-menu $XDG_CFG >$CACHE_DIR/openbox/boxrc");
+	mkdir("$CACHE_DIR/openbox") && system("xdg_menu --format openbox --root-menu $XDG_CFG >$CACHE_DIR/openbox/boxrc 2>>$LOG_FILE");
     }
     elsif(/^openbox3$/)
     {
 	# openbox3
 	print "Generating openbox3\n";
-	mkdir("$CACHE_DIR/openbox3") && system("xdg_menu --format openbox3 --root-menu $XDG_CFG >$CACHE_DIR/openbox3/boxrc");
+	mkdir("$CACHE_DIR/openbox3") && system("xdg_menu --format openbox3 --root-menu $XDG_CFG >$CACHE_DIR/openbox3/boxrc 2>>$LOG_FILE");
     }
     elsif(/^#.*$/)
     {
