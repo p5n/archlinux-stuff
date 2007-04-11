@@ -3,6 +3,8 @@
 $XDG_CFG="/etc/xdg/menus/arch-applications.menu";
 $CACHE_DIR="/var/cache/xdg-menu";
 
+system("rm -rf ~/.xdg_menu_cache/");
+
 open(FH, "</etc/update-menus.conf") || die("No config file!");
 
 while(<FH>)
@@ -30,34 +32,44 @@ while(<FH>)
     {
 	# WindowMaker
 	print "Generating WindowMaker\n";
+	mkdir("$CACHE_DIR/WindowMaker") && system("xdg_menu --format WindowMaker --root-menu $XDG_CFG >$CACHE_DIR/WindowMaker/wmrc");
     }
     elsif(/^fvwm2$/)
     {
 	# fvwm2
 	print "Generating fvwm2\n";
+	mkdir("$CACHE_DIR/fvwm2") && system("xdg_menu --format fvwm2 --root-menu $XDG_CFG >$CACHE_DIR/fvwm2/fvwm2rc");
     }
     elsif(/^blackbox$/)
     {
 	# blackbox
-	print "Generating blackbox/\n";
+	print "Generating blackbox\n";
+	mkdir("$CACHE_DIR/blackbox") && system("xdg_menu --format blackbox --root-menu $XDG_CFG >$CACHE_DIR/blackbox/boxrc");
     }
     elsif(/^fluxbox$/)
     {
 	# fluxbox
 	print "Generating fluxbox\n";
+	mkdir("$CACHE_DIR/fluxbox") && system("xdg_menu --format fluxbox --root-menu $XDG_CFG >$CACHE_DIR/fluxbox/boxrc");
     }
     elsif(/^openbox$/)
     {
 	# openbox
 	print "Generating openbox\n";
+	mkdir("$CACHE_DIR/openbox") && system("xdg_menu --format openbox --root-menu $XDG_CFG >$CACHE_DIR/openbox/boxrc");
     }
     elsif(/^openbox3$/)
     {
 	# openbox3
 	print "Generating openbox3\n";
+	mkdir("$CACHE_DIR/openbox3") && system("xdg_menu --format openbox3 --root-menu $XDG_CFG >$CACHE_DIR/openbox3/boxrc");
+    }
+    elsif(/^#.*$/)
+    {
     }
     else
     {
+	print "Unknown line: $_\n";
     }
 }
 
