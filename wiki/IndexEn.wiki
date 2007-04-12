@@ -10,3 +10,5 @@ Some my small projects here...
   * arch-backup - set of trivial scripts that can backup local and remote machines (using ssh or smb protocols)
   * aur-sync - synchronizes Arch Linux Unsupported repository
   * echat - patched version of echat. (vypress chat 2.0 and utf8 compatible. locale KOI8-R tested, can execute external command on event if ECHAT_EVENT_COMMAND shell variable set to proper executable)
+  * pacman scripts - list package in depends order, print src urls from PKGBUILD
+  * xdg-menu - generates submenu to include into WM from XDG stuff (see http://wiki.archlinux.org/index.php/XdgMenu)
