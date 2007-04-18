@@ -2,21 +2,12 @@
 
 #
 # Usage:
-#   $0 [-p|-P] [config-name1 [config-name2 [...]]]
-# -p - backup package list (only for localhost now)
-# -P - backup package list and exit (only for localhost now)
+#   $0 [ [-c] | [config-name1 [config-name2 [...]]] ]
+# -c - check ~/.backup-list
 # config-name - filename from /etc/arch-backup
 # if no config-name given, backups all configurations from
 # $BACKUP in /etc/arch-backup/arch-backup.conf
 #
-
-source /etc/arch-backup/arch-backup.conf
-source $LIBEXEC_DIR/common.inc
-
-DATE=`date +%Y.%m.%d.%H.%M.%S`
-export BACKUP_DIR=$BACKUP_BASE_DIR/arch-backup-$DATE-$BACKUP_SUFFIX
-
-mkdir -p $BACKUP_DIR
 
 #
 # check ~/.backup-list
@@ -27,6 +18,16 @@ if [ "x$1" == "x-c" ];then
     echo "end of list"
     exit 0
 fi
+
+#
+
+source /etc/arch-backup/arch-backup.conf
+source $LIBEXEC_DIR/common.inc
+
+DATE=`date +%Y.%m.%d.%H.%M.%S`
+export BACKUP_DIR=$BACKUP_BASE_DIR/arch-backup-$DATE-$BACKUP_SUFFIX
+
+mkdir -p $BACKUP_DIR
 
 #
 # Backup
