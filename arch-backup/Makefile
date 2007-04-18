@@ -1,4 +1,4 @@
-AVER=0.7.6
+AVER=0.7.7
 DIR=arch-backup-$(AVER)
 
 all: arch-backup.8 $(DIR).tar.gz

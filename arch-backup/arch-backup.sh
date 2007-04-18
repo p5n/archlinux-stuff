@@ -19,6 +19,16 @@ export BACKUP_DIR=$BACKUP_BASE_DIR/arch-backup-$DATE-$BACKUP_SUFFIX
 mkdir -p $BACKUP_DIR
 
 #
+# check ~/.backup-list
+#
+if [ "x$1" == "x-c" ];then
+    echo "List of missing files/dirs:"
+    cat ~/.backup-list| while read A; do [ -f ~/$A ] || [ -d ~/$A ] || echo $A; done
+    echo "end of list"
+    exit 0
+fi
+
+#
 # Backup
 #
 if [ "x$1" == "x" ]; then
