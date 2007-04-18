@@ -4,7 +4,7 @@ NAME
 
 SYNOPSIS
 
-    arch-backup [backup-config1 [backup-config2 [...]]]
+    arch-backup [-c | [backup-config1 [backup-config2 [...]]]]
 
 DESCRIPTION
 
@@ -19,6 +19,9 @@ DESCRIPTION
     - localhost
     - through SSH
     - through Samba
+
+OPTIONS
+    -c - check ~/.backup-list. Prints out missing files and directories listed in ~/.backup-list.
 
 LOCALHOST BACKUP
 
