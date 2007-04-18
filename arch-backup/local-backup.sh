@@ -44,7 +44,7 @@ for user in ${USERS[@]}; do
     if [ -f $homedir/.backup-list ]; then
 	echo -n "Saving $user's home..."
 	list=`cat $homedir/.backup-list | perl -ne "print \"'$homedir/\"; chomp; print; print \"' \";"`
-        sh -c "tar cjf $BACKUP_DIR/_localhost-user-$user.tar.bz2 $list" 1>/dev/null 2>/dev/null
+        sh -c "tar c $list" 2>/dev/null | $COMPRESS_CMD 1>$BACKUP_DIR/_localhost-user-$user.tar.$COMPRESSED_EXT 2>/dev/null
 	if [ $? -eq 0 ];then
             echo -e "${MSG_OK}"
 	else
@@ -60,7 +60,7 @@ done
 #
 for dir in ${DIRS[@]}; do
     echo -n "Saving $dir..."
-    tar cjf $BACKUP_DIR/_localhost-dir-`echo $dir | tr '/' '_'`.tar.bz2 $dir 1>/dev/null 2>/dev/null
+    tar c $dir 2>/dev/null | $COMPRESS_CMD 1>$BACKUP_DIR/_localhost-dir-`echo $dir | tr '/' '_'`.tar.$COMPRESSED_EXT 2>/dev/null
     if [ $? -eq 0 ];then
         echo -e "${MSG_OK}"
     else
@@ -78,7 +78,7 @@ while [ "x${COMMANDS[$i]}" != "x" ]; do
     CMD=${COMMANDS[$i]}
     i=`expr $i + 1`
     echo -n "Saving command to file $FILE..."
-    $SSH_COMMAND "$CMD" 2>/dev/null | bzip2 > $BACKUP_DIR/_localhost-cmd-$FILE.bz2 2>/dev/null
+    $SSH_COMMAND "$CMD" 2>/dev/null | $COMPRESS_CMD > $BACKUP_DIR/_localhost-cmd-$FILE.$COMPRESSED_EXT 2>/dev/null
     if [ $? -eq 0 ];then
         echo -e "${MSG_OK}"
     else

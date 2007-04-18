@@ -45,7 +45,7 @@ for user in ${USERS[@]}; do
     homedir=`$SSH_COMMAND "cat /etc/passwd" 2>/dev/null | perl -ne "if(/^(.+):.*:.*:.*:.*:(.+):.*/ && \\$1 eq "$user"){print \\$2;}"`
     echo -n "Saving $user's home..."
     list=`$SSH_COMMAND "cat $homedir/.backup-list" 2>/dev/null | perl -ne "print \"'$homedir/\"; chomp; print; print \"' \";"`
-    $SSH_COMMAND "tar c $list" 2>/dev/null | bzip2 >$BACKUP_DIR/$HOST-user-$user.tar.bz2 2>/dev/null
+    $SSH_COMMAND "tar c $list" 2>/dev/null | $COMPRESS_CMD >$BACKUP_DIR/$HOST-user-$user.tar.$COMPRESSED_EXT 2>/dev/null
     if [ $? -eq 0 ];then
         echo -e "${MSG_OK}"
     else
@@ -58,7 +58,7 @@ done
 #
 for dir in ${DIRS[@]}; do
     echo -n "Saving $dir..."
-    $SSH_COMMAND "tar c $dir" 2>/dev/null | bzip2 >$BACKUP_DIR/$HOST-dir-`echo $dir | tr '/' '_'`.tar.bz2 2>/dev/null
+    $SSH_COMMAND "tar c $dir" 2>/dev/null | $COMPRESS_CMD >$BACKUP_DIR/$HOST-dir-`echo $dir | tr '/' '_'`.tar.$COMPRESSED_EXT 2>/dev/null
     if [ $? -eq 0 ];then
         echo -e "${MSG_OK}"
     else
@@ -76,7 +76,7 @@ while [ "x${COMMANDS[$i]}" != "x" ]; do
     CMD=${COMMANDS[$i]}
     i=`expr $i + 1`
     echo -n "Saving command to file $FILE..."
-    $SSH_COMMAND "$CMD" 2>/dev/null | bzip2 > $BACKUP_DIR/$HOST-cmd-$FILE.bz2 2>/dev/null
+    $SSH_COMMAND "$CMD" 2>/dev/null | $COMPRESS_CMD > $BACKUP_DIR/$HOST-cmd-$FILE.$COMPRESSED_EXT 2>/dev/null
     if [ $? -eq 0 ];then
         echo -e "${MSG_OK}"
     else
