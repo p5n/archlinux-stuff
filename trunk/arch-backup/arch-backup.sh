@@ -82,9 +82,7 @@ fi
 # Remove old backup dirs
 #
 
-NUM_BACKUPS=`expr $NUM_BACKUPS + 1`
-
-cd $BACKUP_BASE_DIR && (ls -1 | tail -n+$NUM_BACKUPS | while read A; do
+cd $BACKUP_BASE_DIR && (ls -1 | sort | head -n -$NUM_BACKUPS | while read A; do
     echo "Removing $A..."
     rm -rf $A
 done)
