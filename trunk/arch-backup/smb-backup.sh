@@ -28,7 +28,7 @@ for dir in ${DIRS[@]}; do
 	SMB_COMMAND="smbtar -s $HOST -u $SMB_USER -p \"$SMB_PASSWD\" -x $share -d $dir -t /proc/self/fd/1"
     fi
 
-    $SMB_COMMAND | bzip2 >$BACKUP_DIR/$HOST-dir-$share-`echo $dir | tr '/' '_'`.tar.bz2 1>/dev/null 2>/dev/null
+    $SMB_COMMAND 2>/dev/null | $COMPRESS_CMD >$BACKUP_DIR/$HOST-dir-$share-`echo $dir | tr '/' '_'`.tar.$COMPRESSED_EXT 2>/dev/null
     if [ $? -eq 0 ];then
         echo -e "${MSG_OK}"
     else
