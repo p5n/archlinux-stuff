@@ -78,7 +78,7 @@ while [ "x${COMMANDS[$i]}" != "x" ]; do
     CMD=${COMMANDS[$i]}
     i=`expr $i + 1`
     echo -n "Saving command to file $FILE..."
-    $SSH_COMMAND "$CMD" 2>/dev/null | $COMPRESS_CMD > $BACKUP_DIR/_localhost-cmd-$FILE.$COMPRESSED_EXT 2>/dev/null
+    $CMD 2>/dev/null | $COMPRESS_CMD > $BACKUP_DIR/_localhost-cmd-$FILE.$COMPRESSED_EXT 2>/dev/null
     if [ $? -eq 0 ];then
         echo -e "${MSG_OK}"
     else
