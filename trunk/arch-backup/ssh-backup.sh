@@ -15,6 +15,8 @@ source $1
 
 SSH_COMMAND="ssh -l $SSH_USER -i $SSH_KEY $HOST -C"
 
+[ "x$SSH_PORT" != "x" ] && SSH_COMMAND="$SSH_COMMAND -p $SSH_PORT"
+
 #
 # Save package list
 #

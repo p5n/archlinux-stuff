@@ -40,7 +40,7 @@ fi
 # Save users homes according to ~/.backup-list
 #
 for user in ${USERS[@]}; do
-    homedir=`cat /etc/passwd | perl -ne "if(/^(\S+):\S*:\S*:\S*:\S*:(\S+):\S*/ && \\$1 eq "$user"){print \\$2;}"`
+    homedir=`cat /etc/passwd | perl -ne "if(/^(\S+):.*:.*:.*:.*:(.+):.*/ && \\$1 eq "$user"){print \\$2;}"`
     if [ -f $homedir/.backup-list ]; then
 	echo -n "Saving $user's home..."
 	list=`cat $homedir/.backup-list | perl -ne "print \"'$homedir/\"; chomp; print; print \"' \";"`
