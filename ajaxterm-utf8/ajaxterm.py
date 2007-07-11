@@ -323,10 +323,10 @@ class Terminal:
 					r+='<span class="f%d b%d">%s</span>'%(span_fg,span_bg,cgi.escape(span.encode('utf8')))
 				span=u""
 				span_bg,span_fg=bg,fg
-                        if c == 0:
+                        if c == 0 or c > 0x10000:
                                 span+=u' '
                         else:
-                                span+=unichr(c)
+                                span+=unichr(c&0xFFFF)
 			if i%w==w-1:
 				span+=u'\n'
 		r='<?xml version="1.0" encoding="utf8"?><pre class="term">%s</pre>'%r
