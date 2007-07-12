@@ -224,7 +224,7 @@ ajaxterm.Terminal_ctor=function(id,width,height) {
 			if(k=="+") {
 				queue("%2B");
 			} else {
-				queue(escape(k));
+				queue(utf8Escape(k));
 			}
 		}
 		ev.cancelBubble=true;
