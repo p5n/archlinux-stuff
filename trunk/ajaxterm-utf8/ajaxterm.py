@@ -244,19 +244,17 @@ class Terminal:
 	def csi_m(self,l):
 		for i in l:
 			if i==0 or i==39 or i==49 or i==27:
-				self.sgr=0x000700
+				self.sgr=0x07000000
 			elif i==1:
-				self.sgr=(self.sgr|0x000800)
+				self.sgr=(self.sgr|0x08000000)
 			elif i==7:
-				self.sgr=0x070000
+				self.sgr=0x70000000
 			elif i>=30 and i<=37:
 				c=i-30
-				self.sgr=(self.sgr&0xff08ff)|(c<<8)
+				self.sgr=(self.sgr&0xf8ffffff)|(c<<24)
 			elif i>=40 and i<=47:
 				c=i-40
-				self.sgr=(self.sgr&0x00ffff)|(c<<16)
-                        self.sgr=0x07000000
-# FIXME: sgr mask!!!
+				self.sgr=(self.sgr&0x0fffffff)|(c<<28)
 #			else:
 #				print "CSI sgr ignore",l,i
 #		print 'sgr: %r %x'%(l,self.sgr)
@@ -314,7 +312,9 @@ class Terminal:
 		for i in range(h*w):
 			q,c=divmod(self.scr[i],256*256*256)
 			if color:
-				bg,fg=divmod(q,256*256*256)
+				bg,fg=divmod(q,16)
+                                bg &= 0x7
+                                fg &= 0x7
 			else:
 				bg,fg=0,7
 			if i==self.cy*w+self.cx:
@@ -324,8 +324,10 @@ class Terminal:
 					r+='<span class="f%d b%d">%s</span>'%(span_fg,span_bg,cgi.escape(span.encode('utf8')))
 				span=u""
 				span_bg,span_fg=bg,fg
-                        if c == 0 or c > 0x10000:
+                        if c == 0:
                                 span+=u' '
+                        elif c > 0x10000:
+                                span+=u'?'
                         else:
                                 span+=unichr(c&0xFFFF)
 			if i%w==w-1:
