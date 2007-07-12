@@ -301,7 +301,7 @@ class Terminal:
 		for i in self.scr:
 			r+=unichr(i&0xFFFFFF)
 		return r
-	def dumplatin1(self):
+	def dumputf8(self):
 		return self.dump().encode('utf8')
 	def dumphtml(self,color=1):
 		h=self.height
@@ -340,7 +340,7 @@ class Terminal:
 #			print self
 			return r
 	def __repr__(self):
-		d=self.dumplatin1()
+		d=self.dumputf8()
 		r=u""
 		for i in range(self.height):
 			r+="|%s|\n"%d[self.width*i:self.width*(i+1)]

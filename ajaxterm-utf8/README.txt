@@ -41,7 +41,7 @@ Then point your browser to this URL : http://localhost:8022/
 
 == Documentation and Caveats ==
 
- * Ajaxterm only support latin1, if you use Ubuntu or any LANG==en_US.UTF-8 distribution don't forget to "unset LANG".
+ * Ajaxterm only support utf8.
 
  * If run as root ajaxterm will run /bin/login, otherwise it will run ssh
    localhost. To use an other command use the -c option.
