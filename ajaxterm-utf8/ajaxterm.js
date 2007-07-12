@@ -116,7 +116,16 @@ ajaxterm.Terminal_ctor=function(id,width,height) {
 				if (r.readyState==4) {
 					if(r.status==200) {
 						window.clearTimeout(error_timeout);
-						de=r.responseXML.documentElement;
+						if(ie)
+						{
+						    var responseXMLdoc = new ActiveXObject("Microsoft.XMLDOM");
+						    responseXMLdoc.loadXML(r.responseText);
+						    de = responseXMLdoc.documentElement;
+						}
+						else
+						{
+						    de=r.responseXML.documentElement;
+						}
 						if(de.tagName=="pre") {
 							if(ie) {
 								Sarissa.updateContentFromNode(de, dterm);
