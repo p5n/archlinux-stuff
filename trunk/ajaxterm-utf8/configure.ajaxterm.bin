@@ -1,2 +1,3 @@
 #!/bin/sh
+cd %(lib)s
 PYTHONPATH=%(lib)s exec %(lib)s/ajaxterm.py $@
