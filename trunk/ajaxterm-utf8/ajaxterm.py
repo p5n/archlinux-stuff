@@ -81,8 +81,8 @@ class Terminal:
 		self.cy_bak=self.cy=0
 		self.cl=0
 		self.sgr=0x07000000
-		self.buf=u""
-		self.outbuf=u""
+		self.buf=""
+		self.outbuf=""
 		self.last_html=""
 	def peek(self,y1,x1,y2,x2):
 		return self.scr[self.width*y1+x1:self.width*y2+x2]
@@ -255,6 +255,8 @@ class Terminal:
 			elif i>=40 and i<=47:
 				c=i-40
 				self.sgr=(self.sgr&0x00ffff)|(c<<16)
+                        self.sgr=0x07000000
+# FIXME: sgr mask!!!
 #			else:
 #				print "CSI sgr ignore",l,i
 #		print 'sgr: %r %x'%(l,self.sgr)
@@ -271,31 +273,30 @@ class Terminal:
 		e=self.buf
 		if len(e)>32:
 #			print "error %r"%e
-			self.buf=u""
+			self.buf=""
 		elif e in self.esc_seq:
 			self.esc_seq[e](e)
-			self.buf=u""
+			self.buf=""
 		else:
 			for r,f in self.esc_re:
 				mo=r.match(e)
 				if mo:
 					f(e,mo)
-					self.buf=u""
+					self.buf=""
 					break
 #		if self.buf=='': print "ESC %r\n"%e
 	def write(self,s):
-		for j in unicode(s, 'utf-8'):
-                        i = j
+		for i in unicode(s, 'utf-8'):
 			if len(self.buf) or (i in self.esc_seq):
-				self.buf+=i
+				self.buf+=chr(ord(i)&255)
 				self.escape()
 			elif i == '\x1b':
-				self.buf+=i
+				self.buf+=chr(ord(i)&255)
 			else:
 				self.echo(i)
 	def read(self):
 		b=self.outbuf
-		self.outbuf=u""
+		self.outbuf=""
 		return b
 	def dump(self):
 		r=u''
