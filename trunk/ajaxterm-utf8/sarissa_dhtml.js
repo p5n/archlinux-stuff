@@ -102,4 +102,3 @@ Sarissa.updateContentFromNode = function(oNode, oTargetElement, xsltproc) {
         oTargetElement.style.cursor = "auto";
     };
 };
-

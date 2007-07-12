@@ -33,41 +33,47 @@ var char2hex = new Array(
     "%f8", "%f9", "%fa", "%fb", "%fc", "%fd", "%fe", "%ff"
   );
 
-function utf8Escape(q)
+function utf8Escape(s)
 {
   var sbuf = "";
   var i;
-  var s = new java.lang.String(q).getBytes();
+
   var len = s.length;
   for (i = 0; i < len; i++)
   {
-    var ch = s[i];
-    var ch2 = String.fromCharCode(ch);
-    if(ch<0)
+    var ch = s.charCodeAt(i);
+    if( (65 <= ch && ch <= 90) ||
+        (97 <= ch && ch <= 122) ||
+        (48 <= ch && ch <= 57) )
     {
-      ch=256+ch;
+      sbuf += String.fromCharCode(ch);
     }
-    if( ('A' <= ch2 && ch2 <= 'Z') ||
-        ('a' <= ch2 && ch2 <= 'z') ||
-        ('0' <= ch2 && ch2 <= '9') )
-    {
-      sbuf += ch2;
-    }
-    else if (ch == ' ')                    // space
+    else if (ch == 32)
     {
       sbuf += '+';
     }
-    else if (ch2 == '-' || ch2 == '_'        // unreserved
-             || ch2 == '.' || ch2 == '!'
-             || ch2 == '~' || ch2 == '*'
-             || ch2 == '\'' || ch2 == '('
-             || ch2 == ')')
-    {
-      sbuf += ch2;
-    }
-    else                                  // other
+    else if (ch == 45 || ch == 95
+             || ch == 46 || ch == 33
+             || ch == 126 || ch == 42
+             || ch == 39 || ch == 40
+             || ch == 41)
     {
       sbuf += char2hex[ch];
+    }
+    else if (ch <= 0x007F)
+    {
+      sbuf += char2hex[ch];
+    }
+    else if (ch <= 0x07FF)
+    {
+       sbuf += char2hex[0xc0 | (ch >> 6)];
+       sbuf += char2hex[0x80 | (ch & 0x3F)];
+    }
+    else
+    {
+       sbuf += char2hex[0xe0 | (ch >> 12)];
+       sbuf += char2hex[0x80 | ((ch >> 6) & 0x3F)];
+       sbuf += char2hex[0x80 | (ch & 0x3F)];
     }
   }
   return sbuf;
