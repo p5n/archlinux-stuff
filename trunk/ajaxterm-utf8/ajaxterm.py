@@ -284,6 +284,7 @@ class Terminal:
 					break
 #		if self.buf=='': print "ESC %r\n"%e
 	def write(self,s):
+# FIXME: s broken inside multibyte char
 		for i in unicode(s, 'utf-8'):
 			if len(self.buf) or (i in self.esc_seq):
 				self.buf+=chr(ord(i)&255)
