@@ -1,0 +1,10 @@
+*default host=cvs.archlinux.org
+
+*default release=cvs
+*default delete
+*default use-rel-suffix
+*default compress
+#*default umask=002
+
+*default tag=CURRENT-64
+community
