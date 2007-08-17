@@ -1,11 +1,13 @@
 pkgname=arch-repodiff-svn
-pkgver=65
+pkgver=67
 pkgrel=1
 pkgdesc="A web based terminal"
 arch=('i686' 'x86_64')
 url="http://code.google.com/p/archlinux-stuff/"
 depends=(bash perl diff2html)
 license=('GPL')
+source=()
+md5sums=()
 
 _svntrunk=http://archlinux-stuff.googlecode.com/svn/trunk/arch-repodiff/
 _svnmod=arch-repodiff
