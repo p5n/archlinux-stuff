@@ -108,6 +108,16 @@ foreach $i (sort keys %PKGS)
     $p1 = "&nbsp;" if($p1 eq "");
     $p2 = "&nbsp;" if($p2 eq "");
 
+    if($p1 =~ /^(.*)-(.+)\..+$/)
+    {
+        $p1 = "$1-$2";
+    }
+
+    if($p2 =~ /^(.*)-(.+)\..+$/)
+    {
+        $p2 = "$1-$2";
+    }
+
     if($p1 ne $p2)
     {
 	print "DIFF: $repo-$group-$pkg\n";
