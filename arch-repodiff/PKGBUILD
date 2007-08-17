@@ -1,5 +1,5 @@
 pkgname=arch-repodiff-svn
-pkgver=1
+pkgver=65
 pkgrel=1
 pkgdesc="A web based terminal"
 arch=('i686' 'x86_64')
