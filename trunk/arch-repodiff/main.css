@@ -1,0 +1,28 @@
+.row0
+{
+    background-color: #CACACA;
+}
+
+.row1
+{
+    background-color: #9B9B9B;
+}
+
+.outdated
+{
+    background-color: #FF5C5C;
+}
+
+.table
+{
+    background-color: #000000;
+    border-width: 0px;
+    border-spacing: 1px;
+    padding: 0px;
+    margin: auto;
+}
+
+.header
+{
+    background-color: #4ECF9B;
+}
