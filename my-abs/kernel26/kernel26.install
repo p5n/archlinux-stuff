@@ -1,0 +1,16 @@
+post_install () {
+  echo ">>> Updating module dependencies. Please wait ..."
+  KERNEL_VERSION=2.6.20
+  /sbin/depmod -A -v $KERNEL_VERSION > /dev/null 2>&1
+}
+
+post_upgrade() {
+  echo ">>> Updating module dependencies. Please wait ..."
+  KERNEL_VERSION=2.6.20
+  /sbin/depmod -A -v $KERNEL_VERSION > /dev/null 2>&1
+}
+
+op=$1
+shift
+
+$op $*

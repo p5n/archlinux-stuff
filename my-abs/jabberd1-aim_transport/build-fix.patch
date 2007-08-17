@@ -1,0 +1,26 @@
+diff -wbBur ./aim-transport-stable-20040131/src/aimtrans.h ./aim-transport-stable-20040131.my/src/aimtrans.h
+--- ./aim-transport-stable-20040131/src/aimtrans.h	2004-01-20 00:19:11.000000000 +0300
++++ ./aim-transport-stable-20040131.my/src/aimtrans.h	2006-07-24 16:15:30.000000000 +0400
+@@ -3,7 +3,10 @@
+  *
+ */
+ 
++#define INCLUDE_LEGACY
++
+ #include "jabberd.h"
++#include "jabberdlib.h"
+ #include "aim.h"
+ #include <sys/utsname.h>
+ #include <iconv.h>
+diff -wbBur ./aim-transport-stable-20040131/src/rxhandlers.c ./aim-transport-stable-20040131.my/src/rxhandlers.c
+--- ./aim-transport-stable-20040131/src/rxhandlers.c	2001-11-28 21:05:42.000000000 +0300
++++ ./aim-transport-stable-20040131.my/src/rxhandlers.c	2006-07-24 16:17:21.000000000 +0400
+@@ -66,7 +66,7 @@
+ 	}
+ 
+ 	mod->next = (aim_module_t *)sess->modlistv;
+-	(aim_module_t *)sess->modlistv = mod;
++	sess->modlistv = mod;
+ 
+ 	faimdprintf(sess, 1, "registered module %s (family 0x%04x, version = 0x%04x, tool 0x%04x, tool version 0x%04x)\n", mod->name, mod->family, mod->version, mod->toolid, mod->toolversion);
+ 

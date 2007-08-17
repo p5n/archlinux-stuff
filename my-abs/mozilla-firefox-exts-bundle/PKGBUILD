@@ -1,0 +1,40 @@
+# Contributor: Sergej Pupykin <ps@lx-ltd.ru>
+pkgname=mozilla-firefox-exts-bundle
+pkgver=0.2
+pkgrel=1
+pkgdesc="Mozilla-Firefox extensions"
+arch=(i686 x86_64)
+depends=(firefox)
+url="http://mozilla.org/"
+source=(http://releases.mozilla.org/pub/mozilla.org/extensions/adblock/adblock-0.5.3.043-fx+fl+mz+ns.xpi \
+	https://addons.mozilla.org/en-US/firefox/downloads/file/17369/noscript-1.1.6.02-fx+mz+sm+fl.xpi
+	http://releases.mozilla.org/pub/mozilla.org/extensions/imglikeopera/imglikeopera-0.6.15-fx.xpi \
+	http://releases.mozilla.org/pub/mozilla.org/extensions/scrapbook/scrapbook-1.2.0.8-fx+fl.xpi \
+	http://forum.mozilla-russia.org/uploaded/humanurl-0.1.2.1.xpi \
+	http://downloads.mozdev.org/wmlbrowser/wmlbrowser-0.7.15.xpi \
+	http://addons.mozilla.org/en-US/firefox/downloads/file/15530/foxmarks_bookmark_synchronizer-1.0.1-fx.xpi \
+	http://addons.mozilla.org/en-US/firefox/downloads/file/14778/russian_hot_keys_bugfix-1.4-fx+mz+tb+sm+fl.xpi \
+	http://releases.mozilla.org/pub/mozilla.org/extensions/lori_life-of-request_info_/lori_life-of-request_info_-0.1.0.20061030-fx.xpi \
+	http://releases.mozilla.org/pub/mozilla.org/extensions/download_statusbar/download_statusbar-0.9.4.2-fx.xpi \
+	http://releases.mozilla.org/pub/mozilla.org/extensions/mouseless_browsing/mouseless_browsing-0.4.2-fx.xpi \
+	http://releases.mozilla.org/pub/mozilla.org/extensions/user_agent_switcher/user_agent_switcher-0.6.8-fx+fl+mz.xpi)
+
+# http://releases.mozilla.org/pub/mozilla.org/extensions/wizz_rss_news_reader/wizz_rss_news_reader-2.1.5-fx+fl.xpi
+# http://extensions.geckozone.org/xpi/mozff/BookmarksSynchronizer-1.02.xpi
+# http://releases.mozilla.org/pub/mozilla.org/extensions/lingvo_online_/lingvo_online_-1.3.5b-fx+mz.xpi \
+# http://newsfox.mozdev.org/newsfox.xpi
+
+# http://downloads.mozdev.org/dragtotab/resizesearchbox.xpi
+
+# http://downloads.mozdev.org/conkeror/conkeror-firefox-0.38.xpi
+# http://downloads.mozdev.org/surfkeys/surfkeys_0_4_2.xpi
+# http://downloads.mozdev.org/hah/hah_0_9_1.xpi
+
+# http://releases.mozilla.org/pub/mozilla.org/themes/noia_2.0_extreme_/noia_2.0_extreme_-3.34-fx.jar
+
+build() {
+	cd $startdir/src/
+	mkdir -p $startdir/pkg/usr/share/mozilla-extensions/firefox/
+	rename .jar .xpi *.jar
+	cp *.xpi $startdir/pkg/usr/share/mozilla-extensions/firefox/
+}

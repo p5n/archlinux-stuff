@@ -1,0 +1,54 @@
+pkgname=samba-workstation
+pkgver=3.0.24
+pkgrel=1
+pkgdesc="Lightweight samba version for generic workstation (w/o ldap, swat, etc...)"
+url="http://www.samba.org"
+backup=(etc/logrotate.d/samba etc/pam.d/samba)
+depends=('popt')
+conflicts=(samba smbclient)
+replaces=(samba smbclient)
+provides=(samba smbclient)
+source=(http://us1.samba.org/samba/ftp/samba-${pkgver}.tar.gz \
+        samba \
+	samba.logrotate \
+	samba.pam)
+
+build() {
+  cd ${startdir}/src/samba-${pkgver}/source
+
+  ./configure --prefix=/usr --with-configdir=/etc/samba \
+              --with-lockdir=/var/run/samba \
+	      --with-fhs --disable-cups --with-smbmount
+  make || return 1
+  mkdir -p $startdir/pkg/var/log/samba
+  mkdir -p $startdir/pkg/etc/samba/private
+  chmod 700 $startdir/pkg/etc/samba/private
+
+  make DESTDIR=$startdir/pkg install
+
+  chmod 644 $startdir/pkg/usr/include/*.h
+  rm -rf $startdir/pkg/usr/var
+  (cd script; cp installbin.sh i; cat i | sed 's/\/sbin\///' > installbin.sh)
+
+  install -D -m755 ../../samba $startdir/pkg/etc/rc.d/samba
+
+  mkdir -p $startdir/pkg/etc/samba
+
+  cat ../examples/smb.conf.default | sed 's|log file = .*$|log file = /var/log/samba/log.%m|g' >$startdir/pkg/etc/samba/smb.conf.default
+
+  install -D -m644 ../../samba.logrotate $startdir/pkg/etc/logrotate.d/samba
+  install -D -m644 ../../samba.pam $startdir/pkg/etc/pam.d/samba
+
+  # spool directory
+  install -d -m1777 $startdir/pkg/var/spool/samba
+  sed -i 's|/usr/spool/samba|/var/spool/samba|g' $startdir/pkg/etc/samba/smb.conf.default
+
+  # MY
+  rm -rf $startdir/pkg/usr/share/samba
+  rm -f $startdir/pkg/usr/sbin/swat
+  rm -f $startdir/pkg/usr/man/man8/swat*
+
+  ln -sf samba/libsmbclient.so ${startdir}/pkg/usr/lib/libsmbclient.so
+  ln -sf samba/libsmbclient.so ${startdir}/pkg/usr/lib/libsmbclient.so.0
+  ln -sf ../usr/bin/smbmount ${startdir}/pkg/sbin/mount.smbfs
+}

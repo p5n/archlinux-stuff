@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Ion
+Comment=The Ion window manager
+Exec=ion
+# no icon yet, only the top three are currently used
+Icon=
+Type=Application

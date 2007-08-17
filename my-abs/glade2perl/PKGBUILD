@@ -1,0 +1,21 @@
+# Contributor: Sergej Pupykin <ps@lx-ltd.ru>
+pkgname=glade2perl
+pkgver=0.61
+pkgrel=1
+pkgdesc="convert glade project into perl-gtk sources"
+url="http://search.cpan.org/~dmusgr/Glade-Perl-0.61/"
+license="GPL"
+depends=(perlxml gtk-perl)
+conflicts=()
+replaces=()
+backup=()
+install=
+source=(http://search.cpan.org/CPAN/authors/id/D/DM/DMUSGR/Glade-Perl-$pkgver.tar.gz)
+md5sums=('13159e67d1a91bf912b4ffea2975cd1a')
+
+build() {
+  cd $startdir/src/Glade-Perl-$pkgver
+  perl ./Makefile.PL
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+}

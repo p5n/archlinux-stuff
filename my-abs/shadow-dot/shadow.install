@@ -1,0 +1,14 @@
+# This is a default template for a post-install scriptlet.  You can
+# remove any functions you don't need (and this header).
+
+post_upgrade() {
+  # fix gshadow
+  if [ "$(grpck -r)" ]; then
+     echo "Fixing gshadow file ..."
+     yes | grpck > /dev/null
+  fi
+}
+
+op=$1
+shift
+$op $*

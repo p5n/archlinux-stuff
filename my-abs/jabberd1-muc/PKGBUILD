@@ -1,0 +1,30 @@
+# Contributor: Sergej Pupykin <ps@lx-ltd.ru>
+pkgname=jabberd1-muc
+pkgver=0.6.0
+_jabver=1.4.4
+pkgrel=1
+pkgdesc="mu conference for jabberd1"
+url="http://mu-conference.jabberstudio.org/"
+license="GPL"
+depends=(jabberd1)
+makedepends=(patch)
+conflicts=()
+replaces=()
+backup=()
+install=
+source=(http://download.jabberd.org/jabberd14/jabberd-$_jabver.tar.gz \
+		http://files.jabberstudio.org/mu-conference/mu-conference-$pkgver.tar.gz \
+		build-fix.patch)
+md5sums=('395f814a6627436ba7bd235509adcbc7' 'e97433bf4a978329d639ce872bee3223'\
+         '65c17abefe0248d3b0e0cf8bceaa53c5')
+
+build() {
+  cd $startdir/src/jabberd-$_jabver
+  ./configure --prefix=/usr --enable-ssl --enable-legacy --sysconfdir=/etc/jabberd --localstatedir=/var
+  cd $startdir/src/
+  mv mu-conference-$pkgver jabberd-$_jabver
+  cd jabberd-$_jabver/mu-conference-$pkgver
+  patch -Np1 <../../build-fix.patch
+  make || return 1
+  install -D -m 0755 $startdir/src/jabberd-$_jabver/mu-conference-$pkgver/src/mu-conference.so $startdir/pkg/usr/lib/jabberd/mu-conference.so
+}

@@ -1,0 +1,12 @@
+--- sim/plugins/_core/historycfg.cpp.orig	2004-06-16 07:56:23 +0600
++++ sim/plugins/_core/historycfg.cpp	2004-08-07 12:29:01 +0600
+@@ -313,8 +313,8 @@
+     if (bChanged){
+         Event e(EventHistoryConfig);
+         e.process();
+-        fillPreview();
+     }
++    fillPreview();
+     HistoryUserData *data = (HistoryUserData*)(getContacts()->getUserData(CorePlugin::m_plugin->history_data_id));
+     data->CutDays.bValue = chkDays->isChecked();
+     data->CutSize.bValue = chkSize->isChecked();

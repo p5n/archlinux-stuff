@@ -1,0 +1,17 @@
+# Contributor: Sergej Pupykin <ps@lx-ltd.ru>
+pkgname=my-dock-icon
+pkgver=0.1
+pkgrel=1
+pkgdesc="insert specified icon into tray"
+url="http://archlinux.org/"
+license="GPL"
+depends=(libx11)
+makedepends=(imake)
+source=(pic.xpm xxkb.c xxkb.h)
+md5sums=('b452072d5d900fce2869a94c23c708ef' '06f02ae2123914ab747e66371fda8179'\
+         '38ea6809ab16bbfccc92da9297ddeac5')
+
+build() {
+  mkdir -p $startdir/pkg/usr/bin && \
+  gcc -O2 $startdir/src/xxkb.c -o $startdir/pkg/usr/bin/my-dock-icon -I/usr/include -lXpm
+}

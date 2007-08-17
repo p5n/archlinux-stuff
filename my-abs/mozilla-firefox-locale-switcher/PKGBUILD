@@ -1,0 +1,16 @@
+# Contributor: Sergej Pupykin <ps@lx-ltd.ru>
+pkgname=mozilla-firefox-locale-switcher
+pkgver=2.0
+pkgrel=1
+pkgdesc="Mozilla-Firefox locale switcher"
+depends=(firefox)
+makedepends=('unzip')
+url="http://benjamin.smedbergs.us/switch-locales/"
+source=(http://benjamin.smedbergs.us/switch-locales/switch-locales-$pkgver.xpi)
+md5sums=('536ba190b6899410e8802b5d11289f55')
+
+build() {
+	cd $startdir/src/
+	mkdir -p $startdir/pkg/opt/mozilla/lib/firefox/extensions/locale-switcher@benjamin.smedbergs.us
+	unzip $startdir/src/switch-locales-$pkgver.xpi -d $startdir/pkg/opt/mozilla/lib/firefox/extensions/locale-switcher@benjamin.smedbergs.us
+}

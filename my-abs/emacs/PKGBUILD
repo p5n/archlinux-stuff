@@ -1,0 +1,36 @@
+# $Id: PKGBUILD,v 1.2 2006/07/28 11:59:42 pupykin Exp $
+# Maintainer: Juergen Hoetzel <juergen@archlinux.org>
+# Contributor: Renchi Raju <renchi@green.tam.uiuc.edu>
+pkgname=emacs
+pkgver=21.4
+pkgrel=4
+pkgdesc="The Emacs Editor"
+url="http://www.gnu.org/software/emacs/emacs.html"
+depends=('ncurses' 'libpng' 'libtiff' 'libungif' 'xaw3d')
+makedepends=(patch)
+source=(ftp://ftp.gnu.org/gnu/emacs/$pkgname-21.4a.tar.gz \
+        emacs-21.4-xorg.patch)
+md5sums=('8f9d97cbd126121bd5d97e5e31168a87' 'ca07e58ea6c9ad668d15d2e3650f6628')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  # fix AltGr key behaviour when compiling against xorg
+  patch -p1 -i ../emacs-21.4-xorg.patch || return 1
+  ./configure --prefix=/usr --with-x --with-x-toolkit=athena --with-xpm --with-jpeg --with-tiff --with-gif --with-png \
+              --x-includes=/usr/include --x-libraries=/usr/lib
+  
+  # we don't want to use /usr/libexec
+  sed -i "s|\"/usr/libexec/emacs.*$|\"/usr/lib/emacs/$pkgver\"|g" src/epaths.h
+  mv newepaths.h src/epaths.h
+
+  make libexecdir=/usr/lib archlibdir=/usr/lib/emacs/${pkgver} || return 1
+  make prefix=$startdir/pkg/usr libexecdir=$startdir/pkg/usr/lib \
+    archlibdir=$startdir/pkg/usr/lib/emacs/${pkgver} install
+  # remove conflict with ctags package
+  mv $startdir/pkg/usr/bin/{ctags,ctags.emacs} || return 1
+  mv $startdir/pkg/usr/bin/{etags,etags.emacs} || return 1
+  mv $startdir/pkg/usr/man/man1/{etags.1,etags.emacs.1} || return 1
+  mv $startdir/pkg/usr/man/man1/{ctags.1,ctags.emacs.1} || return 1
+  # fix all the 777 perms on directories
+  find $startdir/pkg/usr/share/emacs/$pkgver -type d -exec chmod 755 {} \;
+}

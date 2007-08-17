@@ -1,0 +1,55 @@
+# Contributor: Sergej Pupykin <ps@lx-ltd.ru>
+arch=(i686 x86_64)
+pkgname=ffmpeg-amr
+pkgver=20070131
+pkgrel=1
+url="http://ffmpeg.mplayerhq.hu/"
+pkgdesc="FFMpeg with AMR(WB&NB) codecs from 3gpp.org"
+depends=('lame' 'sdl' 'libvorbis' 'a52dec' 'faad2' 'faac' 'libdts' 'xvidcore' 'zlib')
+makedepends=(patch unzip)
+conflicts=(ffmpeg)
+provides=(ffmpeg)
+source=(http://gerolde.archlinux.org/~paul/ffmpeg-$pkgver.tar.gz \
+	http://www.3gpp.org/ftp/Specs/archive/26_series/26.104/26104-510.zip \
+	http://www.3gpp.org/ftp/Specs/archive/26_series/26.204/26204-510.zip)
+md5sums=('044f19cd998a86954f93c9e7d3eb1417'
+         '9b575d01f94f50dd4dcf570cd8a14dda' '607a14d090898ffb0f72c1aa6aa6ce31')
+
+build() {
+     cd $startdir/src/ffmpeg || return 1
+
+     mkdir -p libavcodec/amr_float
+     cd libavcodec/amr_float && unzip -o ../../../26104-510_ANSI_C_source_code.zip || return 1
+     cd ../..
+
+     mkdir -p libavcodec/amrwb_float
+     cd libavcodec/amrwb_float && unzip -o ../../../26204-510_ANSI-C_source_code.zip || return 1
+     cd ../..
+
+     # configure
+     ./configure \
+          --prefix=/usr \
+          --enable-gpl \
+          --enable-mp3lame \
+          --enable-libogg \
+          --enable-vorbis \
+          --enable-pp \
+          --enable-faac \
+          --enable-faad \
+          --enable-a52 \
+          --enable-xvid \
+          --enable-dts \
+          --enable-pp \
+          --enable-shared \
+          --enable-pthreads \
+	  --enable-amr_nb --enable-amr_wb \
+       || return 1
+
+     # build
+     make -j 2 || return 1
+     # make LDFLAGS+=-lX11 || return 1
+
+     # install
+     mkdir -p $startdir/pkg/usr/{bin,include,lib} || return 1
+     make DESTDIR=$startdir/pkg install || return 1
+}

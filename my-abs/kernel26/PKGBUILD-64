@@ -1,0 +1,24 @@
+# Contributor: Sergej Pupykin <ps@lx-ltd.ru>
+pkgname=kernel26-my
+basekernel=2.6.20
+pkgver=2.6.20
+pkgrel=1
+pkgdesc="The Linux Kernel and modules"
+url="http://www.kernel.org"
+depends=('module-init-tools')
+provides=(kernel26)
+install=kernel26.install
+
+build() {
+  # build!
+  cd ..
+  _kernver="${basekernel}${CONFIG_LOCALVERSION}"
+  make || return 1
+  mkdir -p $startdir/pkg/{lib/modules,boot}
+  make INSTALL_MOD_PATH=$startdir/pkg modules_install || return 1
+  cp System.map $startdir/pkg/boot/System.map-my
+  cp arch/x86_64/boot/bzImage $startdir/pkg/boot/vmlinuz-my
+  install -D -m644 .config $startdir/pkg/boot/kconfig-my
+  # set correct depmod command for install
+  sed -i -e "s/KERNEL_VERSION=.*/KERNEL_VERSION=${_kernver}/g" $startdir/kernel26.install
+}

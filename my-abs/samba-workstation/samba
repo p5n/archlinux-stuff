@@ -1,0 +1,52 @@
+#!/bin/bash
+
+. /etc/rc.conf
+. /etc/rc.d/functions
+
+export TMPDIR=/tmp
+export LC_ALL=ru_RU.KOI8-R
+export LANG=ru_RU.KOI8-R
+
+SMBD_PID=`pidof -o %PPID /usr/sbin/smbd`
+NMBD_PID=`pidof -o %PPID /usr/sbin/nmbd`
+
+case "$1" in
+  start)
+    rc=0
+    stat_busy "Starting Samba Server"
+    [ -z "$SMBD_PID" ] && /usr/sbin/smbd -D
+    rc=$(($rc+$?))
+    [ -z "$NMBD_PID" ] && /usr/sbin/nmbd -D
+    rc=$(($rc+$?))
+    if [ $rc -gt 0 ]; then
+      stat_fail
+    else
+      add_daemon samba
+      stat_done
+    fi
+    ;;
+  stop)
+    rc=0
+    stat_busy "Stopping Samba Server"
+    kill $SMBD_PID &>/dev/null
+    rc=$(($rc+$?))
+    kill $NMBD_PID &>/dev/null
+    rc=$(($rc+$?))
+    if [ $rc -gt 0 ]; then
+      stat_fail
+    else
+      rm /var/run/samba/smbd.pid &>/dev/null
+      rm /var/run/samba/nmbd.pid &>/dev/null
+      rm_daemon samba
+      stat_done
+    fi
+    ;;
+  restart)
+    $0 stop
+    sleep 1
+    $0 start
+    ;;
+  *)
+    echo "usage: $0 {start|stop|restart}"  
+esac
+exit 0

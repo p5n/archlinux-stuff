@@ -1,0 +1,29 @@
+# Contributor: Sergej Pupykin <ps@lx-ltd.ru>
+pkgname=yahoo-transport
+pkgver=2.3.2
+jabberdver=1.4.4
+pkgrel=1
+pkgdesc="jabber yahoo transport"
+url="http://yahoo-transport.jabberstudio.org/"
+license="GPL"
+backup=(etc/ejabberd/yahoo.xml)
+depends=(jabberd1)
+source=(http://jabberstudio.rediris.es/yahoo-transport-2/yahoo-transport-2.3.2.tar.gz \
+	http://download.jabberd.org/jabberd14/jabberd-$jabberdver.tar.gz \
+        yahoo.rc \
+	build-fix.patch)
+md5sums=('bfe48aa7980a5e27ec929311615e792c' '395f814a6627436ba7bd235509adcbc7'\
+         'd686054b2c0e9c08143c4eb6a185dbb2' 'bb3f42d94628ea46f8fadd744a0e3d04')
+
+build() {
+  mv $startdir/src/yahoo-transport-2.3.2 $startdir/src/jabberd-$jabberdver/
+  cd $startdir/src/jabberd-$jabberdver
+  ./configure --prefix=/usr --enable-ssl --enable-legacy --sysconfdir=/etc/jabberd --localstatedir=/var
+  make || return 1
+  cd $startdir/src/jabberd-$jabberdver/$pkgname-$pkgver
+  patch -Np0 <../../build-fix.patch
+  make
+  install -D -m 0755 ./yahoo-transport.so $startdir/pkg/usr/lib/jabberd/yahoo-transport.so && \
+  install -D -m 0644 ./yahoo-jabber.xml $startdir/pkg/etc/ejabberd/yahoo.xml && \
+  install -D -m0755 ../../yahoo.rc $startdir/pkg/etc/rc.d/yahoot
+}

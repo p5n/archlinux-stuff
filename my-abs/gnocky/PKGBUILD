@@ -1,0 +1,21 @@
+# Contributor: Sergej Pupykin <ps@lx-ltd.ru>
+pkgname=gnocky
+pkgver=0.0.3
+pkgrel=1
+pkgdesc="gnokii frontend written in GTK2"
+url="http://www.gnokii.org/"
+license="GPL"
+depends=(gnokii)
+conflicts=()
+replaces=()
+backup=()
+install=
+source=(http://www.gnokii.org/download/gnocky/$pkgname-$pkgver.tar.gz)
+md5sums=('869b3b781c2ba996d3ee4058c01deb7a')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  ./configure --prefix=/usr
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+}

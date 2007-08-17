@@ -1,0 +1,35 @@
+# Contributor: Sergej Pupykin <ps@lx-ltd.ru>
+pkgname=bahamut
+pkgver=1.8.3
+pkgrel=1
+pkgdesc="IRC server"
+url="http://bahamut.dal.net/"
+license="GPL"
+depends=()
+conflicts=()
+replaces=()
+backup=()
+install=
+source=(ftp://ftp.dal.net/dalnet/server/bahamut/$pkgname-$pkgver-release.tar.gz)
+md5sums=('2e782fe99656433ca24f6a9832d9aad5')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  ./configure --prefix=/usr
+  make || return 1
+  find -type f -name Makefile -exec sed -i "s#INSTALL_DIR=/usr#INSTALL_DIR=$startdir/pkg/usr#" {} \;
+  make install || return 1
+
+  cd $startdir/pkg/ && \
+  mkdir -p etc/ircd && \
+  mkdir -p usr/sbin && \
+
+  cd usr && \
+  mv convert_conf sbin/ && \
+  mv ircd sbin/ && \
+  mv mkpasswd sbin/ && \
+  mv ircd.motd ../etc/ircd && \
+  mv opers.txt ../etc/ircd && \
+  mv reference.conf ../etc/ircd && \
+  mv template.conf ../etc/ircd
+}

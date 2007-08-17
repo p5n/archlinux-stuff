@@ -1,0 +1,30 @@
+pkgname=ion
+pkgver=3rc_20070720
+_pkgver=3rc-20070720
+pkgrel=1
+pkgdesc="Ion is a tiling windowmanager with tabbed frames scriptable in Lua."
+arch=(i686 x86_64)
+url="http://iki.fi/tuomov/ion/"
+depends=('libsm' 'lua')
+license=('GPL')
+source=(http://iki.fi/tuomov/dl/ion-$_pkgver.tar.gz \
+	mod_xkb.c \
+	Makefile \
+	xkbion.lua)
+
+build() {
+  cd $startdir/src/ion-$_pkgver
+
+  sed -i "s#PREFIX=/usr/local#PREFIX=/usr#" system.mk || return 1
+  sed -i "s#ETCDIR=\$(PREFIX)/etc/ion3#ETCDIR=\$(PREFIX)/../etc/ion3#" system.mk || return 1
+  sed -i "s#LUA_DIR=/usr/local#LUA_DIR=/usr#" system.mk || return 1
+
+  mkdir mod_xkb && cp -f ../mod_xkb.c ../Makefile mod_xkb/
+  sed -i "s|\t      de|\t      de mod_xkb|" modulelist.mk
+
+  make || return 1
+
+  sed -i "s#PREFIX=/usr#PREFIX=$startdir/pkg/usr#" system.mk || return 1
+
+  make install || return 1
+}
