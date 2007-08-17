@@ -1,0 +1,38 @@
+# Contributor: Sergej Pupykin <ps@lx-ltd.ru>
+arch=(i686)
+pkgname=taglib-svn
+pkgver=20070330
+pkgrel=1
+pkgdesc="taglib svn version"
+url="http://ktown.kde.org/~wheeler/taglib.html"
+depends=('gcc>=4.0.1' 'zlib' 'bash')
+conflicts=('taglib')
+provides=('taglib')
+source=()
+md5sums=()
+
+_svntrunk="svn://anonsvn.kde.org/home/kde/trunk/kdesupport/taglib"
+
+build() {
+  cd $startdir/src/
+
+  msg "Checking for previous build"
+  if [[ -d taglib/.svn ]]
+  then
+    msg "Retrieveing missig patches"
+    cd taglib
+    svn up
+  else
+    msg "Retrieving complete sources"
+    svn co $_svntrunk
+    cd taglib
+  fi
+
+  msg "Configure"
+  make -f admin/Makefile.common
+
+  msg "Starting build"
+  ./configure --prefix=/usr
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+}

@@ -1,0 +1,23 @@
+pkgname=php4
+pkgver=4.4.4
+pkgrel=1
+pkgdesc="A high-level scripting language"
+arch=(i686 x86_64)
+url="http://www.php.net"
+backup=(etc/php.ini)
+source=(http://www.php.net/distributions/${pkgname}-${pkgver}.tar.gz)
+
+build() {
+  export MAKEFLAGS="-j1"
+  cd ${startdir}/src/${pkgname}-${pkgver}
+  ./configure --prefix=/usr --with-apache-dir=/usr --with-apxs=/usr/bin/apxs --disable-cgi
+  make || return 1
+  mkdir -p ${startdir}/pkg/usr/lib/apache
+
+  mkdir -p $startdir/pkg/etc/httpd
+  cp /etc/httpd/httpd.conf $startdir/pkg/etc/httpd/httpd.conf
+
+  make INSTALL_ROOT=${startdir}/pkg install
+
+  rm -f $startdir/pkg/etc/httpd/httpd.conf*
+}

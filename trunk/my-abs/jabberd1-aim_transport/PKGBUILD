@@ -1,0 +1,24 @@
+# Contributor: Sergej Pupykin <ps@lx-ltd.ru>
+pkgname=jabberd1-aim_transport
+pkgver=20040131b
+pkgrel=1
+pkgdesc="jabberd1 aim/icq transport"
+url="http://aim-transport.jabberstudio.org"
+license="GPL"
+depends=(jabberd1)
+makedepends=(patch)
+conflicts=()
+replaces=()
+backup=()
+install=
+source=(http://aim-transport.jabberstudio.org/aim-transport-stable-$pkgver.tar.gz \
+		build-fix.patch)
+md5sums=('804469a50824691adcfa2cec71dbf6df' 'a2eeaa1f584fc6e0653e08c776c8ab7d')
+
+build() {
+  cd $startdir/src/aim-transport-stable-20040131
+  patch -Np2 <../build-fix.patch
+  ./configure --prefix=/usr --with-jabberd=/usr/bin/
+  make || return 1
+  install -D -m 0755 ./src/aimtrans.so $startdir/pkg/usr/lib/jabberd/aimtrans.so
+}

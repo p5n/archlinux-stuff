@@ -1,0 +1,32 @@
+# Contributor: Sergej Pupykin <ps@lx-ltd.ru>
+pkgname=ion2
+pkgver=20040729
+pkgrel=4
+pkgdesc="A keyboard-friendly tiling (no overlapping windows) window manager"
+depends=('lua>=5.0.2' 'libtool' 'libxinerama' 'libsm')
+makedepends=(patch)
+source=(http://modeemi.fi/~tuomov/ion/dl/ion-2-$pkgver.tar.gz \
+    ion.desktop \
+    ion2-lua51.diff)
+url="http://modeemi.fi/~tuomov/ion/"
+md5sums=('d7d98baa41635c1989e423adf76eb2ac' '4c4a02e5258c6c35d7cb26abe0177cb6'\
+         'ee0d209c158764ce5dcab5318ff16d8f')
+
+build() {
+  cd $startdir/src/ion-2-$pkgver
+
+  patch -p1 <../ion2-lua51.diff
+  sed -i "s#/usr/local#/usr#" system.mk
+  sed -i "s#-llualib##" system.mk
+
+  ./configure --prefix=/usr
+  /usr/bin/make ETCDIR=/etc/ion || return 1
+
+  sed -i "s#PREFIX=/usr#PREFIX=$startdir/pkg/usr#" system.mk
+
+  /usr/bin/make prefix=$startdir/pkg/usr ETCDIR=$startdir/pkg/etc/ion install
+
+  # set up desktop session file
+  /bin/mkdir -p $startdir/pkg/etc/X11/sessions
+  /bin/cp $startdir/ion.desktop $startdir/pkg/etc/X11/sessions
+}

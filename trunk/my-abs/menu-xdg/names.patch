@@ -1,0 +1,81 @@
+diff -wbBur menu-xdg-0.2.3/menu-xdg menu-xdg-0.2.3.my/menu-xdg
+--- menu-xdg-0.2.3/menu-xdg	2006-03-20 05:44:48.000000000 -0800
++++ menu-xdg-0.2.3.my/menu-xdg	2006-05-15 11:44:25.000000000 -0700
+@@ -22,9 +22,9 @@
+ function DirEntry() =
+ 	Dirs()
+ 	"<Name>" title() "</Name>\n"
+-	"<Directory>" "debian" replacewith(tolower($section),"/","-") ".directory" "</Directory>\n"
++	"<Directory>" "arch" replacewith(tolower($section),"/","-") ".directory" "</Directory>\n"
+ 	"<Include>\n"
+-	"<Category>" "X-Debian" replacewith($section,"/","-") "</Category>\n"
++	"<Category>" "X-Arch" replacewith($section,"/","-") "</Category>\n"
+ 	"</Include>\n";
+ 
+ 
+@@ -39,9 +39,9 @@
+ 
+ treewalk = "(M)";
+ 
+-genmenu = "debian-menu.menu";
++genmenu = "arch-menu.menu";
+ 
+-prerun = "rm -rf " prefix() "/debian-menu.menu";
++prerun = "rm -rf " prefix() "/arch-menu.menu";
+ 
+ rootsection = "";
+ 
+diff -wbBur menu-xdg-0.2.3/xdg-desktop-entry-spec-apps menu-xdg-0.2.3.my/xdg-desktop-entry-spec-apps
+--- menu-xdg-0.2.3/xdg-desktop-entry-spec-apps	2006-03-20 05:44:23.000000000 -0800
++++ menu-xdg-0.2.3.my/xdg-desktop-entry-spec-apps	2006-05-15 11:44:16.000000000 -0700
+@@ -20,7 +20,7 @@
+ 	"Icon=" icon() "\n"
+ 	"Exec=" $command "\n"
+ 	"Terminal=" $terminal "\n"
+-	"Categories=X-Debian" replacewith($basesection,"/","-") "\n";
++	"Categories=X-Arch" replacewith($basesection,"/","-") "\n";
+ 
+ 
+ supported;
+@@ -34,7 +34,7 @@
+ 
+ treewalk = "M";
+ 
+-genmenu = ifnempty($command,"X-Debian" replacewith($basesection,"/","-") "-" tolower(replacewith($title,"/ ","__") ".desktop"));
++genmenu = ifnempty($command,"X-Arch" replacewith($basesection,"/","-") "-" tolower(replacewith($title,"/ ","__") ".desktop"));
+ 
+ rootsection = "";
+ 
+diff -wbBur menu-xdg-0.2.3/xdg-desktop-entry-spec-dirs menu-xdg-0.2.3.my/xdg-desktop-entry-spec-dirs
+--- menu-xdg-0.2.3/xdg-desktop-entry-spec-dirs	2006-03-20 05:44:29.000000000 -0800
++++ menu-xdg-0.2.3.my/xdg-desktop-entry-spec-dirs	2006-05-15 11:44:07.000000000 -0700
+@@ -24,7 +24,7 @@
+ 	"Encoding=UTF-8\n"
+ 	section()
+ 	"Comment=" ifnempty($longtitle,$longtitle) "\n"
+-	"Icon=" "debian" replacewith(tolower($section),"/","-") "\n";
++	"Icon=" "arch" replacewith(tolower($section),"/","-") "\n";
+ 
+ 
+ supported;
+@@ -38,7 +38,7 @@
+ 
+ treewalk = "M";
+ 
+-genmenu = ifempty($command,tolower("debian" replacewith($section,"/ ","--") ".directory"));
++genmenu = ifempty($command,tolower("arch" replacewith($section,"/ ","--") ".directory"));
+ 
+ rootsection = "";
+ 
+diff -wbBur menu-xdg-0.2.3/xdg-desktop-entry-spec-sessions menu-xdg-0.2.3.my/xdg-desktop-entry-spec-sessions
+--- menu-xdg-0.2.3/xdg-desktop-entry-spec-sessions	2006-03-20 05:44:36.000000000 -0800
++++ menu-xdg-0.2.3.my/xdg-desktop-entry-spec-sessions	2006-05-15 11:43:55.000000000 -0700
+@@ -33,7 +33,7 @@
+ 
+ treewalk = "M";
+ 
+-genmenu = ifnempty($command,"X-Debian" replacewith($basesection,"/","-") 
++genmenu = ifnempty($command,"X-Arch" replacewith($basesection,"/","-") 
+            "-" tolower(replacewith($title,"/ ","__") ".desktop"));
+ 
+ rootsection = "";

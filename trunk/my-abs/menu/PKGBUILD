@@ -1,0 +1,38 @@
+# Contributor: Sergej Pupykin <ps@lx-ltd.ru>
+pkgname=menu
+pkgver=2.1.29
+pkgrel=1
+pkgdesc="extendable wm menu generator (uses menufiles and menu-methods)"
+url="http://debian.org/"
+license="GPL"
+depends=(gcc)
+makedepends=(patch)
+conflicts=()
+replaces=()
+backup=()
+install=
+source=(http://ftp.debian.org/debian/pool/main/m/menu/${pkgname}_$pkgver.tar.gz \
+	alt2.patch \
+	ion3 \
+	ion3-i18n)
+md5sums=('aa5db403ff36165bd4f5f01b0e0e35b2' '9b4d501b32499cf0fee4a0628b7e0486'\
+         '4976aaf43242a28c7fbef6a1efc229ad' '475ce858d112aaa30e2d78ebc382a4a4')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+
+  (cd update-menus && patch -N <../../alt2.patch)
+
+  ./configure --prefix=/usr
+  make || return 1
+  make DESTDIR=$startdir/pkg install && \
+  mkdir -p $startdir/pkg/usr/share/menu/ && \
+  cp -r $startdir/src/$pkgname-$pkgver/examples $startdir/pkg/usr/share/menu/examples && \
+  install -d -m0755 $startdir/pkg/etc/menu && \
+  install -D -m0644 $startdir/src/$pkgname-$pkgver/examples/menu.h $startdir/pkg/etc/menu-methods/menu.h && \
+  install -D -m0644 $startdir/src/$pkgname-$pkgver/examples/menu.config $startdir/pkg/etc/menu-methods/menu.config && \
+  install -D -m0644 $startdir/src/$pkgname-$pkgver/examples/translate_menus $startdir/pkg/etc/menu-methods/translate_menus && \
+  install -D -m0644 $startdir/src/$pkgname-$pkgver/po-sections/lang.h $startdir/pkg/etc/menu-methods/lang.h && \
+  install -D -m0755 $startdir/src/ion3 $startdir/pkg/etc/menu-methods/ion3 && \
+  install -D -m0755 $startdir/src/ion3-i18n $startdir/pkg/etc/menu-methods/ion3-i18n
+}

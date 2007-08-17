@@ -1,0 +1,30 @@
+# $Id: PKGBUILD,v 1.1 2006/12/19 18:28:50 pupykin Exp $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+pkgname=gcc3
+pkgver=3.4.6
+pkgrel=2
+pkgdesc="The GNU Compiler Collection - Version 3"
+url="http://gcc.gnu.org"
+depends=('glibc' 'binutils')
+source=(ftp://gcc.gnu.org/pub/gcc/releases/gcc-${pkgver}/gcc-{core,g++}-${pkgver}.tar.bz2)
+
+build() {
+  mkdir -p $startdir/src/gcc-build
+  cd $startdir/src/gcc-build
+  ../gcc-${pkgver}/configure --host="${CHOST}" --build="${CHOST}" \
+     --prefix=/opt/gcc3 --enable-shared --enable-languages=c,c++ \
+     --enable-threads=posix --enable-__cxa_atexit --disable-bootstrap --disable-multilib
+#  make bootstrap || return 1
+  make || return 1
+  make DESTDIR=$startdir/pkg install || return 1
+
+  # Remove libstdc++ provided by gcc4 package
+  rm -f $startdir/pkg/opt/gcc3/lib/libstdc++.so*
+
+  # Create symlinks
+  mkdir -p $startdir/pkg/usr/bin
+  ln -sf /opt/gcc3/bin/g++ $startdir/pkg/usr/bin/g++3
+  ln -sf /opt/gcc3/bin/gcc $startdir/pkg/usr/bin/gcc3
+
+  find $startdir/pkg -name '*.la' -exec rm {} \;
+}

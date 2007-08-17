@@ -1,0 +1,25 @@
+# Contributor: Sergej Pupykin <ps@lx-ltd.ru>
+pkgname=jabberd1-irc_transport
+pkgver=20011018
+pkgrel=1
+pkgdesc="jabberd1 IRC transport"
+url="http://www.jabber.org/old-dl/contrib/irc_transport.README"
+license="GPL"
+depends=(jabberd1)
+makedepends=(patch)
+conflicts=()
+replaces=()
+backup=()
+install=
+source=(http://www.jabber.org/old-dl/contrib/irc-transport.tar.gz \
+		build-fix.patch)
+md5sums=('59fdcd1d4339d4cee51cbd4f8db91429' '1b2e144002297c649aeb1a919ec33a4b')
+
+build() {
+  cd $startdir/src/irc-transport
+  patch -Np1 <../build-fix.patch
+  ./configure --prefix=/usr
+  make || return 1
+  install -D -m 0755 ./src/irc_transport.so $startdir/pkg/usr/lib/jabberd/irc_transport.so && \
+  install -D -m 0644 ./src/irc_trans.xml $startdir/pkg/etc/jabberd/irc_trans.xml
+}

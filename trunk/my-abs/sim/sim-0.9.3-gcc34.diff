@@ -1,0 +1,220 @@
+diff -ur sim-0.9.3/plugins/_core/cfgdlg.cpp sim-0.9.3-new/plugins/_core/cfgdlg.cpp
+--- sim-0.9.3/plugins/_core/cfgdlg.cpp	2004-03-07 07:39:54.000000000 -0500
++++ sim-0.9.3-new/plugins/_core/cfgdlg.cpp	2004-10-19 07:37:55.510344496 -0400
+@@ -279,7 +279,7 @@
+     return new MainInfo(dlg, NULL);
+ }
+ 
+-};
++}
+ 
+ using namespace ConfigDlg;
+ 
+diff -ur sim-0.9.3/plugins/_core/statuswnd.cpp sim-0.9.3-new/plugins/_core/statuswnd.cpp
+--- sim-0.9.3/plugins/_core/statuswnd.cpp	2004-03-07 07:39:54.000000000 -0500
++++ sim-0.9.3-new/plugins/_core/statuswnd.cpp	2004-10-19 07:43:39.849996912 -0400
+@@ -115,7 +115,7 @@
+     QToolTip::add(this, tip);
+     resize(pict.width(), pict.height());
+     setFixedSize(pict.width(), pict.height());
+-};
++}
+ 
+ void StatusLabel::timeout()
+ {
+diff -ur sim-0.9.3/plugins/yahoo/yahooauth.cpp sim-0.9.3-new/plugins/yahoo/yahooauth.cpp
+--- sim-0.9.3/plugins/yahoo/yahooauth.cpp	2004-03-15 01:23:14.000000000 -0500
++++ sim-0.9.3-new/plugins/yahoo/yahooauth.cpp	2004-10-19 07:59:28.671754080 -0400
+@@ -52,7 +52,7 @@
+ {
+     char *yahoo_crypt(const char *key, const char *salt);
+     int yahoo_Dispatch(int Salt, int Parameter);
+-};
++}
+ 
+ /* This is the y64 alphabet... it's like base64, but has a . and a _ */
+ char base64digits[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789._";
+diff -ur sim-0.9.3/sim/api/cfg.cpp sim-0.9.3-new/sim/api/cfg.cpp
+--- sim-0.9.3/sim/api/cfg.cpp	2004-03-16 11:15:30.000000000 -0500
++++ sim-0.9.3-new/sim/api/cfg.cpp	2004-10-19 07:01:52.271206832 -0400
+@@ -1092,4 +1092,4 @@
+     return strcmp(s1, s2) != 0;
+ }
+ 
+-};
++}
+diff -ur sim-0.9.3/sim/api/cmddef.cpp sim-0.9.3-new/sim/api/cmddef.cpp
+--- sim-0.9.3/sim/api/cmddef.cpp	2003-11-10 04:11:10.000000000 -0500
++++ sim-0.9.3-new/sim/api/cmddef.cpp	2004-10-19 07:07:25.390564992 -0400
+@@ -424,6 +424,6 @@
+     return res;
+ }
+ 
+-};
++}
+ 
+ 
+diff -ur sim-0.9.3/sim/api/contacts.cpp sim-0.9.3-new/sim/api/contacts.cpp
+--- sim-0.9.3/sim/api/contacts.cpp	2004-03-19 03:13:29.000000000 -0500
++++ sim-0.9.3-new/sim/api/contacts.cpp	2004-10-19 07:10:24.409350000 -0400
+@@ -1952,7 +1952,7 @@
+     return PluginManager::contacts;
+ }
+ 
+-};
++}
+ 
+ EXPORT QString g_i18n(const char *text, Contact *contact)
+ {
+diff -ur sim-0.9.3/sim/api/country.cpp sim-0.9.3-new/sim/api/country.cpp
+--- sim-0.9.3/sim/api/country.cpp	2003-10-17 01:22:07.000000000 -0400
++++ sim-0.9.3-new/sim/api/country.cpp	2004-10-19 07:10:37.223401968 -0400
+@@ -539,4 +539,4 @@
+ }
+ 
+ 
+-};
++}
+diff -ur sim-0.9.3/sim/api/html.h sim-0.9.3-new/sim/api/html.h
+--- sim-0.9.3/sim/api/html.h	2004-03-07 07:40:03.000000000 -0500
++++ sim-0.9.3-new/sim/api/html.h	2004-10-19 07:18:30.311481648 -0400
+@@ -46,6 +46,6 @@
+     friend class HTMLParserPrivate;
+ };
+ 
+-};
++}
+ 
+ #endif
+diff -ur sim-0.9.3/sim/api/html.ll sim-0.9.3-new/sim/api/html.ll
+--- sim-0.9.3/sim/api/html.ll	2004-03-01 15:10:25.000000000 -0500
++++ sim-0.9.3-new/sim/api/html.ll	2004-10-19 07:28:33.555774576 -0400
+@@ -347,7 +347,7 @@
+ 	return res;
+ }
+ 
+-};
++}
+ 
+ int yywrap() { return 1; }
+ 
+diff -ur sim-0.9.3/sim/api/log.cpp sim-0.9.3-new/sim/api/log.cpp
+--- sim-0.9.3/sim/api/log.cpp	2003-10-20 04:39:28.000000000 -0400
++++ sim-0.9.3-new/sim/api/log.cpp	2004-10-19 07:10:48.285720240 -0400
+@@ -143,4 +143,4 @@
+     return m;
+ }
+ 
+-};
++}
+diff -ur sim-0.9.3/sim/api/message.cpp sim-0.9.3-new/sim/api/message.cpp
+--- sim-0.9.3/sim/api/message.cpp	2004-03-28 13:46:15.000000000 -0500
++++ sim-0.9.3-new/sim/api/message.cpp	2004-10-19 07:16:24.524604160 -0400
+@@ -645,5 +645,5 @@
+     return "";
+ }
+ 
+-};
++}
+ 
+diff -ur sim-0.9.3/sim/api/plugins.cpp sim-0.9.3-new/sim/api/plugins.cpp
+--- sim-0.9.3/sim/api/plugins.cpp	2004-03-28 13:46:15.000000000 -0500
++++ sim-0.9.3-new/sim/api/plugins.cpp	2004-10-19 07:12:47.001672672 -0400
+@@ -792,4 +792,4 @@
+ ContactList *PluginManager::contacts = NULL;
+ SocketFactory *PluginManager::factory = NULL;
+ 
+-};
++}
+diff -ur sim-0.9.3/sim/api/simapi.cpp sim-0.9.3-new/sim/api/simapi.cpp
+--- sim-0.9.3/sim/api/simapi.cpp	2004-03-28 13:46:15.000000000 -0500
++++ sim-0.9.3-new/sim/api/simapi.cpp	2004-10-19 07:12:59.862717496 -0400
+@@ -963,7 +963,7 @@
+     return strcmp(m_str->c_str(), a.m_str->c_str()) < 0;
+ }
+ 
+-};
++}
+ 
+ #ifndef HAVE_STRCASECMP
+ 
+diff -ur sim-0.9.3/sim/api/simapi.h sim-0.9.3-new/sim/api/simapi.h
+--- sim-0.9.3/sim/api/simapi.h	2004-03-29 18:42:44.000000000 -0500
++++ sim-0.9.3-new/sim/api/simapi.h	2004-10-19 07:01:14.708917168 -0400
+@@ -1803,7 +1803,7 @@
+ EXPORT bool logEnabled();
+ EXPORT void setLogEnable(bool);
+ 
+-};
++}
+ 
+ using namespace SIM;
+ 
+diff -ur sim-0.9.3/sim/api/socket.cpp sim-0.9.3-new/sim/api/socket.cpp
+--- sim-0.9.3/sim/api/socket.cpp	2004-03-26 12:46:43.000000000 -0500
++++ sim-0.9.3-new/sim/api/socket.cpp	2004-10-19 07:21:42.464269984 -0400
+@@ -464,7 +464,7 @@
+ 
+ #endif
+ 
+-};
++}
+ 
+ #ifndef WIN32
+ #include "socket.moc"
+diff -ur sim-0.9.3/sim/api/socket.h sim-0.9.3-new/sim/api/socket.h
+--- sim-0.9.3/sim/api/socket.h	2004-03-28 23:46:04.000000000 -0500
++++ sim-0.9.3-new/sim/api/socket.h	2004-10-19 07:01:33.721026888 -0400
+@@ -256,6 +256,6 @@
+ 
+ #endif
+ 
+-};
++}
+ 
+ #endif
+diff -ur sim-0.9.3/sim/api/sockfactory.cpp sim-0.9.3-new/sim/api/sockfactory.cpp
+--- sim-0.9.3/sim/api/sockfactory.cpp	2004-03-22 15:03:14.000000000 -0500
++++ sim-0.9.3-new/sim/api/sockfactory.cpp	2004-10-19 07:22:03.948003960 -0400
+@@ -640,7 +640,7 @@
+ #endif
+ }
+ 
+-};
++}
+ 
+ #ifndef WIN32
+ #include "sockfactory.moc"
+diff -ur sim-0.9.3/sim/api/sockfactory.h sim-0.9.3-new/sim/api/sockfactory.h
+--- sim-0.9.3/sim/api/sockfactory.h	2004-02-29 19:40:49.000000000 -0500
++++ sim-0.9.3-new/sim/api/sockfactory.h	2004-10-19 07:07:12.945456936 -0400
+@@ -152,7 +152,7 @@
+     QDns *resolver;
+ };
+ 
+-};
++}
+ 
+ #endif
+ 
+diff -ur sim-0.9.3/sim/api/translit.cpp sim-0.9.3-new/sim/api/translit.cpp
+--- sim-0.9.3/sim/api/translit.cpp	2003-10-20 04:39:29.000000000 -0400
++++ sim-0.9.3-new/sim/api/translit.cpp	2004-10-19 07:18:45.357194352 -0400
+@@ -75,4 +75,4 @@
+     return res;
+ }
+ 
+-};
++}
+diff -ur sim-0.9.3/sim/sim.cpp sim-0.9.3-new/sim/sim.cpp
+--- sim-0.9.3/sim/sim.cpp	2004-03-16 11:15:29.000000000 -0500
++++ sim-0.9.3-new/sim/sim.cpp	2004-10-19 07:33:38.960346024 -0400
+@@ -287,7 +287,7 @@
+     CloseHandle(hMutex);
+ #endif
+     return res;
+-};
++}
+ 
+ 
+ 

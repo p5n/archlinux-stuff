@@ -1,0 +1,27 @@
+# Contributor: Sergej Pupykin <ps@lx-ltd.ru>
+pkgname=dictd-lingvo
+pkgver=1.0
+pkgrel=1
+pkgdesc="dictd en-ru/ru-en dictionaries"
+url=""
+license="GPL"
+depends=(dictd)
+conflicts=()
+replaces=()
+backup=()
+install=
+source=(ER_LingvoUniversal.dict.dz \
+	ER_LingvoUniversal.index \
+	RE_LingvoUniversal.dict.dz \
+	RE_LingvoUniversal.index)
+md5sums=(6652c7a940e0b8b980786e3a539e845b 161b761c7227efab21f0603b47765704 \
+	 b5316d26637b464c1c66a4b9a94158f5 c23a03355ab13d295bac791874dbedc5)
+
+build() {
+  cd $startdir/src && \
+  install -d $startdir/pkg/usr/share/dictd && \
+  install -m 0644 $startdir/src/ER_LingvoUniversal.dict.dz $startdir/pkg/usr/share/dictd/ && \
+  install -m 0644 $startdir/src/ER_LingvoUniversal.index $startdir/pkg/usr/share/dictd/ && \
+  install -m 0644 $startdir/src/RE_LingvoUniversal.dict.dz $startdir/pkg/usr/share/dictd/ && \
+  install -m 0644 $startdir/src/RE_LingvoUniversal.index $startdir/pkg/usr/share/dictd/
+}

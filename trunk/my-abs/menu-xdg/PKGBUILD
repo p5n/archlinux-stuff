@@ -1,0 +1,29 @@
+# Contributor: Sergej Pupykin <ps@lx-ltd.ru>
+pkgname=menu-xdg
+pkgver=0.2.3
+pkgrel=3
+pkgdesc="XDG menu-methods for menu package"
+url="http://debian.org/"
+license="GPL"
+depends=(menu)
+makedepends=(patch)
+conflicts=()
+replaces=()
+backup=()
+install=
+source=(http://ftp.debian.org/debian/pool/main/m/menu-xdg/${pkgname}_$pkgver.tar.gz \
+	names.patch)
+md5sums=('257008a9a38c819774b976bae5346b9d' 'd6b2bbe139986ced2b5c48151cd4a7bc')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+
+  patch -Np1 <../names.patch
+
+  install -D -m0755 $startdir/src/$pkgname-$pkgver/menu-xdg $startdir/pkg/etc/menu-methods/menu-xdg && \
+  install -D -m0755 $startdir/src/$pkgname-$pkgver/xdg-desktop-entry-spec-apps $startdir/pkg/etc/menu-methods/xdg-desktop-entry-spec-apps && \
+  install -D -m0755 $startdir/src/$pkgname-$pkgver/xdg-desktop-entry-spec-dirs $startdir/pkg/etc/menu-methods/xdg-desktop-entry-spec-dirs && \
+  install -D -m0755 $startdir/src/$pkgname-$pkgver/xdg-desktop-entry-spec-sessions $startdir/pkg/etc/menu-methods/xdg-desktop-entry-spec-sessions && \
+  install -d -m0755 $startdir/pkg/etc/xdg/menus/ && \
+  ln -s /var/lib/menu-xdg/menus/arch-menu.menu $startdir/pkg/etc/xdg/menus/arch-menu.menu
+}

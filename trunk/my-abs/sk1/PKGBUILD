@@ -1,0 +1,18 @@
+# Contributor: Sergej Pupykin <ps@lx-ltd.ru>
+pkgname=sk1
+pkgver=0.9pre01
+pkgrel=1
+pkgdesc="2D vector graphics editor"
+url="http://sk1.sourceforge.net"
+license="GPL"
+depends=()
+install=
+source=(http://dl.sourceforge.net/sk1/sK1_v.$pkgver.tar.gz)
+md5sums=('04170f2b5cc37339f72dec184c82babe')
+
+build() {
+  cd $startdir/src/sK1_v.$pkgver
+  sed -i "s#INSTALL_PATH=/usr/local/lib#INSTALL_PATH=$startdir/pkg/usr/lib#" ./install.sh
+  mkdir -p $startdir/pkg/usr/lib && \
+  ./install.sh
+}

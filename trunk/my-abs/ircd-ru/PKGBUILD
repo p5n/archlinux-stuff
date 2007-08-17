@@ -1,0 +1,32 @@
+# Contributor: Sergej Pupykin <ps@lx-ltd.ru>
+pkgname=ircd-ru
+pkgver=1.0.7.03.rc_rootnet
+pkgrel=1
+pkgdesc="irc server"
+url="http://rootnet.ru"
+license="GPL"
+depends=(glibc)
+conflicts=(ircd)
+provides=(ircd)
+backup=(etc/ircd/ircd.motd etc/ircd/ircd.ini etc/ircd/ircd.conf)
+install=ircd.install
+source=(ircd_RU_1.0.7_03_rc_rootnet_.tar.gz \
+    ircd-ru-rootnet \
+	paths-fix.patch)
+md5sums=('da446038550e9099e022aa0ede939494' '6578a4b5cd8559db5de38179a175a025'\
+         'a096b7a574c202e8317bbcda71d708ab')
+
+build() {
+  cd $startdir/src/ircd-RU-1.0.7-03-rc
+  ./configure --prefix=/ --enable-dnsbl
+  cp -f rootnet/config.h include/config.h || return 1
+  (cd include && patch -Np0 <../../paths-fix.patch || return 1)
+  sed -i "s#MKDEP=#MKDEP=gcc -MM#" src/Makefile
+  sed -i "s#MKDEP=#MKDEP=gcc -MM#" tools/Makefile
+
+  make || return 1
+
+  sed -r -i "s|#define DPATH\s+\"/\"|#define DPATH       \"$startdir/pkg/\"|" include/paths.h || return 1
+  make install && \
+  install -D -m 0755 $startdir/src/ircd-ru-rootnet $startdir/pkg/etc/rc.d/ircd-ru-rootnet
+}

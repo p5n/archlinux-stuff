@@ -1,0 +1,34 @@
+--- update-menus.cc	2005-12-12 10:15:25.000000000 -0800
++++ update-menus.cc.my	2006-05-15 10:14:08.000000000 -0700
+@@ -93,6 +93,7 @@
+ /** Checks whether a package is installed */
+ bool is_pkg_installed(const string& filename)
+ {
++  return true;
+   if (contains(filename, "local."))
+     return true;
+   else
+@@ -428,6 +429,7 @@
+ /** Read in list of installed packages */
+ void read_pkginfo()
+ {
++  return;
+   // Here we get the list of *installed* packages from dpkg, using sed to
+   // retrieve the package name.
+   char *pkgs = "dpkg-query --show --showformat='${status} ${package}\\n' | sed -n -e 's/.*installed *//p'";
+@@ -747,6 +749,7 @@
+   */
+ int check_dpkglock()
+ {
++  return 0;
+   int fd;
+   struct flock fl;
+   if (!is_root)
+@@ -785,6 +788,7 @@
+  */
+ void wait_dpkg(string &stdoutfile)
+ {
++  return;
+   int child;
+   int parentpid;
+   int i,r;

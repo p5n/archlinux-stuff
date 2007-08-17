@@ -1,0 +1,20 @@
+# Contributor: Sergej Pupykin <ps@lx-ltd.ru>
+pkgname=cisco-vpn-client
+pkgver=4.6.0
+pkgrel=1
+pkgdesc="Cisco VPN client"
+url="http://cisco.com/"
+backup=(etc/opt/cisco-vpnclient/vpnclient.ini)
+depends=(glibc)
+
+build() {
+    cd $startdir/
+    xstartdir=. ./vpn_install
+
+    # fixes
+    cd $startdir/pkg
+    (cd etc && ln -f -s opt/cisco-vpnclient CiscoSystemsVPNClient) || return 1
+    (cd usr/bin && ln -f -s ../../opt/cisco-vpnclient/bin/cisco_cert_mgr cisco_cert_mgr) || return 1
+    (cd usr/bin && ln -f -s ../../opt/cisco-vpnclient/bin/ipseclog ipseclog) || return 1
+    (cd usr/bin && ln -f -s ../../opt/cisco-vpnclient/bin/vpnclient vpnclient) || return 1
+}

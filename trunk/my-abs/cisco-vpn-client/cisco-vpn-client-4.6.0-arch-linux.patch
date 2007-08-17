@@ -1,0 +1,304 @@
+diff -wbBurN vpnclient/frag.c vpnclient.linux/frag.c
+--- vpnclient/frag.c	2004-08-04 17:31:50.000000000 +0400
++++ vpnclient.linux/frag.c	2006-12-13 13:35:41.000000000 +0300
+@@ -1,4 +1,4 @@
+-#include <linux/config.h>
++#include <linux/autoconf.h>
+ #include <linux/version.h>
+ #include <linux/netdevice.h>
+ #include <linux/etherdevice.h>
+diff -wbBurN vpnclient/interceptor.c vpnclient.linux/interceptor.c
+--- vpnclient/interceptor.c	2004-08-04 17:31:50.000000000 +0400
++++ vpnclient.linux/interceptor.c	2006-12-13 13:42:10.000000000 +0300
+@@ -8,7 +8,7 @@
+ ***************************************************************************
+ * This module implements the linux driver.
+ ***************************************************************************/
+-#include <linux/config.h>
++#include <linux/autoconf.h>
+ #ifdef CONFIG_SMP
+ #define __SMP__
+ #endif
+@@ -601,10 +601,10 @@
+         goto exit_gracefully;
+     }
+ 
+-    if (skb->ip_summed == CHECKSUM_HW)
++    if (skb->ip_summed == CHECKSUM_PARTIAL)
+     {
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,7)
+-       if (skb_checksum_help(&skb,1))
++       if (skb_checksum_help(&skb))
+        {
+            dev_kfree_skb(skb);
+            skb = NULL;
+@@ -726,10 +726,10 @@
+     tmp_InjectSend = NULL;
+ 
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,4,0)
+-    if (skb->ip_summed == CHECKSUM_HW)
++    if (skb->ip_summed == CHECKSUM_PARTIAL)
+     {
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,7)
+-       if (skb_checksum_help(&skb,0))
++       if (skb_checksum_help(&skb))
+ #else
+        if ((skb = skb_checksum_help(skb)) == NULL)
+ #endif //LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,7)
+diff -wbBurN vpnclient/IPSecDrvOS_linux.c vpnclient.linux/IPSecDrvOS_linux.c
+--- vpnclient/IPSecDrvOS_linux.c	2004-08-04 17:31:50.000000000 +0400
++++ vpnclient.linux/IPSecDrvOS_linux.c	2006-12-13 13:35:58.000000000 +0300
+@@ -11,7 +11,7 @@
+ *   
+ *
+ ***************************************************************************/
+-#include <linux/config.h>
++#include <linux/autoconf.h>
+ #include <linux/version.h>
+ #include <linux/vmalloc.h>
+ #include <linux/sched.h>
+diff -wbBurN vpnclient/linuxcniapi.c vpnclient.linux/linuxcniapi.c
+--- vpnclient/linuxcniapi.c	2004-08-04 17:31:50.000000000 +0400
++++ vpnclient.linux/linuxcniapi.c	2006-12-13 13:35:27.000000000 +0300
+@@ -9,7 +9,7 @@
+ * This module implements a translation layer between the CNI API and the
+ * Linux Interceptor driver.
+ ***************************************************************************/
+-#include <linux/config.h>
++#include <linux/autoconf.h>
+ #ifdef CONFIG_SMP
+ #define __SMP__
+ #endif
+@@ -312,7 +312,7 @@
+         goto exit_gracefully;
+     }
+     /* move the data into the packet */
+-    do_gettimeofday(&skb->stamp);
++    do_gettimeofday(&skb->tstamp);
+ 
+     pIP = skb_put(skb, lpPacketDescriptor->uiPacketSize);
+ 
+@@ -449,7 +449,7 @@
+     CniGetPacketData(Packet, 0, lpPacketDescriptor->uiPacketSize, pIP);
+ 
+     /* put the mac header on */
+-    do_gettimeofday(&skb->stamp);
++    do_gettimeofday(&skb->tstamp);
+ 
+     skb->dev = pBinding->pDevice;
+ 
+diff -wbBurN vpnclient/PKGBUILD vpnclient.linux/PKGBUILD
+--- vpnclient/PKGBUILD	1970-01-01 03:00:00.000000000 +0300
++++ vpnclient.linux/PKGBUILD	2006-12-13 14:11:42.000000000 +0300
+@@ -0,0 +1,20 @@
++# Contributor: Sergej Pupykin <ps@lx-ltd.ru>
++pkgname=cisco-vpn-client
++pkgver=4.6.0
++pkgrel=1
++pkgdesc="Cisco VPN client"
++url="http://cisco.com/"
++backup=(etc/opt/cisco-vpnclient/vpnclient.ini)
++depends=(glibc)
++
++build() {
++    cd $startdir/
++    xstartdir=. ./vpn_install
++
++    # fixes
++    cd $startdir/pkg
++    (cd etc && ln -f -s opt/cisco-vpnclient CiscoSystemsVPNClient) || return 1
++    (cd usr/bin && ln -f -s ../../opt/cisco-vpnclient/bin/cisco_cert_mgr cisco_cert_mgr) || return 1
++    (cd usr/bin && ln -f -s ../../opt/cisco-vpnclient/bin/ipseclog ipseclog) || return 1
++    (cd usr/bin && ln -f -s ../../opt/cisco-vpnclient/bin/vpnclient vpnclient) || return 1
++}
+diff -wbBurN vpnclient/vpnclient_init vpnclient.linux/vpnclient_init
+--- vpnclient/vpnclient_init	2004-08-04 17:31:50.000000000 +0400
++++ vpnclient.linux/vpnclient_init	2006-12-13 13:55:56.000000000 +0300
+@@ -35,7 +35,7 @@
+ 		echo "Failed (super user access required)"
+ 		exit 1
+ 	fi
+-	/sbin/lsmod | grep -q "${VPNMOD}"
++	lsmod | grep -q "${VPNMOD}"
+         if [ "$?" = "0" ] ; then 
+ 		echo "module ${VPNMOD} is already running. Use restart instead."
+ 		exit 1
+@@ -51,7 +51,7 @@
+ 		PC=/lib/modules/`uname -r`/CiscoVPN
+ 	fi
+ 	if [ -d $PC ] ; then
+-		/sbin/insmod ${PC}/${VPNMOD_FILE}
++		insmod ${PC}/${VPNMOD_FILE}
+ 		if [ "$?" != "0" ] ; then
+ 			echo "Failed (insmod)"
+ 		exit 1
+@@ -77,13 +77,13 @@
+ 		ifconfig $VPNDEV 222.222.222.222 ;
+ 		if [ "$?" != "0" ] ; then
+ 			echo "Failed (ifconfig)"
+-			/sbin/rmmod ${VPNMOD}
++			rmmod ${VPNMOD}
+ 			exit 1
+ 		fi
+ 		;;
+ 	*)
+ 		echo "Failed (unsupported Linux version)"
+-		/sbin/rmmod ${VPNMOD}
++		rmmod ${VPNMOD}
+ 		exit 1
+ 		;;
+ 	esac
+@@ -98,17 +98,17 @@
+ 	fi
+     killall cvpnd > /dev/null 2>&1
+ 
+-	/sbin/lsmod | grep -q "${VPNMOD}"
++	lsmod | grep -q "${VPNMOD}"
+     if [ "$?" != "0" ] ; then 
+ 		echo "module ${VPNMOD} is not running."
+ 		exit 1
+ 	fi
+-	/sbin/ifconfig $VPNDEV down
++	ifconfig $VPNDEV down
+ 	if [ "$?" != "0" ] ; then
+ 		echo "Failed (ifconfig)"
+ 		exit 1
+ 	fi
+-	/sbin/rmmod ${VPNMOD}
++	rmmod ${VPNMOD}
+ 	if [ "$?" != "0" ] ; then
+ 		echo "Failed (rmmod)"
+ 		exit 1
+@@ -116,14 +116,14 @@
+ 	echo "Done"
+ 	;;
+   status)
+-	/sbin/lsmod | egrep 'Module'
+-	/sbin/lsmod | egrep "${VPNMOD}"
++	lsmod | egrep 'Module'
++	lsmod | egrep "${VPNMOD}"
+ 	if [ "$?" != "0" ] ; then
+ 			echo
+ 			echo "Status Failed (lsmod ${VPNMOD}) - The VPN module is not loaded."
+     fi
+ 	echo
+-	/sbin/ifconfig $VPNDEV
++	ifconfig $VPNDEV
+ 	if [ "$?" != "0" ] ; then
+ 		echo
+ 		echo "Status Failed (ifconfig ${VPNDEV}) - The virtual interface is not present."
+diff -wbBurN vpnclient/vpn_install vpnclient.linux/vpn_install
+--- vpnclient/vpn_install	2004-08-04 17:31:50.000000000 +0400
++++ vpnclient.linux/vpn_install	2006-12-13 13:59:26.000000000 +0300
+@@ -12,10 +12,6 @@
+ #
+ ###########################################################################
+ WHOAMI=`id | sed -e 's/(.*//'`
+-if [ "$WHOAMI" != "uid=0" ] ; then
+-	echo "Sorry, you need super user access to run this script."
+-	exit 1
+-fi
+ echo "Cisco Systems VPN Client Version 4.6.00 (0045) Linux Installer"
+ echo "Copyright (C) 1998-2004 Cisco Systems, Inc. All Rights Reserved."
+ echo ""
+@@ -24,9 +20,7 @@
+ echo "its terms. "
+ echo ""
+ PATH="${PATH}:/sbin:/usr/sbin:/usr/local/sbin"
+-if [ -z "$LINKDIR" ]; then
+-	LINKDIR=/usr/local/bin 
+-fi
++LINKDIR=$xstartdir/pkg/usr/bin
+ 
+ #
+ # Check for existence and validity of chkconfig
+@@ -51,26 +45,7 @@
+    
+     printf "\n%s [%s]" "$rp" "$dflt"
+ 
+-	while expr "X$ans" : "X!" >/dev/null; do
+-		read ans
+-		case "$ans" in
+-			!)
+-				sh
+-				echo " "
+-				echo $n "$rp $c"
+-				;;
+-			!*)
+-				set `expr "X$ans" : "X!\(.*\)$"`
+-				sh -c "$*"
+-				echo " "
+-				echo $n "$rp $c"
+-				;;
+-			esac
+-	done
+-
+-	if [ -z "$ans" ]; then
+         ans="$dflt"
+-    fi
+ }
+ function file_install()
+ {
+@@ -82,10 +57,10 @@
+ 
+     echo "    $destfile"
+     cp -f $file $destfile
+-    chown $user:$group $destfile
++#    chown $user:$group $destfile
+     chmod $mode $destfile
+ }
+-MODULEDIR=/lib/modules/`uname -r`/CiscoVPN
++MODULEDIR=$xstartdir/pkg/lib/modules/`uname -r`/CiscoVPN
+ 
+ if [ -d /lib/modules/`uname -r`/build ]; then
+     KERNELSRCDIR="/lib/modules/`uname -r`/build"
+@@ -99,16 +74,8 @@
+ 	KERNELSRCDIR=""
+ fi
+ 
+-if [ -d /etc/init.d ]; then
+-    INIT_D="/etc/init.d"
+-elif [ -d /etc/rc.d/init.d ]; then
+-    INIT_D="/etc/rc.d/init.d"
+-elif [ -d /etc/rc.d ]; then
+-    INIT_D="/etc/rc.d"
+-else
+-    INIT_D=""
+-fi
+-
++INIT_D="$xstartdir/pkg/etc/rc.d"
++mkdir -p $INIT_D
+ 
+ if [ -d /etc/rc3.d ]; then
+     RC_D="/etc"
+@@ -344,9 +311,9 @@
+ cp $MODULE_NAME $MODULEDIR
+ 
+ PKGNAME=cisco-vpnclient
+-PKGDIR=/opt/cisco-vpnclient
+-CFGDIR=/etc/opt/cisco-vpnclient
+-OLD_CFGDIR=/etc/CiscoSystemsVPNClient
++PKGDIR=$xstartdir/pkg/opt/cisco-vpnclient
++CFGDIR=$xstartdir/pkg/etc/opt/cisco-vpnclient
++OLD_CFGDIR=$xstartdir/pkg/etc/CiscoSystemsVPNClient
+ BINDIR="${PKGDIR}/bin"
+ LIBDIR="${PKGDIR}/lib"
+ INCDIR="${PKGDIR}/include"
+@@ -532,7 +499,7 @@
+     echo "    ${CFGDIR} (group ${VPNGROUP} readable)"
+     echo "    ${CFGDIR}/Profiles (group ${VPNGROUP} readable)"
+     echo "    ${CFGDIR}/Certificates (group ${VPNGROUP} readable)"
+-    chgrp -R $VPNGROUP $CFGDIR
++#    chgrp -R $VPNGROUP $CFGDIR
+     chmod 0777 "$CFGDIR"
+     chmod 0666 "$CFGDIR/vpnclient.ini"
+     chmod 0777 "$CFGDIR/Certificates"
+@@ -544,7 +511,7 @@
+ echo "* You may wish to change these permissions to restrict access to root."
+ 
+ #all files owned by the vpn group
+-chgrp -R $VPNGROUP $PKGDIR
++#chgrp -R $VPNGROUP $PKGDIR
+ 
+ #
+ # Install the packaged root cert

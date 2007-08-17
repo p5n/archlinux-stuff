@@ -1,0 +1,22 @@
+# Contributor: Sergej Pupykin <ps@lx-ltd.ru>
+pkgname=xclip
+pkgver=0.08
+pkgrel=1
+pkgdesc="x clipboard manipulation command line utility that is designed to run on any system with an X11 implementation"
+url="http://people.debian.org/~kims/xclip/"
+license="GPL"
+depends=(xorg)
+conflicts=()
+replaces=()
+backup=()
+install=
+source=(http://people.debian.org/~kims/xclip/$pkgname-$pkgver.tar.gz)
+md5sums=('a90bde3fb0da6aad3a6042c4867245c6')
+
+build() {
+  cd $startdir/src/$pkgname
+  xmkmf
+  make || return 1
+  install -d -m 0755 $startdir/pkg/usr/bin/
+  install -m 0755 ./xclip $startdir/pkg/usr/bin/
+}

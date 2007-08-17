@@ -1,0 +1,31 @@
+--- paths.h.org	2007-01-22 13:16:59 +0300
++++ paths.h	2007-01-22 13:14:46 +0300
+@@ -55,18 +55,18 @@
+ 
+ 
+ #define DPATH		"/"
+-#define SPATH		"bin/ircd"
+-#define BDIR		"bin"
+-#define CPDIR		"codepages"
+-#define MDIR		"modules"
+-
+-#define CPATH		"etc/ircd.conf"
+-#define KPATH   	"etc/kline.conf"
+-#define MPATH		"etc/ircd.motd"
+-#define SMPATH		"etc/ircd.smotd"
++#define SPATH		"usr/bin/ircd"
++#define BDIR		"usr/bin"
++#define CPDIR		"usr/lib/ircd/codepages"
++#define MDIR		"usr/lib/ircd/modules"
++
++#define CPATH		"etc/ircd/ircd.conf"
++#define KPATH   	"etc/ircd/kline.conf"
++#define MPATH		"etc/ircd/ircd.motd"
++#define SMPATH		"etc/ircd/ircd.smotd"
+ #define LPATH		"var/log/ircd.log"
+ #define PPATH		"var/run/ircd.pid"
+-#define HPATH		"doc/opers.txt"
++#define HPATH		"usr/share/doc/opers.txt"
+ 
+ #define EPATH		".ircd.entropy"
+ #define MCPATH		".maxclients"

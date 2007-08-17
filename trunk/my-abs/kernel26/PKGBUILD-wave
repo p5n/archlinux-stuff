@@ -1,0 +1,26 @@
+# Contributor: Sergej Pupykin <ps@lx-ltd.ru>
+pkgname=kernel26wave
+basekernel=2.6.18
+pkgver=2.6.18
+pkgrel=2
+pkgdesc="The Linux Kernel and modules"
+url="http://www.kernel.org"
+backup=()
+depends=('module-init-tools')
+install=kernel26.install
+source=()
+md5sums=()
+
+build() {
+  # build!
+  cd ..
+  _kernver="${basekernel}${CONFIG_LOCALVERSION}"
+  make || return 1
+  mkdir -p $startdir/pkg/{lib/modules,boot}
+  make INSTALL_MOD_PATH=$startdir/pkg modules_install || return 1
+  cp System.map $startdir/pkg/boot/System.map26-wave
+  cp arch/i386/boot/bzImage $startdir/pkg/boot/vmlinuz26-wave
+  install -D -m644 .config $startdir/pkg/boot/kconfig26-wave
+  # set correct depmod command for install
+  sed -i -e "s/KERNEL_VERSION=.*/KERNEL_VERSION=${_kernver}/g" $startdir/kernel26.install
+}

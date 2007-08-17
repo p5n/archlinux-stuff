@@ -1,0 +1,2 @@
+http://savannah.gnu.org/cgi-bin/viewcvs/gnokii/gnokii/
+http://savannah.gnu.org/cgi-bin/viewcvs/gnokii/gnokii/patches/kernel_2.6/

@@ -1,0 +1,15 @@
+# Contributor: Sergej Pupykin <ps@lx-ltd.ru>
+pkgname=con-shutdown
+pkgver=0.1
+pkgrel=1
+pkgdesc="console Ctrl+Alt+Del handler"
+url="http://archlinux.org/"
+license="GPL"
+depends=()
+source=(xshutdown.c)
+md5sums=('d0226252a2cbe9b14909927883d903d4')
+
+build() {
+  mkdir -p $startdir/pkg/usr/bin/ && \
+  gcc -O2 $startdir/src/xshutdown.c -o $startdir/pkg/usr/bin/con-shutdown -lncurses
+}

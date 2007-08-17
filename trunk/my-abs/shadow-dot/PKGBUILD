@@ -1,0 +1,64 @@
+# $Id: PKGBUILD,v 1.1 2006/10/31 10:14:30 pupykin Exp $
+# Maintainer: judd <jvinet@zeroflux.org>
+pkgname=shadow
+pkgver=4.0.18.1
+pkgrel=3
+pkgdesc="Shadow password file utilities"
+arch=(i686 x86_64)
+url="http://shadow.pld.org.pl"
+backup=(etc/login.defs \
+  etc/pam.d/{chage,login,passwd,shadow,useradd,usermod,userdel} \
+  etc/pam.d/{chpasswd,newusers,groupadd,groupdel,groupmod} \
+  etc/default/useradd)
+depends=('pam')
+source=(ftp://ftp.pld.org.pl/software/$pkgname/$pkgname-$pkgver.tar.bz2 \
+  xstrdup.patch login.defs shadow.cron.daily \
+  adduser chage login passwd shadow useradd shadow-UID_GID.patch \
+  dot-user-name.patch)
+install=(shadow.install)
+md5sums=('e7751d46ecf219c07ae0b028ab3335c6' 'a57478bc078f94c0884dfcd50e1939eb'\
+         '640cdc998d996152155905dbbaf22b6d' '1d64b4113e1d402746d9dd65f28a2c6f'\
+         '0365b9983675df485280fe5f570411f1' 'a31374fef2cba0ca34dfc7078e2969e4'\
+         '76a759c07104fcd0708fcf91337961b5' 'b84204ab731bd02dca49d0637d44ebec'\
+         'a31374fef2cba0ca34dfc7078e2969e4' 'a31374fef2cba0ca34dfc7078e2969e4'\
+         'dd72bf6dd1253ed6f338eb16dc0abdc5' 'dc780e9d609a0d725e54636315212290')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  patch -Np1 -i ../dot-user-name.patch || return 1
+  patch -Np1 -i ../xstrdup.patch || return 1
+  patch -Np1 -i ../shadow-UID_GID.patch || return 1
+  cp src/useradd.c src/useradd.c.backup
+  sed 's/\(.*\) (nflg || \(.*\))\(.*\)/\1\2\3/' src/useradd.c > tmp~
+  mv tmp~ src/useradd.c
+  ./configure --prefix=/usr --mandir=/usr/man --sysconfdir=/etc --with-libpam --without-selinux
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+  install -D -m744 ../shadow.cron.daily $startdir/pkg/etc/cron.daily/shadow
+  install -D -m755 ../adduser $startdir/pkg/usr/sbin/adduser
+  install -D -m644 ../login.defs $startdir/pkg/etc/login.defs
+  for fn in chage login passwd shadow useradd; do
+    install -D -m644 ../$fn $startdir/pkg/etc/pam.d/$fn
+  done
+  # we use the 'useradd' PAM file for other similar utilties
+  for fn in chpasswd chfn groupadd groupdel groupmod newusers usermod userdel; do
+    install -D -m644 ../useradd $startdir/pkg/etc/pam.d/$fn
+  done
+  ln -sf vipw $startdir/pkg/usr/sbin/vigr
+  ln -sf newgrp $startdir/pkg/usr/bin/sg
+  rm -f $startdir/pkg/bin/{vipw,vigr,sg,su}
+  rm -f $startdir/pkg/usr/man/man1/su.1
+  mkdir -p $startdir/pkg/etc/default
+  cat >$startdir/pkg/etc/default/useradd <<_EOF
+# useradd defaults file
+GROUP=100
+HOME=/home
+INACTIVE=-1
+EXPIRE=
+SHELL=/bin/bash
+SKEL=/etc/skel
+_EOF
+  # remove conflicting su it is provided by coreutils
+  rm $startdir/pkg/etc/pam.d/su
+  find $startdir/pkg -name "*.la" -exec rm -f {} \;
+}

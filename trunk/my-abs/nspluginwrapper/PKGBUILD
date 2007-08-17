@@ -1,0 +1,24 @@
+# Contributor: Sergej Pupykin <ps@lx-ltd.ru>
+arch=(x86_64)
+pkgname=nspluginwrapper
+pkgver=0.9.90.1
+pkgrel=1
+pkgdesc="browser x86-plugin wrapper for x86_64"
+url="http://www.gibix.net/dokuwiki/en:projects:nspluginwrapper"
+license="GPL"
+depends=()
+conflicts=()
+replaces=()
+install=
+source=(http://www.gibix.net/projects/nspluginwrapper/files/$pkgname-$pkgver.tar.bz2)
+md5sums=('34021feaf1a2ddbf718b20d9d1376c6e')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+
+  mkdir objs64 objs32
+  cd objs64 && ../configure && make && cd ..
+  make -C objs64 install DESTDIR=$startdir/pkg/
+# linux32 bash -c "cd objs32 && ../configure && make npviewer.bin"
+# make -C objs32 install.viewer
+}

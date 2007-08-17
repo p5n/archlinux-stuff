@@ -1,0 +1,43 @@
+#!/bin/bash
+
+. /etc/rc.conf
+. /etc/rc.d/functions
+
+case "$1" in
+start)
+stat_busy "Initializing NVIDIA Drivers"
+/bin/grep -q nvidia /proc/modules >/dev/null 2>&1
+if [ $? -ne 0 ] ; then
+  /sbin/modprobe nvidia >/dev/null 2>&1
+  if [ $? -ne 0 ] ; then
+    stat_fail
+  else
+    stat_done
+    add_daemon nvidia
+  fi
+else
+  stat_done
+  add_daemon nvidia
+fi
+;;
+
+stop)
+stat_busy "Stopping NVIDIA Drivers"
+/sbin/rmmod nvidia >/dev/null 2>&1
+if [ $? -ne 0 ]; then
+ stat_fail
+else
+ stat_done
+ rm_daemon nvidia
+fi
+;;
+
+restart)
+$0 stop
+sleep 3
+$0 start
+;;
+
+*)
+echo "usage: $0 {start|stop|restart}"  
+esac

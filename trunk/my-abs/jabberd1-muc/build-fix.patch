@@ -1,0 +1,69 @@
+diff -wbBur mu-conference-0.6.0.org/include/conference.h mu-conference-0.6.0/include/conference.h
+--- mu-conference-0.6.0.org/include/conference.h	2003-11-15 07:19:43 +0300
++++ mu-conference-0.6.0/include/conference.h	2005-12-09 19:36:35 +0300
+@@ -21,6 +21,7 @@
+ #include <jabberd.h>
+ #include <stdio.h>
+ #include <string.h>
++#include <glib/gmacros.h>
+ #include <glib.h>
+ #include "hash.h"
+ #include "ns.h"
+diff -wbBur mu-conference-0.6.0.org/src/conference.c mu-conference-0.6.0/src/conference.c
+--- mu-conference-0.6.0.org/src/conference.c	2003-11-15 07:19:44 +0300
++++ mu-conference-0.6.0/src/conference.c	2005-12-09 20:29:10 +0300
+@@ -1208,3 +1208,13 @@
+ 
+     pool_free(tp);
+ }
++
++/*
++int jabberd__signalflag = 0;
++pool jabberd__runtime = NULL;
++xht debug__zones;
++
++void jabberd_signal(void)
++{
++}
++*/
+Только в mu-conference-0.6.0/src: conference.o
+diff -wbBur mu-conference-0.6.0.org/src/Makefile mu-conference-0.6.0/src/Makefile
+--- mu-conference-0.6.0.org/src/Makefile	2003-11-15 07:19:44 +0300
++++ mu-conference-0.6.0/src/Makefile	2006-01-25 14:48:37 +0300
+@@ -1,32 +1,19 @@
+ include ../../platform-settings
+ 
+-CFLAGS:=$(CFLAGS) -I../../jabberd -I../include `pkg-config --cflags glib-2.0`
+-LIBS:=$(LIBS) `pkg-config --libs glib-2.0`
+-
+-# Debug/Experimental
+-#CFLAGS:=$(CFLAGS) -pipe -Os -I../../jabberd -I../include 
+-#LIBS:=$(LIBS) /usr/local/lib/ccmalloc-gcc.o -lccmalloc 
+-#LIBS:=$(LIBS) -lmemusage
+-#LIBS:=$(LIBS) -lmcheck
++CFLAGS:=$(CFLAGS) -I../../jabberd -I../include -I/usr/lib/glib-2.0/include -I/usr/include/glib-2.0
++LIBS:=$(LIBS) -lglib-2.0 -L../../jabberd/lib/.libs -ljabberd -ljabberdsm
+ 
+ conference_OBJECTS=conference.o conference_room.o conference_user.o utils.o xdata.o admin.o roles.o xdb.o hash.o
+ 
+ all: conference
+ 
+ conference: $(conference_OBJECTS)
+-ifeq ($(__CYGWIN__),1)
+-	$(CC) $(CFLAGS) $(MCFLAGS) -o mu-conference.dll $(conference_OBJECTS) ../../jabberd/jabberd.a $(LDFLAGS) $(LIBS)
+-else        
+-	$(CC) $(CFLAGS) $(MCFLAGS) -o mu-conference.so $(conference_OBJECTS) $(LDFLAGS) $(LIBS)
+-endif
++	$(CC) -shared -o mu-conference.so $(conference_OBJECTS) $(LDFLAGS) $(LIBS)
+ 
+ static: $(conference_OBJECTS)
+ 
+ single: $(conference_OBJECTS)
+ 
+ clean:
+-ifeq ($(__CYGWIN__),1)
+-	rm -f $(conference_OBJECTS) mu-conference.dll
+-else        
+ 	rm -f $(conference_OBJECTS) mu-conference.so *~
+-endif
++

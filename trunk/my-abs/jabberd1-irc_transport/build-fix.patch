@@ -1,0 +1,18 @@
+diff -wbBur irc-transport/src/Makefile.in irc-transport.my/src/Makefile.in
+--- irc-transport/src/Makefile.in	2001-09-04 08:40:01.000000000 -0700
++++ irc-transport.my/src/Makefile.in	2006-05-11 13:32:16.000000000 -0700
+@@ -111,12 +111,9 @@
+ all: all-redirect
+ .SUFFIXES:
+ .SUFFIXES: .S .c .lo .o .s
+-$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
+-	cd $(top_srcdir) && $(AUTOMAKE) --gnu src/Makefile
++$(srcdir)/Makefile.in:
+ 
+-Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
+-	cd $(top_builddir) \
+-	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
++Makefile:
+ 
+ 
+ mostlyclean-binPROGRAMS:

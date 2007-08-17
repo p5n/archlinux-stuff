@@ -1,0 +1,23 @@
+# Contributor: Sergej Pupykin <ps@lx-ltd.ru>
+pkgname=anope
+pkgver=1.6.4
+pkgrel=1
+pkgdesc="IRC services (NickServ etc)"
+url="http://www.anope.org/"
+license="GPL"
+depends=()
+conflicts=()
+replaces=()
+backup=()
+install=
+source=(http://dl.sourceforge.net/sourceforge/anope/$pkgname-$pkgver.tar.gz)
+md5sums=('0c9b241230e75f8367fd10d1ca1f9cea')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+
+echo "Not implemented"
+#  ./configure --prefix=/usr
+#  make || return 1
+#  make DESTDIR=$startdir/pkg install
+}

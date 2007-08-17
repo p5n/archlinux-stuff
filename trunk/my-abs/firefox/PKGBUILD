@@ -1,0 +1,70 @@
+pkgname=firefox-my
+pkgver=2.0.0.2
+pkgrel=1
+pkgdesc="Standalone web browser from mozilla.org"
+arch=(i686 x86_64)
+depends=('gtk2>=2.10.0' 'pango>=1.14.0' 'gcc' 'libxt' 'libidl2' 'nss>=3.11.4' 'desktop-file-utils')
+makedepends=('zip' 'imagemagick' 'pkgconfig')
+install=firefox.install
+url="http://www.mozilla.org/projects/firefox"
+source=(ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/${pkgver}/source/firefox-${pkgver}-source.tar.bz2
+        mozconfig
+       	launcher.patch
+        firefox-1.1-uriloader.patch
+	mozilla-firefox-1.0-lang.patch
+        moz310924.patch
+	moz325644.patch
+	firefox-nopangoxft.patch
+	firefox-visibility.patch
+	firefox-1.5-new-gtkim.patch
+	firefox-1.5-pango-cursor-position.patch
+	firefox-2.0-add-ldflags.patch
+	firefox-2.0-buildversion.patch
+        firefox.desktop
+	firefox-safe.desktop)
+	
+build() {
+  cd ${startdir}/src/mozilla
+  patch -Np0 -i ${startdir}/src/firefox-1.1-uriloader.patch
+  patch -Np0 -i ${startdir}/src/moz310924.patch
+  patch -Np0 -i ${startdir}/src/moz325644.patch
+  patch -Np0 -i ${startdir}/src/launcher.patch
+  patch -Np1 -i ${startdir}/src/mozilla-firefox-1.0-lang.patch
+  patch -Np1 -i ${startdir}/src/firefox-nopangoxft.patch
+  patch -Np1 -i ${startdir}/src/firefox-1.5-new-gtkim.patch
+  patch -Np1 -i ${startdir}/src/firefox-1.5-pango-cursor-position.patch
+  patch -Np0 -i ${startdir}/src/firefox-2.0-add-ldflags.patch
+  patch -Np0 -i ${startdir}/src/firefox-2.0-buildversion.patch
+
+  # this time we need -j1
+  export MAKEFLAGS="-j1"
+
+  sed "s/#CFLAGS#/${CFLAGS}/g" ${startdir}/src/mozconfig >.mozconfig
+
+  export MOZ_PROJECT=browser
+
+  make -f client.mk build || return 1
+  make DESTDIR=${startdir}/pkg install || return 1
+
+  cd ${startdir}/pkg/opt/mozilla/lib/firefox-${pkgver}
+  export MOZ_DISABLE_GNOME=1
+  export MOZTMP=`mktemp -d -p ${startdir}/src`
+  LD_LIBRARY_PATH=`pwd` HOME=${MOZTMP} ./firefox-bin -register
+  rm -rf ${MOZTMP}
+  cd chrome
+  find . -maxdepth 1 -type d -exec rm -rf {} \;
+
+  #Remove mozilla devel stuff, this is in XULRunner now
+  rm -rf ${startdir}/pkg/opt/my-firefox/share
+  rm -rf ${startdir}/pkg/opt/my-firefox/include
+  rm -rf ${startdir}/pkg/opt/my-firefox/lib/pkgconfig
+
+
+  cd ${startdir}/pkg/opt/my-firefox/lib && ln -sf firefox-${pkgver} firefox
+
+  rm -rf ${startdir}/pkg/opt/my-firefox/bin/defaults
+
+  mkdir -p ${startdir}/pkg/opt/my-firefox/lib/firefox/chrome/icons/default
+  install -m644 ${startdir}/src/mozilla/browser/app/default.xpm ${startdir}/pkg/opt/my-firefox/lib/firefox/chrome/icons/default/
+  install -m644 ${startdir}/src/mozilla/browser/app/default.xpm ${startdir}/pkg/opt/my-firefox/lib/firefox/icons/
+}

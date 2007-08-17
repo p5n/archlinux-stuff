@@ -1,0 +1,46 @@
+# $Id: PKGBUILD,v 1.1 2006/08/30 00:05:58 pupykin Exp $
+# Maintainer: judd <jvinet@zeroflux.org>
+pkgname=mysql-localhost
+pkgver=5.0.24
+pkgrel=2
+pkgdesc="A fast SQL database server"
+arch=(i686 x86_64)
+backup=(etc/my.cnf etc/conf.d/mysqld)
+depends=('tcp_wrappers')
+provides=(libmysql mysql mysql-clients)
+conflicts=(libmysql mysql mysql-clients)
+source=(ftp://ftp.orst.edu/pub/mysql/Downloads/MySQL-5.0/mysql-${pkgver}.tar.gz \
+    mysqld \
+	my.cnf \
+	mysqld.conf.d)
+
+build() {
+  # PIC
+  cd $startdir/src/mysql-${pkgver}
+  libtoolize --force
+  ./configure --prefix=/usr --libexecdir=/usr/sbin \
+    --without-debug --without-docs --without-bench --with-readline \
+    --with-innodb --enable-local-infile --without-openssl \
+    --with-charset=latin1 --with-collation=latin1_general_ci \
+    --with-extra-charsets=complex --enable-thread-safe-client \
+    --without-libwrap --with-berkeley-db
+
+  # fixes
+  sed -i -e 's/^.*HAVE_GETHOSTBYNAME_R_GLIBC2_STYLE.*$/#define\ HAVE_GETHOSTBYNAME_R_GLIBC2_STYLE/g' config.h || return 1
+  sed -i -e 's/size_socket/socklen_t/g' sql/mysqld.cc || return 1
+
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+  rm -rf $startdir/pkg/usr/{mysql-test,sql-bench}
+  install -D -m644 ../my.cnf $startdir/pkg/etc/my.cnf
+  install -D -m755 ../mysqld $startdir/pkg/etc/rc.d/mysqld
+  install -D -m644 ../mysqld.conf.d $startdir/pkg/etc/conf.d/mysqld
+
+  # create library symlinks in /usr/lib
+  ln -sf mysql/libmysqlclient.so.15 $startdir/pkg/usr/lib/libmysqlclient.so.15
+  ln -sf libmysqlclient.so.15 $startdir/pkg/usr/lib/libmysqlclient.so
+  ln -sf libmysqlclient.so.15 $startdir/pkg/usr/lib/libmysqlclient.so.1
+  ln -sf mysql/libmysqlclient_r.so.15 $startdir/pkg/usr/lib/libmysqlclient_r.so.15
+  ln -sf libmysqlclient_r.so.15 $startdir/pkg/usr/lib/libmysqlclient_r.so
+  ln -sf libmysqlclient_r.so.15 $startdir/pkg/usr/lib/libmysqlclient_r.so.1
+}

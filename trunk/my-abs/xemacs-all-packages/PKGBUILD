@@ -1,0 +1,14 @@
+# Contributor: Sergej Pupykin <ps@lx-ltd.ru>
+arch=(i686 x86_64)
+pkgname=xemacs-all-packages
+pkgver=20060911
+pkgrel=1
+pkgdesc="all packages from xemacs.org"
+depends=('xemacs')
+conflicts=('xemacs-sumo' 'xemacs-base')
+source=(http://ftp.xemacs.org/pub/packages/xemacs-all-packages.tar.bz2)
+
+build() {
+  mkdir -p $startdir/pkg/usr/lib/xemacs/xemacs-packages/
+  cp -r $startdir/src/xemacs-packages/*  $startdir/pkg/usr/lib/xemacs/xemacs-packages/
+}

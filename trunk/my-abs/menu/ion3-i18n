@@ -1,0 +1,38 @@
+#!/usr/bin/install-menu
+# by Iwan Heskamp <iwan@hetwasietsmet.nl>
+# http://tdm120.el.utwente.nl/~hkp/pwm/
+# Modified for Ion by Per Olofsson <pelle@dsv.su.se>
+
+compat="menu-1"
+
+!include menu.h
+
+compat="menu-2"
+
+outputencoding="LOCALE";
+
+function q($arg) = esc($arg, "\\\"");
+function qc($arg) = esc($arg, "\\'");
+
+function entry($action)="    menuentry(\"" q(title()) "\", \""
+	q($action) "\"),\n";
+function entry_exec($command)=entry("ioncore.exec('" qc($command) "')");
+
+supported;
+   x11  = entry_exec($command);
+   wm   = entry("ioncore.restart_other('" qc($command) "')");
+   text = entry_exec(term());
+endsupported;
+
+
+startmenu="defmenu(\"" $section "\", {\n";
+endmenu="})\n\n";
+genmenu="arch-menu-i18n.lua";
+submenutitle="    submenu(\"" $title "\", \"" $section "\"),\n";
+preoutput="\n";
+mainmenutitle="Arch";
+rootsection="Arch";
+rootprefix="/var/lib/ion3/";
+userprefix="/.ion3/";
+
+preoutput= "-- Automatically generated file. Do not edit.\n-- (See /usr/share/doc/menu/menu.txt.gz)\n\n";
