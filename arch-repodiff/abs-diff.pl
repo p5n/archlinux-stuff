@@ -16,7 +16,7 @@ $arch2 = "x86_64";
 
 #####################################
 
-$title = "$repo diff ($arch1 vs $arch2) at ".`date +%Y.%m.%d.%H.%m`;
+$title = "$repo diff ($arch1 vs $arch2) at ".`date +"%Y.%m.%d.%H.%M.%S(%Z)"`;
 
 !system("mkdir -p $destdir") || die "can not create destdir";
 
