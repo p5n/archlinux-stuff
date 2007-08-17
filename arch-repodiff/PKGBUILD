@@ -1,0 +1,35 @@
+pkgname=arch-repodiff-svn
+pkgver=1
+pkgrel=1
+pkgdesc="A web based terminal"
+arch=('i686' 'x86_64')
+url="http://code.google.com/p/archlinux-stuff/"
+depends=(bash perl diff2html)
+license=('GPL')
+
+_svntrunk=http://archlinux-stuff.googlecode.com/svn/trunk/arch-repodiff/
+_svnmod=arch-repodiff
+
+build() {
+  cd $startdir/src
+
+  svn checkout $_svntrunk --config-dir ./ $_svnmod
+
+  msg "SVN checkout done or server timeout"
+  msg "Starting make..."
+
+  cp -r $_svnmod $_svnmod-build
+  cd $_svnmod-build
+
+  install -D -m 0755 abs-diff.pl $startdir/pkg/usr/bin/arch-repodiff-diff && \
+  install -D -m 0755 my-abs.sh $startdir/pkg/usr/bin/arch-repodiff-fetch && \
+  install -D -m 0755 pkg.sh $startdir/pkg/usr/bin/arch-repodiff-pkginfo && \
+  install -d -m 0755 $startdir/pkg/etc/arch-repodiff/ && \
+  install -D -m 0644 abs/supfile.arch $startdir/pkg/etc/arch-repodiff/ && \
+  install -D -m 0644 abs/supfile.arch-64 $startdir/pkg/etc/arch-repodiff/ && \
+  install -D -m 0644 abs/supfile.community $startdir/pkg/etc/arch-repodiff/ && \
+  install -D -m 0644 abs/supfile.community-64 $startdir/pkg/etc/arch-repodiff/ && \
+  install -D -m 0644 abs/supfile.extra $startdir/pkg/etc/arch-repodiff/ && \
+  install -D -m 0644 abs/supfile.extra-64 $startdir/pkg/etc/arch-repodiff/ && \
+  install -D -m 0644 main.css $startdir/pkg/etc/arch-repodiff/example.css
+}
