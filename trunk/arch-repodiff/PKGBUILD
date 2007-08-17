@@ -1,6 +1,6 @@
 pkgname=arch-repodiff-svn
-pkgver=67
-pkgrel=2
+pkgver=71
+pkgrel=1
 pkgdesc="makes html'ed diff between i686 and x86_64 repositories"
 arch=('i686' 'x86_64')
 url="http://code.google.com/p/archlinux-stuff/"
