@@ -5,8 +5,11 @@ $basedir = "~/arch-abs";
 $repo = "community";
 $arch1 = "i686";
 $arch2 = "x86_64";
+$cssurl="main.css";
 
 #####################################
+
+$title = "$repo diff ($arch1 vs $arch2) at ".`date +%Y.%m.%d.%H.%m`;
 
 !system("mkdir -p $destdir") || die "can not create destdir";
 
@@ -72,10 +75,13 @@ print "Comparing...\n";
 
 open IDXFH, ">$destdir/index.html" || die "Can not open index.html";
 
-$title = "$repo diff ($arch1 vs $arch2)".`date +%Y.%m.%d.%H.%m`;
+print IDXFH "<HTML><HEAD><TITLE>$title</TITLE></HEAD>\n";
+print IDXFH "<link rel=\"stylesheet\" type=\"text/css\" href=\"$cssurl\" media=\"screen\">\n";
+print IDXFH "<BODY><H1>$title</H1>\n";
+print IDXFH "<TABLE width='100%' class=table>\n";
+print IDXFH "<TR class=header><TH>Group<TH>Package<TH>$arch1<TH>$arch2</TR>\n";
 
-print IDXFH "<HTML><HEAD><TITLE>$title</TITLE></HEAD><BODY><H1>$title</H1>\n";
-print IDXFH "<TABLE width='100%' border=1px>\n";
+$counter = 0;
 
 foreach $i (sort keys %PKGS)
 {
@@ -102,15 +108,17 @@ foreach $i (sort keys %PKGS)
 	print "DIFF: $repo-$group-$pkg\n";
 	if($p1 lt $p2)
 	{
-    	    print IDXFH "<TR><TD>$group<TD><A HREF=\"$repo-$group-$pkg.html\">$pkg</A><TD bgcolor=red>$p1<TD>$p2</TR>\n";
+    	    print IDXFH "<TR class=row$counter><TD>$group<TD><A HREF=\"$repo-$group-$pkg.html\">$pkg</A><TD class=outdated>$p1<TD>$p2</TR>\n";
 	}
 	else
 	{
-    	    print IDXFH "<TR><TD>$group<TD><A HREF=\"$repo-$group-$pkg.html\">$pkg</A><TD>$p1<TD bgcolor=red>$p2</TR>\n";
+    	    print IDXFH "<TR class=row$counter><TD>$group<TD><A HREF=\"$repo-$group-$pkg.html\">$pkg</A><TD>$p1<TD class=outdated>$p2</TR>\n";
 	}
 	open FH, ">$destdir/$repo-$group-$pkg.html" || die "can not write diff";
     	print FH $diff;
     	close FH;
+	$counter++;
+	$counter %= 2;
     }
 }
 
