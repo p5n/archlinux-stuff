@@ -1,0 +1,27 @@
+=Into=
+Make diff between different arch samenamed repositories.
+
+=Installation=
+Get PKGBUILD from
+[http://aur.archlinux.org/packages.php?do_Details=1&ID=12589 http://aur.archlinux.org/packages.php?do_Details=1&ID=12589],
+make and install arch-repodiff-svn package.
+
+=Usage=
+
+==Fetch latest abs tree==
+Fetch  latest abs tree into ~/arch-abs
+<pre>
+arch-repodiff-fetch ~/arch-abs
+</pre>
+
+==Make diff==
+
+Make diff and put htmls into ~/arch-abs/current-diff, ~/arch-abs/extra-diff and ~/arch-abs/community-diff.
+
+<pre>
+arch-repodiff-diff ~/arch-abs ~/arch-abs/current-diff current http://example.com/css/main.css
+
+arch-repodiff-diff ~/arch-abs ~/arch-abs/extra-diff extra http://example.com/css/main.css
+
+arch-repodiff-diff ~/arch-abs ~/arch-abs/community-diff community http://example.com/css/main.css
+</pre>
