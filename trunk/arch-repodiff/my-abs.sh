@@ -1,8 +1,14 @@
-#!/bin/sh
+#!/bin/bash
 
-ABSROOT=~/arch-abs/
-CVSUP=cvsup
-supdir=./abs
+if [ "x$1" == "x" ]; then
+    echo "Usage: $0 <basedir>"
+    exit 1
+fi
+
+ABSROOT=$1
+[ -f /usr/bin/cvsup ] && CVSUP=/usr/bin/cvsup
+[ -f /usr/bin/csup  ] && CVSUP=/usr/bin/csup
+supdir=/etc/arch-repodiff
 
 ############################################3
 

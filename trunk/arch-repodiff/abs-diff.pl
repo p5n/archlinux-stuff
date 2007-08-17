@@ -102,8 +102,8 @@ foreach $i (sort keys %PKGS)
         die("bad param");
     }
 
-    $p1 = `arch-repodiff-pkginfo.sh $basedir/$arch1/$repo/$group/$pkg/PKGBUILD`;
-    $p2 = `arch-repodiff-pkginfo.sh $basedir/$arch2/$repo/$group/$pkg/PKGBUILD`;
+    $p1 = `arch-repodiff-pkginfo $basedir/$arch1/$repo/$group/$pkg/PKGBUILD`;
+    $p2 = `arch-repodiff-pkginfo $basedir/$arch2/$repo/$group/$pkg/PKGBUILD`;
 
     $p1 = "&nbsp;" if($p1 eq "");
     $p2 = "&nbsp;" if($p2 eq "");
