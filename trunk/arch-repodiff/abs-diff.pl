@@ -86,7 +86,7 @@ print IDXFH "<HTML><HEAD><TITLE>$title</TITLE></HEAD>\n";
 print IDXFH "<link rel=\"stylesheet\" type=\"text/css\" href=\"$cssurl\" media=\"screen\">\n";
 print IDXFH "<BODY><H1>$title</H1>\n";
 print IDXFH "<TABLE width='100%' class=table>\n";
-print IDXFH "<TR class=header><TH>Group<TH>Package<TH>$arch1<TH>$arch2</TR>\n";
+print IDXFH "<TR class=header><TH>#<TH>Group<TH>Package<TH>$arch1<TH>$arch2</TR>\n";
 
 $counter = 0;
 
@@ -131,16 +131,16 @@ foreach $i (sort keys %PKGS)
 	{
 	    $diffurl = "$pkg";
 	}
+	$class = $counter % 2;
 	if($p1 lt $p2)
 	{
-    	    print IDXFH "<TR class=row$counter><TD>$group<TD>$diffurl<TD class=outdated>$p1<TD>$p2</TR>\n";
+    	    print IDXFH "<TR class=row$class><TD>$counter<TD>$group<TD>$diffurl<TD class=outdated>$p1<TD>$p2</TR>\n";
 	}
 	else
 	{
-    	    print IDXFH "<TR class=row$counter><TD>$group<TD>$diffurl<TD>$p1<TD class=outdated>$p2</TR>\n";
+    	    print IDXFH "<TR class=row$class><TD>$counter<TD>$group<TD>$diffurl<TD>$p1<TD class=outdated>$p2</TR>\n";
 	}
 	$counter++;
-	$counter %= 2;
     }
 }
 
