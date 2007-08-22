@@ -89,6 +89,9 @@ print IDXFH "<TABLE width='100%' class=table>\n";
 print IDXFH "<TR class=header><TH>#<TH>Group<TH>Package<TH>$arch1<TH>$arch2</TR>\n";
 
 $counter = 0;
+$count_hidden = 0;
+$count_reldiff = 0;
+$count_absent = 0;
 
 foreach $i (sort keys %PKGS)
 {
@@ -110,17 +113,26 @@ foreach $i (sort keys %PKGS)
 
     if($p1 =~ /^(.*)-(.+)\..+$/)
     {
+	$v1 = $1;
+	$r1 = $2;
         $p1 = "$1-$2";
     }
 
     if($p2 =~ /^(.*)-(.+)\..+$/)
     {
+	$v2 = $1;
+	$r2 = $2;
         $p2 = "$1-$2";
     }
 
     if($p1 ne $p2)
     {
 	print "DIFF: $repo-$group-$pkg\n";
+
+	if($v1 eq $v2)
+	{
+	    $count_reldiff++;
+	}
 
 	if( ($p1 ne "-") && ($p2 ne "-") )
 	{
@@ -130,6 +142,7 @@ foreach $i (sort keys %PKGS)
 	else
 	{
 	    $diffurl = "$pkg";
+	    $count_absent++;
 	}
 	$class = $counter % 2;
 	if($p1 lt $p2)
@@ -144,6 +157,12 @@ foreach $i (sort keys %PKGS)
     }
 }
 
-print IDXFH "</TABLE></BODY></HTML>\n";
+print IDXFH "</TABLE>\n";
+print IDXFH "<P>Total: $counter\n";
+print IDXFH "<P>Hidden (pkgrel differs in after dot part): $count_hidden\n";
+print IDXFH "<P>pkgrel diffs: $count_reldiff\n";
+print IDXFH "<P>Absent packages (present in one arch, but absent in other): $count_absent\n";
+
+print IDXFH "</BODY></HTML>\n";
 
 close IDXFH;
