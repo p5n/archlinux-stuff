@@ -105,24 +105,37 @@ foreach $i (sort keys %PKGS)
         die("bad param");
     }
 
-    $p1 = `arch-repodiff-pkginfo $basedir/$arch1/$repo/$group/$pkg/PKGBUILD`;
-    $p2 = `arch-repodiff-pkginfo $basedir/$arch2/$repo/$group/$pkg/PKGBUILD`;
+    $org_p1 = `arch-repodiff-pkginfo $basedir/$arch1/$repo/$group/$pkg/PKGBUILD`;
+    $org_p2 = `arch-repodiff-pkginfo $basedir/$arch2/$repo/$group/$pkg/PKGBUILD`;
 
-    $p1 = "&nbsp;" if($p1 eq "");
-    $p2 = "&nbsp;" if($p2 eq "");
+    $org_p1 = "&nbsp;" if($org_p1 eq "");
+    $org_p2 = "&nbsp;" if($org_p2 eq "");
 
-    if($p1 =~ /^(.*)-(.+)\..+$/)
+    if($org_p1 =~ /^(.*)-(.+)\..+$/)
     {
-	$v1 = $1;
-	$r1 = $2;
         $p1 = "$1-$2";
     }
 
-    if($p2 =~ /^(.*)-(.+)\..+$/)
+    if($org_p2 =~ /^(.*)-(.+)\..+$/)
+    {
+        $p2 = "$1-$2";
+    }
+
+    if($p1 =~ /^(.+)-(.+)$/)
+    {
+	$v1 = $1;
+	$r1 = $2;
+    }
+
+    if($p2 =~ /^(.+)-(.+)$/)
     {
 	$v2 = $1;
 	$r2 = $2;
-        $p2 = "$1-$2";
+    }
+
+    if( ($org_p1 ne $org_p2) and ($p1 eq $p2) )
+    {
+	$count_hidden++;
     }
 
     if($p1 ne $p2)
