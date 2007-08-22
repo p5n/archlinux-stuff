@@ -132,13 +132,11 @@ foreach $i (sort keys %PKGS)
     if($p1 =~ /^(.+)-(.+)$/)
     {
 	$v1 = $1;
-#	$r1 = $2;
     }
 
     if($p2 =~ /^(.+)-(.+)$/)
     {
 	$v2 = $1;
-#	$r2 = $2;
     }
 
     if( ($org_p1 ne $org_p2) and ($p1 eq $p2) )
@@ -168,11 +166,11 @@ foreach $i (sort keys %PKGS)
 	$class = $counter % 2;
 	if($p1 lt $p2)
 	{
-    	    print IDXFH "<TR class=row$class><TD>$counter<TD>$group<TD>$diffurl<TD class=outdated>$p1<TD>$p2</TR>\n";
+    	    print IDXFH "<TR class=row$class><TD>$counter<TD>$group<TD>$diffurl<TD class=outdated>$org_p1<TD>$org_p2</TR>\n";
 	}
 	else
 	{
-    	    print IDXFH "<TR class=row$class><TD>$counter<TD>$group<TD>$diffurl<TD>$p1<TD class=outdated>$p2</TR>\n";
+    	    print IDXFH "<TR class=row$class><TD>$counter<TD>$group<TD>$diffurl<TD>$org_p1<TD class=outdated>$org_p2</TR>\n";
 	}
 	$counter++;
     }
