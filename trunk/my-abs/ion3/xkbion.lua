@@ -158,7 +158,7 @@ function xkbion_set (groups) -- the only global created by xkbion.lua
     local key = groups.key
     if key and type(key) == "string" then
         defbindings("WClientWin", {
-            kpress(key, function (_, _sub) set_group(_, true)  end, "_sub:WClientWin")
+            kpress(key, function (_, _sub) set_group(_, true)  end)
         })
     end
 
