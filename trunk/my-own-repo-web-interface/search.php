@@ -1,5 +1,13 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+    <TITLE>Packages<TITLE>
+    <META http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</HEAD>
+<BODY>
+<TABLE border=1>
+<TR><TH>Name<TH>Version<TH>Description</TR>
 <?php
-    define(REPO_NAME, "custom");
     define(PDO_URL, "sqlite:/tmp/test.db");
 
     try
@@ -24,6 +32,9 @@
 	$license = $row[9];
 	$depend = $row[10];
 	$filelist = $row[11];
-	echo "$pkgname, $pkgver, $pkgdesc <BR>\n";
+	echo "<TR><TD>$pkgname<TD>$pkgver<TD>$pkgdesc</TR>\n";
     }
 ?>
+</TABLE>
+</BODY>
+</HTML>
