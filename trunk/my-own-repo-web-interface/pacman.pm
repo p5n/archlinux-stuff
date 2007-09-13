@@ -18,8 +18,6 @@ sub add_package_pacman
     $depend = "";
     $filelist = "n/a";
 
-    print STDERR "Adding: $packagefile\n";
-
     $filelist = `tar xf $packagefile .FILELIST -O`;
 
     open(FH, "tar xf $packagefile .PKGINFO -O|") || die("tar failed");
@@ -70,8 +68,7 @@ sub add_package_pacman
 
     close FH;
 
-    # TODO: add update
-    $db->do("INSERT INTO packages VALUES (NULL, '$pkgname', '$pkgver', '$pkgdesc', '$url', '$builddate', '$packager', $size, '$arch', '$license', '$depend', \"$filelist\")");
+    return ($pkgname, $pkgver, $pkgdesc, $url, $builddate, $packager, $size, $arch, $license, $depend, $filelist);
 }
 
 return TRUE;
