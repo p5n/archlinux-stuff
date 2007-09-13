@@ -72,3 +72,5 @@ sub add_package_pacman
 
     $db->do("INSERT INTO packages VALUES (NULL, '$pkgname', '$pkgver', '$pkgdesc', '$url', '$builddate', '$packager', $size, '$arch', '$license', '$depend', \"$filelist\")");
 }
+
+return TRUE;
