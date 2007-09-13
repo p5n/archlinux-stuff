@@ -70,6 +70,7 @@ sub add_package_pacman
 
     close FH;
 
+    # TODO: add update
     $db->do("INSERT INTO packages VALUES (NULL, '$pkgname', '$pkgver', '$pkgdesc', '$url', '$builddate', '$packager', $size, '$arch', '$license', '$depend', \"$filelist\")");
 }
 
