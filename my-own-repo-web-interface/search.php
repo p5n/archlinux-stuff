@@ -19,7 +19,7 @@
 	die($exception->getMessage());
     }
 
-    foreach ($dbHandle->query('SELECT id, pkgname, pkgver, pkgdesc, url, builddate, packager, size, arch, license, depend, filelist from packages') as $row)
+    foreach ($dbHandle->query('SELECT id, pkgname, pkgver, pkgdesc, url, builddate, packager, size, arch, license, depend, filelist from packages ORDER BY pkgname') as $row)
     {
 	$pkgname = $row[1];
 	$pkgver = $row[2];

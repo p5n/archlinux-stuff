@@ -19,6 +19,21 @@ sub init_db
     $db->do("INSERT INTO state VALUES (NULL, 'lasttime', '0')");
 }
 
+sub pkg_exist
+{
+    my ($db, $pkgname) = @_;
+    my ($all, $exist);
+
+    $exist = 0;
+    $all = $db->selectall_arrayref("SELECT pkgname FROM packages WHERE pkgname='$pkgname'");
+
+    foreach my $row (@$all)
+    {
+	$exist = 1;
+    }
+    return $exist;
+}
+
 #
 # MAIN
 #
@@ -46,14 +61,20 @@ while($packagefile = readdir DIR)
 	$packagefile = $DIR."/".$packagefile;
 	# ($dev,$ino,$mode,$nlink,$uid,$gid,$rdev,$size,$atime,$mtime,$ctime,$blksize,$blocks)
 	@stat = stat($packagefile);
-#	$size = $stat[7];
-#	$atime = $stat[8];
 	$mtime = $stat[9];
-#	$ctime = $stat[10];
-print "$packagefile : $mtime > $lasttime\n";
 	if($mtime > $lasttime)
 	{
-	    add_package_pacman($db, $packagefile);
+	    ($pkgname, $pkgver, $pkgdesc, $url, $builddate, $packager, $size, $arch, $license, $depend, $filelist) = add_package_pacman($db, $packagefile);
+	    if(pkg_exist($db, $pkgname))
+	    {
+		print STDERR "Updating: $packagefile\n";
+		$db->do("UPDATE packages SET pkgver='$pkgver', pkgdesc='$pkgdesc', url='$url', builddate='$builddate', packager='$packager', size=$size, arch='$arch', license='$license', depend='$depend', filelist=\"$filelist\" WHERE pkgname='$pkgname'");
+	    }
+	    else
+	    {
+		print STDERR "Adding: $packagefile\n";
+		$db->do("INSERT INTO packages VALUES (NULL, '$pkgname', '$pkgver', '$pkgdesc', '$url', '$builddate', '$packager', $size, '$arch', '$license', '$depend', \"$filelist\")");
+	    }
 	}
     }
 }
