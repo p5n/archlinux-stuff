@@ -4,6 +4,9 @@
 
 Place php-files into web server dir, pm-file into /usr/lib/my-own-repo-web-interface/, pl-file into /usr/bin/my-own-repo-update.
 
+= Configuration =
+All you need is edit config.php to change path to sqlite db file.
+
 = Usage =
 
 Init db with:
@@ -14,3 +17,4 @@ Place following command into cron:
 my-own-repo-update pacman /srv/my-own-repo/myrepo.db /home/user/pkgs
 
 That is all. Now you can browse http://your-server.tld/my-own-repo/search.php
+ 
