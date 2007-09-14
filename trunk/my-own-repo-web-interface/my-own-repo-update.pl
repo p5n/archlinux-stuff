@@ -6,7 +6,7 @@ use DBI;
 # GLOBAL CONFIGURATION
 # ####################################################################
 
-$VERSION = "0.1";
+$VERSION = "0.0.1";
 $MODULES_DIR = "./";
 $BASE_DB_DIR = "/tmp";
 

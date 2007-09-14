@@ -5,6 +5,20 @@
     <META http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </HEAD>
 <BODY>
+
+<?php
+
+if(empty($_SERVER['HTTP_REFERER']))
+{
+    echo "<P><A HREF='search.php'>&lt;&lt;back</A>\n";
+}
+else
+{
+    echo "<P><A HREF='".$_SERVER['HTTP_REFERER']."'>&lt;&lt;back</A>\n";
+}
+
+?>
+
 <?php
     $BASE_DB_DIR = "/tmp";
     $REPONAME = "myrepo";
