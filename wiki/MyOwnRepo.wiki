@@ -18,7 +18,3 @@ Place following command into cron:
 my-own-repo-update pacman /path/to/repo-sqlite.db /path/to/packages/dir
 
 That is all. Now you can browse http://your-server.tld/path/to/search.php
- 
- 
- 
- 
