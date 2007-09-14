@@ -11,13 +11,14 @@ All you need is edit config.php to change path to sqlite db file.
 
 Init db with:
 
-my-own-repo-update --init pacman /srv/my-own-repo/myrepo.db /home/user/pkgs
+my-own-repo-update --init pacman /path/to/repo-sqlite.db /path/to/packages/dir
 
 Place following command into cron:
 
-my-own-repo-update pacman /srv/my-own-repo/myrepo.db /home/user/pkgs
+my-own-repo-update pacman /path/to/repo-sqlite.db /path/to/packages/dir
 
-That is all. Now you can browse http://your-server.tld/my-own-repo/search.php
+That is all. Now you can browse http://your-server.tld/path/to/search.php
+ 
  
  
  
