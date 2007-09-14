@@ -7,8 +7,8 @@ use DBI;
 # ####################################################################
 
 $VERSION = "0.0.1";
-$MODULES_DIR = "./";
-$BASE_DB_DIR = "/tmp";
+$MODULES_DIR = "/usr/lib/my-own-repo-web-interface";
+$BASE_DB_DIR = "/srv/my-own-repo";
 
 # ####################################################################
 # Check usage, read parameters

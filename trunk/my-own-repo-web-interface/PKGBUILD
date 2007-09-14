@@ -8,12 +8,18 @@ license=('GPL')
 depends=(perl php)
 options=()
 install=
-source=($pkgname-$pkgver.tar.gz)
+source=(my-own-repo-web-interface-$pkgver.tar.gz)
 
 build() {
-  cd "$startdir/src/$pkgname-$pkgver"
+  cd $startdir/src
 
-  ./configure --prefix=/usr
-  make || return 1
-  make DESTDIR="$startdir/pkg" install
+  install -d -m0755 $startdir/pkg/usr/lib/my-own-repo-web-interface && \
+  install -d -m0755 $startdir/pkg/usr/bin && \
+  install -d -m0755 $startdir/pkg/srv/my-own-repo && \
+  install -m0755 my-own-repo-update.pl $startdir/pkg/usr/bin/my-own-repo-update && \
+  install -m0755 pacman.pm $startdir/pkg/usr/lib/my-own-repo-web-interface/ && \
+  install -m0755 rpm.pm $startdir/pkg/usr/lib/my-own-repo-web-interface/ && \
+  install -m0755 dpkg.pm $startdir/pkg/usr/lib/my-own-repo-web-interface/ && \
+  install -m0644 detail.php $startdir/pkg/srv/my-own-repo/ && \
+  install -m0644 search.php $startdir/pkg/srv/my-own-repo/
 }
