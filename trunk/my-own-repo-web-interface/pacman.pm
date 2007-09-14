@@ -16,6 +16,7 @@ sub add_package
     $arch = "unknown";
     $license = "unknown";
     $depend = "";
+    $backup = "";
     $filelist = "n/a";
 
     $filelist = `tar xf $packagefile .FILELIST -O`;
@@ -62,13 +63,20 @@ sub add_package
         }
         if(/^depend = (.+)$/)
         {
-            $depend = $1;
+            $depend = $depend.$1.",";
+        }
+        if(/^backup = (.+)$/)
+        {
+            $backup = $backup.$1.",";
         }
     }
 
     close FH;
 
-    return ($pkgname, $pkgver, $pkgdesc, $url, $builddate, $packager, $size, $arch, $license, $depend, $filelist);
+    chop $depend;
+    chop $backup;
+
+    return ($pkgname, $pkgver, $pkgdesc, $url, $builddate, $packager, $size, $arch, $license, $depend, $backup, $filelist);
 }
 
 return TRUE;

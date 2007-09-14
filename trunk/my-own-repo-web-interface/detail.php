@@ -5,12 +5,12 @@
     <META http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </HEAD>
 <BODY>
-<TABLE border=1>
-<TR><TH>Name<TH>Version<TH>Description<TH>Last updated</TR>
 <?php
     $BASE_DB_DIR = "/tmp";
     $REPONAME = "myrepo";
     define(PDO_URL, "sqlite:".$BASE_DB_DIR."/".$REPONAME.".db");
+
+    $pkgid = $_GET['id'];
 
     try
     {
@@ -21,9 +21,8 @@
 	die($exception->getMessage());
     }
 
-    foreach ($dbHandle->query('SELECT id, pkgname, pkgver, pkgdesc, url, builddate, packager, size, arch, license, depend, backup, filelist, lastupdated from packages ORDER BY pkgname') as $row)
+    foreach ($dbHandle->query("SELECT id, pkgname, pkgver, pkgdesc, url, builddate, packager, size, arch, license, depend, backup, filelist, lastupdated from packages WHERE id=$pkgid") as $row)
     {
-	$pkgid = $row[0];
 	$pkgname = $row[1];
 	$pkgver = $row[2];
 	$pkgdesc = $row[3];
@@ -37,9 +36,21 @@
 	$backup = $row[11];
 	$filelist = $row[12];
 	$lastupdated = date("Y.m.d H.i.s", $row[13]);
-	echo "<TR><TD><A HREF='detail.php?id=$pkgid'>$pkgname</A><TD>$pkgver<TD>$pkgdesc<TD>$lastupdated</TR>\n";
+
+	echo "<P><B>Name:</B> $pkgname\n";
+	echo "<P><B>Version:</B> $pkgver\n";
+	echo "<P><B>Description:</B> $pkgdesc\n";
+	echo "<P><B>Home page:</B> $url\n";
+	echo "<P><B>Build date:</B> $builddate\n";
+	echo "<P><B>Packager:</B> $packager\n";
+	echo "<P><B>Size:</B> $size\n";
+	echo "<P><B>Arch:</B> $arch\n";
+	echo "<P><B>License:</B> $license\n";
+	echo "<P><B>Depends on:</B> $depend\n";
+	echo "<P><B>Backup files:</B> $backup\n";
+	echo "<P><B>File list:</B> <PRE>$filelist</PRE>\n";
+	echo "<P><B>Last updated in DB:</B> $lastupdated\n";
     }
 ?>
-</TABLE>
 </BODY>
 </HTML>
