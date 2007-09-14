@@ -2,7 +2,7 @@
 
 use DBI;
 
-sub add_package_dpkg
+sub add_package
 {
 }
 

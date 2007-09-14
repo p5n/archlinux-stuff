@@ -2,7 +2,7 @@
 
 use DBI;
 
-sub add_package_rpm
+sub add_package
 {
 }
 

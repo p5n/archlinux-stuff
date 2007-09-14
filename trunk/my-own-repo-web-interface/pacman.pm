@@ -2,9 +2,9 @@
 
 use DBI;
 
-sub add_package_pacman
+sub add_package
 {
-    my ($db, $packagefile) = @_;
+    my ($packagefile) = @_;
     my ($pkgname, $pkgver, $pkgdesc, $url, $builddate, $packager, $size, $arch, $license, $depend, $filelist);
     $pkgname = "n/a";
     $pkgver = "n/a";
