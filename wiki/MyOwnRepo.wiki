@@ -1,4 +1,4 @@
-#my-own-repo-web-interface howto
+#summary my-own-repo-web-interface howto
 
 = Installation =
 
@@ -18,5 +18,6 @@ Place following command into cron:
 my-own-repo-update pacman /srv/my-own-repo/myrepo.db /home/user/pkgs
 
 That is all. Now you can browse http://your-server.tld/my-own-repo/search.php
+ 
  
  
