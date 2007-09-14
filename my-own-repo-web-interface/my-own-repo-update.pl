@@ -2,11 +2,43 @@
 
 use DBI;
 
-use pacman;
-use rpm;
-use dpkg;
+# ####################################################################
+# GLOBAL CONFIGURATION
+# ####################################################################
 
-$DIR = "./pkg";
+$MODULES_DIR = "./";
+$BASE_DB_DIR = "/tmp";
+
+# ####################################################################
+# Check usage, read parameters
+# ####################################################################
+
+if($#ARGV lt 2)
+{
+    print STDERR "Usage: my-own-repo-update [-i|--init] <pkg-format> <repo-name> <path-to-packages>\n";
+    exit 1;
+}
+
+if( ($ARGV[0] =~ /^-i$/) || ($ARGV[0] =~ /^--init$/) )
+{
+    $initflag = 1;
+    $driver = $ARGV[1];
+    $reponame = $ARGV[2];
+    $DIR = $ARGV[3];
+}
+else
+{
+    $initflag = 0;
+    $driver = $ARGV[0];
+    $reponame = $ARGV[1];
+    $DIR = $ARGV[2];
+}
+
+do $MODULES_DIR."/".$driver.".pm";
+
+# ####################################################################
+# FUNCTIONS
+# ####################################################################
 
 #
 # DB initialization
@@ -19,6 +51,9 @@ sub init_db
     $db->do("INSERT INTO state VALUES (NULL, 'lasttime', '0')");
 }
 
+#
+# Does pkg exist?
+#
 sub pkg_exist
 {
     my ($db, $pkgname) = @_;
@@ -34,13 +69,21 @@ sub pkg_exist
     return $exist;
 }
 
-#
+# ####################################################################
 # MAIN
-#
+# ####################################################################
 
-my $db = DBI->connect("dbi:SQLite:/tmp/test.db", "", "", {RaiseError => 1, AutoCommit => 1});
+if($initflag)
+{
+    unlink $BASE_DB_DIR."/".$reponame.".db";
+}
 
-#init_db($db);
+my $db = DBI->connect("dbi:SQLite:".$BASE_DB_DIR."/".$reponame.".db", "", "", {RaiseError => 1, AutoCommit => 1});
+
+if($initflag)
+{
+    init_db($db);
+}
 
 $ctime = time;
 
@@ -49,7 +92,7 @@ $all = $db->selectall_arrayref("SELECT value FROM state WHERE name='lasttime'");
 foreach my $row (@$all)
 {
     $lasttime = $$row[0];
-    print "LAST UPDATE = $lasttime\n";
+    print STDERR "LAST UPDATE = $lasttime\n";
 }
 
 opendir DIR, $DIR || die("cannot open packages dir");
@@ -64,7 +107,7 @@ while($packagefile = readdir DIR)
 	$mtime = $stat[9];
 	if($mtime > $lasttime)
 	{
-	    ($pkgname, $pkgver, $pkgdesc, $url, $builddate, $packager, $size, $arch, $license, $depend, $filelist) = add_package_pacman($db, $packagefile);
+	    ($pkgname, $pkgver, $pkgdesc, $url, $builddate, $packager, $size, $arch, $license, $depend, $filelist) = add_package($packagefile);
 	    if(pkg_exist($db, $pkgname))
 	    {
 		print STDERR "Updating: $packagefile\n";

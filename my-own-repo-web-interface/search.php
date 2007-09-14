@@ -8,7 +8,9 @@
 <TABLE border=1>
 <TR><TH>Name<TH>Version<TH>Description</TR>
 <?php
-    define(PDO_URL, "sqlite:/tmp/test.db");
+    $BASE_DB_DIR = "/tmp";
+    $REPONAME = "myrepo";
+    define(PDO_URL, "sqlite:".$BASE_DB_DIR."/".$REPONAME.".db");
 
     try
     {
