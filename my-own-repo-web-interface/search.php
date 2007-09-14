@@ -8,9 +8,8 @@
 
 <?php
     // config
-    $BASE_DB_DIR = "/tmp";
-    $REPONAME = "myrepo";
-    define(PDO_URL, "sqlite:".$BASE_DB_DIR."/".$REPONAME.".db");
+    include 'config.php';
+    define(PDO_URL, "sqlite:".$REPONAME);
 
     // init
     try

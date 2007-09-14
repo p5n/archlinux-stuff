@@ -8,7 +8,6 @@ use DBI;
 
 $VERSION = "0.0.1";
 $MODULES_DIR = "/usr/lib/my-own-repo-web-interface";
-$BASE_DB_DIR = "/srv/my-own-repo";
 
 # ####################################################################
 # Check usage, read parameters
@@ -16,7 +15,7 @@ $BASE_DB_DIR = "/srv/my-own-repo";
 
 if($#ARGV lt 2)
 {
-    print STDERR "Usage: my-own-repo-update [-i|--init] <pkg-format> <repo-name> <path-to-packages>\n";
+    print STDERR "Usage: my-own-repo-update [-i|--init] <pkg-format> <path-to-repo-db> <path-to-packages>\n";
     exit 1;
 }
 
@@ -79,10 +78,10 @@ sub pkg_exist
 # connect and init
 if($initflag)
 {
-    unlink $BASE_DB_DIR."/".$reponame.".db";
+    unlink $reponame;
 }
 
-my $db = DBI->connect("dbi:SQLite:".$BASE_DB_DIR."/".$reponame.".db", "", "", {RaiseError => 1, AutoCommit => 1});
+my $db = DBI->connect("dbi:SQLite:".$reponame, "", "", {RaiseError => 1, AutoCommit => 1});
 
 if($initflag)
 {
