@@ -8,7 +8,8 @@ license=('GPL')
 depends=(perl php)
 options=()
 install=
-source=(my-own-repo-web-interface-$pkgver.tar.gz)
+source=(http://archlinux-stuff.googlecode.com/files/my-own-repo-web-interface-$pkgver.tar.gz)
+md5sums=('0ff1311a4ca6f4228e7ead611d54a66b')
 
 build() {
   cd $startdir/src
@@ -20,6 +21,7 @@ build() {
   install -m0755 pacman.pm $startdir/pkg/usr/lib/my-own-repo-web-interface/ && \
   install -m0755 rpm.pm $startdir/pkg/usr/lib/my-own-repo-web-interface/ && \
   install -m0755 dpkg.pm $startdir/pkg/usr/lib/my-own-repo-web-interface/ && \
+  install -m0644 config.php $startdir/pkg/srv/my-own-repo/ && \
   install -m0644 detail.php $startdir/pkg/srv/my-own-repo/ && \
   install -m0644 search.php $startdir/pkg/srv/my-own-repo/
 }

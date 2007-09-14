@@ -8,6 +8,8 @@
 
 <?php
 
+include 'config.php';
+
 if(empty($_SERVER['HTTP_REFERER']))
 {
     echo "<P><A HREF='search.php'>&lt;&lt;back</A>\n";
@@ -20,9 +22,7 @@ else
 ?>
 
 <?php
-    $BASE_DB_DIR = "/tmp";
-    $REPONAME = "myrepo";
-    define(PDO_URL, "sqlite:".$BASE_DB_DIR."/".$REPONAME.".db");
+    define(PDO_URL, "sqlite:".$REPONAME);
 
     $pkgid = $_GET['id'];
 
