@@ -1,0 +1,19 @@
+pkgname=my-own-repo-web-interface
+pkgver=0.0.1
+pkgrel=1
+pkgdesc="Custom user repo interface (pacman/rpm/deb)"
+arch=(i686 x86_64)
+url="http://code.google.com/p/archlinux-stuff/"
+license=('GPL')
+depends=(perl php)
+options=()
+install=
+source=($pkgname-$pkgver.tar.gz)
+
+build() {
+  cd "$startdir/src/$pkgname-$pkgver"
+
+  ./configure --prefix=/usr
+  make || return 1
+  make DESTDIR="$startdir/pkg" install
+}
