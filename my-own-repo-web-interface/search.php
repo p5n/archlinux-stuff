@@ -21,10 +21,10 @@
 	die($exception->getMessage());
     }
 
-    $keyword = $_GET['k'];
-    $where = $_GET['s'];
-    $page = $_GET['p'];
-    $perpage = $_GET['pp'];
+    $keyword = urlencode($_GET['k']);
+    $where =  urlencode($_GET['s']);
+    $page =  urlencode($_GET['p']);
+    $perpage =  urlencode($_GET['pp']);
 
     if(empty($perpage))
     {

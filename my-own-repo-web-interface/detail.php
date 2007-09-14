@@ -24,7 +24,7 @@ else
 <?php
     define(PDO_URL, "sqlite:".$REPONAME);
 
-    $pkgid = $_GET['id'];
+    $pkgid =  urlencode($_GET['id']);
 
     try
     {
@@ -54,7 +54,7 @@ else
 	echo "<P><B>Name:</B> $pkgname\n";
 	echo "<P><B>Version:</B> $pkgver\n";
 	echo "<P><B>Description:</B> $pkgdesc\n";
-	echo "<P><B>Home page:</B> $url\n";
+	echo "<P><B>Home page:</B> <A HREF='$url'>$url</A>\n";
 	echo "<P><B>Build date:</B> $builddate\n";
 	echo "<P><B>Packager:</B> $packager\n";
 	echo "<P><B>Size:</B> $size\n";

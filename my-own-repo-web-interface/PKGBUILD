@@ -1,15 +1,15 @@
 pkgname=my-own-repo-web-interface
-pkgver=0.0.1
+pkgver=0.0.3
 pkgrel=1
 pkgdesc="Custom user repo interface (pacman/rpm/deb)"
 arch=(i686 x86_64)
 url="http://code.google.com/p/archlinux-stuff/"
 license=('GPL')
-depends=(perl php)
+depends=(perl php perl-dbd-sqlite)
 options=()
 install=
 source=(http://archlinux-stuff.googlecode.com/files/my-own-repo-web-interface-$pkgver.tar.gz)
-md5sums=('0ff1311a4ca6f4228e7ead611d54a66b')
+md5sums=('083ddb432dea3455b033bfaa0880b9b9')
 
 build() {
   cd $startdir/src
