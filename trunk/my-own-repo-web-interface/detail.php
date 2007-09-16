@@ -6,6 +6,8 @@
 </HEAD>
 <BODY>
 
+<?php include 'menu.html'; ?>
+
 <?php
 
 include 'config.php';
