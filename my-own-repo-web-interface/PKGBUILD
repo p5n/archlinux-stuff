@@ -6,10 +6,11 @@ arch=(i686 x86_64)
 url="http://code.google.com/p/archlinux-stuff/"
 license=('GPL')
 depends=(perl php perl-dbd-sqlite)
+backup=(srv/my-own-repo/config.php)
 options=()
 install=
 source=(http://archlinux-stuff.googlecode.com/files/my-own-repo-web-interface-$pkgver.tar.gz)
-md5sums=('083ddb432dea3455b033bfaa0880b9b9')
+md5sums=('eab6aeeaf594e118512b1c799fe08e07')
 
 build() {
   cd $startdir/src
@@ -23,5 +24,7 @@ build() {
   install -m0755 dpkg.pm $startdir/pkg/usr/lib/my-own-repo-web-interface/ && \
   install -m0644 config.php $startdir/pkg/srv/my-own-repo/ && \
   install -m0644 detail.php $startdir/pkg/srv/my-own-repo/ && \
+  install -m0644 recent.php $startdir/pkg/srv/my-own-repo/ && \
+  install -m0644 menu.html $startdir/pkg/srv/my-own-repo/ && \
   install -m0644 search.php $startdir/pkg/srv/my-own-repo/
 }
