@@ -7,4 +7,4 @@
 #*default umask=002
 
 *default tag=CURRENT-64
-arch
+core

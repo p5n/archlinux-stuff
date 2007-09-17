@@ -27,8 +27,8 @@ build() {
   install -D -m 0755 my-abs.sh $startdir/pkg/usr/bin/arch-repodiff-fetch && \
   install -D -m 0755 pkg.sh $startdir/pkg/usr/bin/arch-repodiff-pkginfo && \
   install -d -m 0755 $startdir/pkg/etc/arch-repodiff/ && \
-  install -D -m 0644 abs/supfile.arch $startdir/pkg/etc/arch-repodiff/ && \
-  install -D -m 0644 abs/supfile.arch-64 $startdir/pkg/etc/arch-repodiff/ && \
+  install -D -m 0644 abs/supfile.core $startdir/pkg/etc/arch-repodiff/ && \
+  install -D -m 0644 abs/supfile.core-64 $startdir/pkg/etc/arch-repodiff/ && \
   install -D -m 0644 abs/supfile.community $startdir/pkg/etc/arch-repodiff/ && \
   install -D -m 0644 abs/supfile.community-64 $startdir/pkg/etc/arch-repodiff/ && \
   install -D -m 0644 abs/supfile.extra $startdir/pkg/etc/arch-repodiff/ && \

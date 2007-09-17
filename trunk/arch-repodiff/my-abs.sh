@@ -21,10 +21,10 @@ NORM=`(echo op && echo sgr0) | tput -S`
 
 echo "${SEL}ARCH: x86_64${NORM}"
 
-# current
-echo "${SEL}[current/x86_64]${NORM}"
-mkdir -p $ABSROOT/x86_64/current
-$CVSUP -L 1 -r 0 -g -b $ABSROOT/x86_64/current -P m -c .sup $supdir/supfile.arch-64
+# core
+echo "${SEL}[core/x86_64]${NORM}"
+mkdir -p $ABSROOT/x86_64/core
+$CVSUP -L 1 -r 0 -g -b $ABSROOT/x86_64 -P m -c .sup $supdir/supfile.core-64
 
 # extra
 echo "${SEL}[extra/x86_64]${NORM}"
@@ -42,10 +42,10 @@ $CVSUP -L 1 -r 0 -g -b $ABSROOT/x86_64 -P m -c community/.sup $supdir/supfile.co
 
 echo "${SEL}ARCH: i686${NORM}"
 
-# current
-echo "${SEL}[current/i686]${NORM}"
-mkdir -p $ABSROOT/i686/current
-$CVSUP -L 1 -r 0 -g -b $ABSROOT/i686/current -P m -c .sup $supdir/supfile.arch
+# core
+echo "${SEL}[core/i686]${NORM}"
+mkdir -p $ABSROOT/i686/core
+$CVSUP -L 1 -r 0 -g -b $ABSROOT/i686 -P m -c .sup $supdir/supfile.core
 
 # extra
 echo "${SEL}[extra/i686]${NORM}"
