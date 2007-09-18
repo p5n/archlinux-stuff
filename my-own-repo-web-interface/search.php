@@ -100,6 +100,7 @@ for($i=0; $i<=$total_count/$perpage; $i++)
 <TH><INPUT class="input-submit" value="Search" type=submit>
 </TR>
 </TABLE>
+<INPUT type=hidden name=repo value='<?php echo $repoidx; ?>'>
 </FORM>
 
 <TABLE border=1 width='100%'>
@@ -121,7 +122,7 @@ for($i=0; $i<=$total_count/$perpage; $i++)
 	$backup = $row[11];
 	$filelist = $row[12];
 	$lastupdated = date("Y.m.d H.i.s", $row[13]);
-	echo "<TR><TD><A HREF='detail.php?id=$pkgid'>$pkgname</A><TD>$pkgver<TD>$pkgdesc<TD>$lastupdated</TR>\n";
+	echo "<TR><TD><A HREF='detail.php?id=$pkgid&repo=$repoidx'>$pkgname</A><TD>$pkgver<TD>$pkgdesc<TD>$lastupdated</TR>\n";
     }
 ?>
 </TABLE>
