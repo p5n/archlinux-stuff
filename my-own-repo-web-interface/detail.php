@@ -6,11 +6,9 @@
 </HEAD>
 <BODY>
 
-<?php include 'menu.html'; ?>
+<?php include 'menu.php'; ?>
 
 <?php
-
-include 'config.php';
 
 if(empty($_SERVER['HTTP_REFERER']))
 {
@@ -24,7 +22,7 @@ else
 ?>
 
 <?php
-    define(PDO_URL, "sqlite:".$REPONAME);
+    define(PDO_URL, $REPODB);
 
     $pkgid =  urlencode($_GET['id']);
 

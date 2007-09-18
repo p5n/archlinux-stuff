@@ -6,12 +6,11 @@
 </HEAD>
 <BODY>
 
-<?php include 'menu.html'; ?>
+<?php include 'menu.php'; ?>
 
 <?php
     // config
-    include 'config.php';
-    define(PDO_URL, "sqlite:".$REPONAME);
+    define(PDO_URL, $REPODB);
 
     // init
     try
