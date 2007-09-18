@@ -1,0 +1,77 @@
+.menu-table
+{
+    width: 100%;
+}
+
+.qswitch
+{
+    text-align: right;
+    align: right;
+}
+
+.qlinks
+{
+}
+
+.input-submit
+{
+    border: 1px black solid;
+    cursor: hand;
+    background-color:#808080;
+}
+
+.input-text
+{
+	border: 1px black solid;
+	background-color: #C0D2C1;
+}
+
+body
+{
+	background-color: #CCDDDD;
+	padding: 10px;
+	margin: 10px;
+}
+
+.input-select
+{
+	background-color: #C0D2C1;
+	border : 1px black solid;
+}
+
+.txt-table
+{
+    background-color: #000000;
+    border-width: 0px;
+    border-spacing: 1px;
+    padding: 0px;
+    margin: auto;
+    overflow: hidden;
+}
+
+.txt-table TH
+{
+    background-color: #4ECF9B;
+    overflow: hidden;
+}
+
+.odd-row
+{
+    background-color: #CACACA;
+    overflow: hidden;
+}
+
+.even-row
+{
+    background-color: #9B9B9B;
+    overflow: hidden;
+}
+
+.dlg-table
+{
+}
+
+.field-title
+{
+    font-weight: bold;
+}
