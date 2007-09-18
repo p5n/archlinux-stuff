@@ -49,4 +49,4 @@ Now you can browse http://your-server.tld/path/to/search.php
 = Screenshots =
 
   * Search page
-http://archlinux-stuff.googlecode.com/svn/trunk/my-own-repo-web-interface/screen1.png
+http://archlinux-stuff.googlecode.com/svn/wiki/my-own-repo-screen1.png
