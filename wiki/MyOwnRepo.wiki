@@ -14,7 +14,7 @@ Place following command into cron:
 
 my-own-repo-update pacman DBI:SQLite:/path/to/repo-sqlite.db /path/to/packages/dir
 
-== Web interface configuration ==
+= Web interface configuration =
 All you need is edit config.php to change list of repositories.
 
 Examples:
@@ -38,3 +38,4 @@ Examples:
 = Browsing =
 
 Now you can browse http://your-server.tld/path/to/search.php
+ 
