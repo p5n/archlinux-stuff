@@ -45,3 +45,8 @@ ln -s default-theme.css theme.css
 to set default theme as current one.
 
 Now you can browse http://your-server.tld/path/to/search.php
+
+= Screenshots =
+
+  * Search page
+http://archlinux-stuff.googlecode.com/files/screen1.png
