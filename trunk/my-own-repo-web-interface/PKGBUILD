@@ -8,9 +8,9 @@ license=('GPL')
 depends=(perl php perl-dbd-sqlite)
 backup=(srv/my-own-repo/config.php)
 options=()
-install=
+install=my-own-repo-web-interface.install
 source=(http://archlinux-stuff.googlecode.com/files/my-own-repo-web-interface-$pkgver.tar.gz)
-md5sums=('7bf52d415a3fbd25273b99cd160799d1')
+md5sums=('4f9f12a4553d93c208e0238242e15c46')
 
 build() {
   cd $startdir/src
