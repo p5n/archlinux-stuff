@@ -3,7 +3,7 @@ post_install() {
 }
 
 post_upgrade() {
-  (cd /srv/my-own-repo && ln -s -f default-theme.css theme.css)
+  echo 'Check /srv/my-own-repo/theme.css symlink!'
 }
 
 pre_remove() {
