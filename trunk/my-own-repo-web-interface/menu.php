@@ -8,7 +8,7 @@
     <A HREF='recent.php?d=1'>Deleted</A>
 )
 </SPAN>
-<SPAN>
+<SPAN align=right>
     <FORM action='search.php' method=GET>
     Quick switch: <SELECT name=repo>
     <?php

@@ -75,7 +75,7 @@
 	{
 	    $op = "UPD";
 	}
-	echo "<TR><TD>$op<TD><A HREF='detail.php?id=$pkgid'>$pkgname</A><TD>$pkgver<TD>$pkgdesc<TD>$lastupdated</TR>\n";
+	echo "<TR><TD>$op<TD><A HREF='detail.php?id=$pkgid&repo=$repoidx'>$pkgname</A><TD>$pkgver<TD>$pkgdesc<TD>$lastupdated</TR>\n";
     }
 ?>
 </TABLE>
