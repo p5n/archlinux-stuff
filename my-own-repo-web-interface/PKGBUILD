@@ -1,6 +1,6 @@
 pkgname=my-own-repo-web-interface
 pkgver=0.1
-pkgrel=1
+pkgrel=2
 pkgdesc="Custom user repo interface (pacman/rpm/deb)"
 arch=(i686 x86_64)
 url="http://code.google.com/p/archlinux-stuff/"
@@ -10,7 +10,7 @@ backup=(srv/my-own-repo/config.php)
 options=()
 install=my-own-repo-web-interface.install
 source=(http://archlinux-stuff.googlecode.com/files/my-own-repo-web-interface-$pkgver.tar.gz)
-md5sums=('4f9f12a4553d93c208e0238242e15c46')
+md5sums=('dd20275963f7308752032a08ced3d01d')
 
 build() {
   cd $startdir/src
