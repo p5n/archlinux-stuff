@@ -4,17 +4,35 @@
 
 Place php-files into web server dir, pm-files into /usr/lib/my-own-repo-web-interface/, my-own-repo-update.pl file into /usr/bin/my-own-repo-update.
 
-= Configuration =
-All you need is edit config.php to change path to sqlite db file.
-
 = Usage =
 
 Init db with:
 
-my-own-repo-update --init pacman /path/to/repo-sqlite.db /path/to/packages/dir
+my-own-repo-update --init pacman DBI:SQLite:/path/to/repo-sqlite.db /path/to/packages/dir
 
 Place following command into cron:
 
-my-own-repo-update pacman /path/to/repo-sqlite.db /path/to/packages/dir
+my-own-repo-update pacman DBI:SQLite:/path/to/repo-sqlite.db /path/to/packages/dir
 
 That is all. Now you can browse http://your-server.tld/path/to/search.php
+
+== Web interface configuration ==
+All you need is edit config.php to change list of repositories.
+
+Examples:
+
+  * Single repo and single arch:
+{{{
+    $repos[0]['db'] = "sqlite:/srv/my-own-repo/myrepo.db";
+    $repos[0]['name'] = "myrepo(i686)";
+}}}
+
+  * Three repo
+{{{
+    $repos[0]['db'] = "sqlite:/srv/my-own-repo/myrepo1.db";
+    $repos[0]['name'] = "myrepo1";
+    $repos[1]['db'] = "sqlite:/srv/my-own-repo/myrepo2.db";
+    $repos[1]['name'] = "myrepo2";
+    $repos[1]['db'] = "sqlite:/srv/my-own-repo/myrepo3.db";
+    $repos[1]['name'] = "myrepo3";
+}}}
