@@ -37,6 +37,11 @@ Examples:
 
 = Browsing =
 
+Do
+{{{
+ln -s default-theme.css theme.css 
+}}}
+
+to set default theme as current one.
+
 Now you can browse http://your-server.tld/path/to/search.php
- 
- 
