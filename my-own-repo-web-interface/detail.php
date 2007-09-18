@@ -3,6 +3,7 @@
 <HEAD>
     <TITLE>Packages<TITLE>
     <META http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <LINK rel="stylesheet" type="text/css" href="theme.css" media="screen">
 </HEAD>
 <BODY>
 
@@ -25,6 +26,7 @@ else
     define(PDO_URL, $REPODB);
 
     $pkgid =  urlencode($_GET['id']);
+    $pkgname =  urlencode($_GET['n']);
 
     try
     {
@@ -35,7 +37,16 @@ else
 	die($exception->getMessage());
     }
 
-    foreach ($dbHandle->query("SELECT id, pkgname, pkgver, pkgdesc, url, builddate, packager, size, arch, license, depend, backup, filelist, lastupdated from packages WHERE id=$pkgid") as $row)
+    if(empty($pkgid))
+    {
+	$wherecond = "pkgname='$pkgname'";
+    }
+    else
+    {
+	$wherecond = "id=$pkgid";
+    }
+
+    foreach ($dbHandle->query("SELECT id, pkgname, pkgver, pkgdesc, url, builddate, packager, size, arch, license, depend, backup, filelist, lastupdated from packages WHERE $wherecond") as $row)
     {
 	$pkgname = $row[1];
 	$pkgver = $row[2];
