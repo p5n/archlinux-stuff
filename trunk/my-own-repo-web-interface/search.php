@@ -3,6 +3,7 @@
 <HEAD>
     <TITLE>Packages<TITLE>
     <META http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <LINK rel="stylesheet" type="text/css" href="theme.css" media="screen">
 </HEAD>
 <BODY>
 
@@ -122,7 +123,7 @@ for($i=0; $i<=$total_count/$perpage; $i++)
 	$backup = $row[11];
 	$filelist = $row[12];
 	$lastupdated = date("Y.m.d H.i.s", $row[13]);
-	echo "<TR><TD><A HREF='detail.php?id=$pkgid&repo=$repoidx'>$pkgname</A><TD>$pkgver<TD>$pkgdesc<TD>$lastupdated</TR>\n";
+	echo "<TR><TD><A HREF='detail.php?n=$pkgname&repo=$repoidx'>$pkgname</A><TD>$pkgver<TD>$pkgdesc<TD>$lastupdated</TR>\n";
     }
 ?>
 </TABLE>

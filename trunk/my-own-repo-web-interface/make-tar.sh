@@ -1,11 +1,11 @@
 #!/bin/sh
 
-pkgver=0.0.4
+pkgver=0.1
 
 sed -i "s|\$VERSION = \".*\";|\$VERSION = \"$pkgver\";|" my-own-repo-update.pl
 sed -i "s|pkgver=.*\$|pkgver=$pkgver|" PKGBUILD
 
-tar czf my-own-repo-web-interface-$pkgver.tar.gz *.pl *.pm *.php
+tar czf my-own-repo-web-interface-$pkgver.tar.gz *.pl *.pm *.php *.css
 
 MD5SUM=`makepkg -g`
 
