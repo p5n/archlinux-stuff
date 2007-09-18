@@ -62,19 +62,19 @@ else
 	$filelist = $row[12];
 	$lastupdated = date("Y.m.d H.i.s", $row[13]);
 
-	echo "<P><B>Name:</B> $pkgname\n";
-	echo "<P><B>Version:</B> $pkgver\n";
-	echo "<P><B>Description:</B> $pkgdesc\n";
-	echo "<P><B>Home page:</B> <A HREF='$url'>$url</A>\n";
-	echo "<P><B>Build date:</B> $builddate\n";
-	echo "<P><B>Packager:</B> $packager\n";
-	echo "<P><B>Size:</B> $size\n";
-	echo "<P><B>Arch:</B> $arch\n";
-	echo "<P><B>License:</B> $license\n";
-	echo "<P><B>Depends on:</B> $depend\n";
-	echo "<P><B>Backup files:</B> $backup\n";
-	echo "<P><B>File list:</B> <PRE>$filelist</PRE>\n";
-	echo "<P><B>Last updated in DB:</B> $lastupdated\n";
+	echo "<P><SPAN class=\"field-title\">Name:</SPAN> <SPAN class=\"field-data\">$pkgname</SPAN>\n";
+	echo "<P><SPAN class=\"field-title\">Version:</SPAN> <SPAN class=\"field-data\">$pkgver</SPAN>\n";
+	echo "<P><SPAN class=\"field-title\">Description:</SPAN> <SPAN class=\"field-data\">$pkgdesc</SPAN>\n";
+	echo "<P><SPAN class=\"field-title\">Home page:</SPAN> <SPAN class=\"field-data\"><A HREF='$url'>$url</A></SPAN>\n";
+	echo "<P><SPAN class=\"field-title\">Build date:</SPAN> <SPAN class=\"field-data\">$builddate</SPAN>\n";
+	echo "<P><SPAN class=\"field-title\">Packager:</SPAN> <SPAN class=\"field-data\">$packager</SPAN>\n";
+	echo "<P><SPAN class=\"field-title\">Size:</SPAN> <SPAN class=\"field-data\">$size</SPAN>\n";
+	echo "<P><SPAN class=\"field-title\">Arch:</SPAN> <SPAN class=\"field-data\">$arch</SPAN>\n";
+	echo "<P><SPAN class=\"field-title\">License:</SPAN> <SPAN class=\"field-data\">$license</SPAN>\n";
+	echo "<P><SPAN class=\"field-title\">Depends on:</SPAN> <SPAN class=\"field-data\">$depend</SPAN>\n";
+	echo "<P><SPAN class=\"field-title\">Backup files:</SPAN> <SPAN class=\"field-data\">$backup</SPAN>\n";
+	echo "<P><SPAN class=\"field-title\">File list:</SPAN> <SPAN class=\"field-data\"><PRE>$filelist</PRE></SPAN>\n";
+	echo "<P><SPAN class=\"field-title\">Last updated in DB:</SPAN> <SPAN class=\"field-data\">$lastupdated</SPAN>\n";
     }
 ?>
 </BODY>

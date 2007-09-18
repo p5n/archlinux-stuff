@@ -54,9 +54,10 @@
     }
 ?>
 
-<TABLE border=1 width='100%'>
+<TABLE class="txt-table" width='100%'>
 <TR><TH>Operation<TH>Name<TH>Version<TH>Description<TH>Last updated</TR>
 <?php
+    $counter = 1;
     foreach ($dbHandle->query("SELECT p.pkgname, p.pkgver, p.pkgdesc, p.lastupdated, log.op from packages as p, log WHERE p.pkgname = log.pkgname $where ORDER BY log.time DESC LIMIT 10") as $row)
     {
 	$pkgname = $row[0];
@@ -76,7 +77,8 @@
 	{
 	    $op = "UPD";
 	}
-	echo "<TR><TD>$op<TD><A HREF='detail.php?id=$pkgid&repo=$repoidx'>$pkgname</A><TD>$pkgver<TD>$pkgdesc<TD>$lastupdated</TR>\n";
+	$rowclass = ($counter++ % 2) ? "even-row" : "odd-row";
+	echo "<TR class=\"$rowclass\"><TD>$op<TD><A HREF='detail.php?n=$pkgname&repo=$repoidx'>$pkgname</A><TD>$pkgver<TD>$pkgdesc<TD>$lastupdated</TR>\n";
     }
 ?>
 </TABLE>

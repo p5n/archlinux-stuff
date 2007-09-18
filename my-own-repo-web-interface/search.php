@@ -72,16 +72,16 @@
 ?>
 
 <FORM action='search.php' method=GET>
-<TABLE>
+<TABLE class="dlg-table">
 <TR>
 <TH>Keyword: <INPUT size=48 class="input-text" type=text name=k value='<?php echo $keyword?>'>
-<TH>Search in: <SELECT name=s>
+<TH>Search in: <SELECT name=s class="input-select">
 <OPTION value=n<?php if($where == "n") echo " selected"?>>name</OPTION>
 <OPTION value=d<?php if($where == "d") echo " selected"?>>description</OPTION>
 <OPTION value=nd<?php if($where == "dn" || $where == "nd") echo " selected"?>>name & description</OPTION>
 </SELECT>
 
-<TH>Page: <SELECT name=p>
+<TH>Page: <SELECT name=p class="input-select">
 <?php
 for($i=0; $i<=$total_count/$perpage; $i++)
 {
@@ -104,9 +104,10 @@ for($i=0; $i<=$total_count/$perpage; $i++)
 <INPUT type=hidden name=repo value='<?php echo $repoidx; ?>'>
 </FORM>
 
-<TABLE border=1 width='100%'>
+<TABLE class="txt-table" width='100%'>
 <TR><TH>Name<TH>Version<TH>Description<TH>Last updated</TR>
 <?php
+    $counter = 1;
     foreach ($dbHandle->query("SELECT id, pkgname, pkgver, pkgdesc, url, builddate, packager, size, arch, license, depend, backup, filelist, lastupdated from packages $wherecond ORDER BY pkgname LIMIT $pagecond") as $row)
     {
 	$pkgid = $row[0];
@@ -123,7 +124,8 @@ for($i=0; $i<=$total_count/$perpage; $i++)
 	$backup = $row[11];
 	$filelist = $row[12];
 	$lastupdated = date("Y.m.d H.i.s", $row[13]);
-	echo "<TR><TD><A HREF='detail.php?n=$pkgname&repo=$repoidx'>$pkgname</A><TD>$pkgver<TD>$pkgdesc<TD>$lastupdated</TR>\n";
+	$rowclass = ($counter++ % 2) ? "even-row" : "odd-row";
+	echo "<TR class=\"$rowclass\"><TD><A HREF='detail.php?n=$pkgname&repo=$repoidx'>$pkgname</A><TD>$pkgver<TD>$pkgdesc<TD>$lastupdated</TR>\n";
     }
 ?>
 </TABLE>
