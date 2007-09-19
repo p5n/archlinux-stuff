@@ -1,3 +1,29 @@
+<?php
+include 'config.php';
+include 'common.php';
+
+    $pkgid =  urlencode($_GET['id']);
+    $pkgname =  urlencode($_GET['n']);
+    $nver =  urlencode($_GET['nver']);
+
+    try
+    {
+	$dbHandle = new PDO($REPODB);
+    }
+    catch( PDOException $exception )
+    {
+	die($exception->getMessage());
+    }
+
+    if(!empty($nver))
+    {
+	$timestamp = time();
+	$dbHandle->exec("UPDATE packages SET newver='$nver' WHERE pkgname='$pkgname'");
+	$dbHandle->exec("INSERT INTO log VALUES (NULL, $timestamp, $OP_OFD, '$pkgname')");
+	header("Location: detail.php?repo=$repoidx&n=$pkgname&id=$pkgid");
+	exit(0);
+    }
+?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
 <HTML>
 <HEAD>
@@ -11,32 +37,6 @@
 
 <?php
 
-if(empty($_SERVER['HTTP_REFERER']))
-{
-    echo "<P><A HREF='search.php'>&lt;&lt;back</A>\n";
-}
-else
-{
-    echo "<P><A HREF='".$_SERVER['HTTP_REFERER']."'>&lt;&lt;back</A>\n";
-}
-
-?>
-
-<?php
-    define(PDO_URL, $REPODB);
-
-    $pkgid =  urlencode($_GET['id']);
-    $pkgname =  urlencode($_GET['n']);
-
-    try
-    {
-	$dbHandle = new PDO(PDO_URL);
-    }
-    catch( PDOException $exception )
-    {
-	die($exception->getMessage());
-    }
-
     if(empty($pkgid))
     {
 	$wherecond = "pkgname='$pkgname'";
@@ -46,7 +46,7 @@ else
 	$wherecond = "id=$pkgid";
     }
 
-    foreach ($dbHandle->query("SELECT id, pkgname, pkgver, pkgdesc, url, builddate, packager, size, arch, license, depend, backup, filelist, lastupdated from packages WHERE $wherecond") as $row)
+    foreach ($dbHandle->query("SELECT id, pkgname, pkgver, pkgdesc, url, builddate, packager, size, arch, license, depend, backup, filelist, lastupdated, newver from packages WHERE $wherecond") as $row)
     {
 	$pkgname = $row[1];
 	$pkgver = $row[2];
@@ -61,11 +61,19 @@ else
 	$backup = $row[11];
 	$filelist = $row[12];
 	$lastupdated = date("Y.m.d H.i.s", $row[13]);
+	$newver = $row[14];
 
 	echo "<P><SPAN class=\"field-title\">Name:</SPAN> <SPAN class=\"field-data\">$pkgname</SPAN>\n";
 	echo "<P><SPAN class=\"field-title\">Version:</SPAN> <SPAN class=\"field-data\">$pkgver</SPAN>\n";
 	echo "<P><SPAN class=\"field-title\">Description:</SPAN> <SPAN class=\"field-data\">$pkgdesc</SPAN>\n";
-	echo "<P><SPAN class=\"field-title\">Home page:</SPAN> <SPAN class=\"field-data\"><A HREF='$url'>$url</A></SPAN>\n";
+	if($url != "unknown")
+	{
+	    echo "<P><SPAN class=\"field-title\">Home page:</SPAN> <SPAN class=\"field-data\"><A HREF='$url'>$url</A></SPAN>\n";
+	}
+	else
+	{
+	    echo "<P><SPAN class=\"field-title\">Home page:</SPAN> <SPAN class=\"field-data\">$url</SPAN>\n";
+	}
 	echo "<P><SPAN class=\"field-title\">Build date:</SPAN> <SPAN class=\"field-data\">$builddate</SPAN>\n";
 	echo "<P><SPAN class=\"field-title\">Packager:</SPAN> <SPAN class=\"field-data\">$packager</SPAN>\n";
 	echo "<P><SPAN class=\"field-title\">Size:</SPAN> <SPAN class=\"field-data\">$size</SPAN>\n";
@@ -75,6 +83,23 @@ else
 	echo "<P><SPAN class=\"field-title\">Backup files:</SPAN> <SPAN class=\"field-data\">$backup</SPAN>\n";
 	echo "<P><SPAN class=\"field-title\">File list:</SPAN> <SPAN class=\"field-data\"><PRE>$filelist</PRE></SPAN>\n";
 	echo "<P><SPAN class=\"field-title\">Last updated in DB:</SPAN> <SPAN class=\"field-data\">$lastupdated</SPAN>\n";
+
+	if(empty($newver))
+	{
+	    if($enableMarkOutOfDate)
+	    {
+		echo "<FORM action='detail.php' method=GET>";
+		echo "<P>Enter new version number:&nbsp;<INPUT class='input-text' type=text size=10 name=nver>";
+		echo "<INPUT type=hidden name=n value=\"$pkgname\">";
+		echo "<INPUT type=hidden name=repo value=\"$repoidx\">";
+		echo "<INPUT class='input-submit' type=submit name=submit value='Flag out of date'>";
+		echo "</FORM>";
+	    }
+	}
+	else
+	{
+	    echo "<P class=red>Out of dated: new version: $newver\n";
+	}
     }
 ?>
 </BODY>

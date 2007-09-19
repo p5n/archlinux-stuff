@@ -1,6 +1,6 @@
 #!/bin/sh
 
-pkgver=0.1
+pkgver=0.2
 
 sed -i "s|\$VERSION = \".*\";|\$VERSION = \"$pkgver\";|" my-own-repo-update.pl
 sed -i "s|pkgver=.*\$|pkgver=$pkgver|" PKGBUILD

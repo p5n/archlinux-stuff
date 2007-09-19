@@ -1,11 +1,3 @@
-<?php
-include 'config.php';
-$repoidx = $_GET['repo'];
-if(empty($repoidx))
-{
-    $repoidx = 0;
-}
-?>
 <FORM action='<?php echo $_SERVER['REQUEST_URI']; ?>' method=GET>
 <TABLE class="menu-table">
     <TR><TD class="qlinks">
@@ -13,6 +5,7 @@ if(empty($repoidx))
 	<A HREF='recent.php?repo=<?php echo $repoidx; ?>'>Recent</A> (
 	    <A HREF='recent.php?repo=<?php echo $repoidx; ?>&a=1'>Added</A> |
 	    <A HREF='recent.php?repo=<?php echo $repoidx; ?>&u=1'>Updated</A> |
+	    <A HREF='recent.php?repo=<?php echo $repoidx; ?>&o=1'>Outdated</A> |
 	    <A HREF='recent.php?repo=<?php echo $repoidx; ?>&d=1'>Deleted</A> )
     <TD class="qswitch">
 	Quick switch: <SELECT name=repo class='input-select'>
@@ -28,7 +21,6 @@ if(empty($repoidx))
 	    echo "<OPTION value=$i>".$repos[$i]['name']."</OPTION>";
 	}
     }
-    $REPODB = $repos[$repoidx]['db'];
     ?>
     </SELECT>
 

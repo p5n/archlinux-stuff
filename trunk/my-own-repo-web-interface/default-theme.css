@@ -67,6 +67,18 @@ body
     overflow: hidden;
 }
 
+.red-row
+{
+    background-color: #FF5C5C;
+}
+
+.red
+{
+    background-color: #FF5C5C;
+    padding: 5px;
+    font-weight: bold;
+}
+
 .dlg-table
 {
 }

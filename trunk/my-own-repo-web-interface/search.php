@@ -7,16 +7,17 @@
 </HEAD>
 <BODY>
 
-<?php include 'menu.php'; ?>
+<?php
+include 'config.php';
+include 'common.php';
+include 'menu.php';
+?>
 
 <?php
-    // config
-    define(PDO_URL, $REPODB);
-
     // init
     try
     {
-	$dbHandle = new PDO(PDO_URL);
+	$dbHandle = new PDO($REPODB);
     }
     catch( PDOException $exception )
     {
@@ -108,7 +109,7 @@ for($i=0; $i<=$total_count/$perpage; $i++)
 <TR><TH>Name<TH>Version<TH>Description<TH>Last updated</TR>
 <?php
     $counter = 1;
-    foreach ($dbHandle->query("SELECT id, pkgname, pkgver, pkgdesc, url, builddate, packager, size, arch, license, depend, backup, filelist, lastupdated from packages $wherecond ORDER BY pkgname LIMIT $pagecond") as $row)
+    foreach ($dbHandle->query("SELECT id, pkgname, pkgver, pkgdesc, url, builddate, packager, size, arch, license, depend, backup, filelist, lastupdated, newver from packages $wherecond ORDER BY pkgname LIMIT $pagecond") as $row)
     {
 	$pkgid = $row[0];
 	$pkgname = $row[1];
@@ -124,7 +125,13 @@ for($i=0; $i<=$total_count/$perpage; $i++)
 	$backup = $row[11];
 	$filelist = $row[12];
 	$lastupdated = date("Y.m.d H.i.s", $row[13]);
+	$newver = $row[14];
+
 	$rowclass = ($counter++ % 2) ? "even-row" : "odd-row";
+	if(!empty($newver))
+	{
+	    $rowclass="red-row";
+	}
 	echo "<TR class=\"$rowclass\"><TD><A HREF='detail.php?n=$pkgname&repo=$repoidx'>$pkgname</A><TD>$pkgver<TD>$pkgdesc<TD>$lastupdated</TR>\n";
     }
 ?>

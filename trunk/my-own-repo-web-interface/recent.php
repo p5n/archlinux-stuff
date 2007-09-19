@@ -7,16 +7,17 @@
 </HEAD>
 <BODY>
 
-<?php include 'menu.php'; ?>
+<?php
+include 'config.php';
+include 'common.php';
+include 'menu.php';
+?>
 
 <?php
-    // config
-    define(PDO_URL, $REPODB);
-
     // init
     try
     {
-	$dbHandle = new PDO(PDO_URL);
+	$dbHandle = new PDO($REPODB);
     }
     catch( PDOException $exception )
     {
@@ -26,25 +27,32 @@
     $upd = $_GET['u'];
     $del = $_GET['d'];
     $add = $_GET['a'];
+    $out = $_GET['o'];
 
     $where = "";
     $started = "";
 
     if(!empty($add))
     {
-	$where .= "op = 1";
+	$where .= "op = $OP_ADD";
 	$started = " OR ";
     }
 
     if(!empty($del))
     {
-	$where .= $started."op = 2";
+	$where .= $started."op = $OP_DEL";
 	$started = " OR ";
     }
 
     if(!empty($upd))
     {
-	$where .= $started."op = 3";
+	$where .= $started."op = $OP_UPD";
+	$started = " OR ";
+    }
+
+    if(!empty($out))
+    {
+	$where .= $started."op = $OP_OFD";
 	$started = " OR ";
     }
 
