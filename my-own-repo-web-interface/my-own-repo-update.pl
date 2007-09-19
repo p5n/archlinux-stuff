@@ -6,7 +6,7 @@ use DBI;
 # GLOBAL CONFIGURATION
 # ####################################################################
 
-$VERSION = "0.1";
+$VERSION = "0.2";
 $MODULES_DIR = "/usr/lib/my-own-repo-web-interface";
 
 # ####################################################################
@@ -16,6 +16,7 @@ $MODULES_DIR = "/usr/lib/my-own-repo-web-interface";
 $OP_ADD = 1;
 $OP_DEL = 2;
 $OP_UPD = 3;
+$OP_OFD = 4; # out of dated
 
 # ####################################################################
 # Check usage, read parameters
@@ -59,7 +60,7 @@ sub init_db
     $db->do("DROP TABLE state");
     $db->do("DROP TABLE log");
 
-    $db->do("CREATE TABLE packages (id INTEGER PRIMARY KEY, pkgfile varchar(512), pkgname varchar(512), pkgver varchar(512), pkgdesc varchar(512), url varchar(512), builddate varchar(64), packager varchar(512), size integer, arch varchar(32), license varchar(512), depend varchar(512), backup varchar(512), filelist TEXT, lastupdated integer)");
+    $db->do("CREATE TABLE packages (id INTEGER PRIMARY KEY, pkgfile varchar(512), pkgname varchar(512), pkgver varchar(512), pkgdesc varchar(512), url varchar(512), builddate varchar(64), packager varchar(512), size integer, arch varchar(32), license varchar(512), depend varchar(512), backup varchar(512), filelist TEXT, lastupdated integer, newver varchar(64))");
     $db->do("CREATE TABLE state (id INTEGER PRIMARY KEY, name varchar(512), value varchar(512))");
     $db->do("CREATE TABLE log (id INTEGER PRIMARY KEY, time integer, op integer, pkgname varchar(512))");
 
@@ -128,13 +129,13 @@ while($pkgfile = readdir DIR)
 	    {
 		print STDERR "Updating: $packagefile\n";
 		$db->do("INSERT INTO log VALUES (NULL, $pkgtime, $OP_UPD, '$pkgname')");
-		$db->do("UPDATE packages SET pkgfile='$pkgfile', pkgver='$pkgver', pkgdesc='$pkgdesc', url='$url', builddate='$builddate', packager='$packager', size=$size, arch='$arch', license='$license', depend='$depend', backup='$backup', filelist=\"$filelist\", lastupdated=$pkgtime WHERE pkgname='$pkgname'");
+		$db->do("UPDATE packages SET pkgfile='$pkgfile', pkgver='$pkgver', pkgdesc='$pkgdesc', url='$url', builddate='$builddate', packager='$packager', size=$size, arch='$arch', license='$license', depend='$depend', backup='$backup', filelist=\"$filelist\", lastupdated=$pkgtime, newver='' WHERE pkgname='$pkgname'");
 	    }
 	    else
 	    {
 		print STDERR "Adding: $packagefile\n";
 		$db->do("INSERT INTO log VALUES (NULL, $pkgtime, $OP_ADD, '$pkgname')");
-		$db->do("INSERT INTO packages VALUES (NULL, '$pkgfile', '$pkgname', '$pkgver', '$pkgdesc', '$url', '$builddate', '$packager', $size, '$arch', '$license', '$depend', '$backup', \"$filelist\", $pkgtime)");
+		$db->do("INSERT INTO packages VALUES (NULL, '$pkgfile', '$pkgname', '$pkgver', '$pkgdesc', '$url', '$builddate', '$packager', $size, '$arch', '$license', '$depend', '$backup', \"$filelist\", $pkgtime, '')");
 	    }
 	}
     }
@@ -158,3 +159,9 @@ foreach my $row (@$all)
 
 # Update finished
 $db->do("UPDATE state SET value='$ctime' WHERE name='lasttime'");
+
+# print warning
+if($initflag)
+{
+    print STDERR "WARNING: don't forget to adjust permissions to '$reponame'\n";
+}
