@@ -17,7 +17,7 @@ source $1
 # Save dirs
 #
 for dir in ${DIRS[@]}; do
-    echo -n "Saving $dir..."
+    echo ">>> Saving $dir..."
 
     share=`echo $dir | cut -d: -f1`
     dir=`echo $dir | cut -d: -f2`
@@ -28,10 +28,10 @@ for dir in ${DIRS[@]}; do
 	SMB_COMMAND="smbtar -s $HOST -u $SMB_USER -p \"$SMB_PASSWD\" -x $share -d $dir -t /proc/self/fd/1"
     fi
 
-    $SMB_COMMAND 2>/dev/null | $COMPRESS_CMD >$BACKUP_DIR/$HOST-dir-$share-`echo $dir | tr '/' '_'`.tar.$COMPRESSED_EXT 2>/dev/null
+    $SMB_COMMAND | $COMPRESS_CMD >$BACKUP_DIR/$HOST-dir-$share-`echo $dir | tr '/' '_'`.tar.$COMPRESSED_EXT
     if [ $? -eq 0 ];then
-        echo -e "${MSG_OK}"
+        echo -e "...${MSG_OK}"
     else
-        echo -e "${MSG_ERROR}"
+        echo -e "...${MSG_ERROR}"
     fi
 done
