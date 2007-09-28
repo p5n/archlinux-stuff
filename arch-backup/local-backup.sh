@@ -16,7 +16,7 @@ source $1
 #
 # Save package list
 #
-echo -n "Saving package list..."
+echo ">>> Saving package list..."
 case "$PACKAGES" in
     pacman)
 	pacman -Q >$BACKUP_DIR/_localhost-pkg-list.txt
@@ -31,9 +31,9 @@ case "$PACKAGES" in
 	;;
 esac
 if [ $? -eq 0 ];then
-    echo -e "${MSG_OK}"
+    echo -e "...${MSG_OK}"
 else
-    echo -e "${MSG_ERROR}"
+    echo -e "...${MSG_ERROR}"
 fi
 
 #
@@ -42,13 +42,24 @@ fi
 for user in ${USERS[@]}; do
     homedir=`cat /etc/passwd | perl -ne "if(/^(\S+):.*:.*:.*:.*:(.+):.*/ && \\$1 eq "$user"){print \\$2;}"`
     if [ -f $homedir/.backup-list ]; then
-	echo -n "Saving $user's home..."
+	# check files
+	echo -n ">>> Checking $user's home:"
+	cat $homedir/.backup-list | while read A; do
+	    if [ -d $homedir/$A -o -f $homedir/$A ]; then
+		echo -n -e "${C_DONE}$A${C_CLEAR} "
+	    else
+		echo -n -e "${C_FAIL}$A${C_CLEAR} "
+	    fi
+	done
+	echo
+	# arc
+	echo ">>> Saving $user's home..."
 	list=`cat $homedir/.backup-list | perl -ne "print \"'$homedir/\"; chomp; print; print \"' \";"`
-        sh -c "tar c $list" 2>/dev/null | $COMPRESS_CMD 1>$BACKUP_DIR/_localhost-user-$user.tar.$COMPRESSED_EXT 2>/dev/null
+        sh -c "tar c $list" | $COMPRESS_CMD 1>$BACKUP_DIR/_localhost-user-$user.tar.$COMPRESSED_EXT
 	if [ $? -eq 0 ];then
-            echo -e "${MSG_OK}"
+            echo -e "...${MSG_OK}"
 	else
-    	    echo -e "${MSG_ERROR}"
+    	    echo -e "...${MSG_ERROR}"
 	fi
     else
 	echo "Saving $user's home: .backup-list is absent"
@@ -59,12 +70,12 @@ done
 # Save dirs
 #
 for dir in ${DIRS[@]}; do
-    echo -n "Saving $dir..."
-    tar c $dir 2>/dev/null | $COMPRESS_CMD 1>$BACKUP_DIR/_localhost-dir-`echo $dir | tr '/' '_'`.tar.$COMPRESSED_EXT 2>/dev/null
+    echo ">>> Saving $dir..."
+    [ -d $dir ] && tar c $dir | $COMPRESS_CMD 1>$BACKUP_DIR/_localhost-dir-`echo $dir | tr '/' '_'`.tar.$COMPRESSED_EXT
     if [ $? -eq 0 ];then
-        echo -e "${MSG_OK}"
+        echo -e "...${MSG_OK}"
     else
-        echo -e "${MSG_ERROR}"
+        echo -e "...${MSG_ERROR}"
     fi
 done
 
@@ -77,11 +88,11 @@ while [ "x${COMMANDS[$i]}" != "x" ]; do
     i=`expr $i + 1`
     CMD=${COMMANDS[$i]}
     i=`expr $i + 1`
-    echo -n "Saving command to file $FILE..."
-    sh -c "$CMD" 2>/dev/null | $COMPRESS_CMD > $BACKUP_DIR/_localhost-cmd-$FILE.$COMPRESSED_EXT 2>/dev/null
+    echo ">>> Saving command to file $FILE..."
+    sh -c "$CMD" | $COMPRESS_CMD > $BACKUP_DIR/_localhost-cmd-$FILE.$COMPRESSED_EXT
     if [ $? -eq 0 ];then
-        echo -e "${MSG_OK}"
+        echo -e "...${MSG_OK}"
     else
-        echo -e "${MSG_ERROR}"
+        echo -e "...${MSG_ERROR}"
     fi
 done

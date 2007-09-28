@@ -35,7 +35,7 @@ mkdir -p $BACKUP_DIR
 if [ "x$1" == "x" ]; then
     for config in ${BACKUP[@]}; do
 	if [ "$config" != "arch-backup.conf" ]; then
-	    echo "BACKUP $config"
+	    echo "${C_SEL}BACKUP $config${C_NORM}"
 	    source $CONFIG_DIR/$config
 
 	    [ "x$BEFORE_BACKUP" == "x" ] && BEFORE_BACKUP=true
@@ -56,7 +56,7 @@ if [ "x$1" == "x" ]; then
 else
     while [ "x$1" != "x" ]; do
 	if [ "$config" != "arch-backup.conf" ]; then
-	    echo "BACKUP $1"
+	    echo "${C_SEL}BACKUP $1${C_NORM}"
     	    source $CONFIG_DIR/$1
 
 	    [ "x$BEFORE_BACKUP" == "x" ] && BEFORE_BACKUP=true
@@ -81,6 +81,8 @@ fi
 #
 # Remove old backup dirs
 #
+
+echo "${C_SEL}Cleanup${C_NORM}"
 
 cd $BACKUP_BASE_DIR && (ls -1 | sort | head -n -$NUM_BACKUPS | while read A; do
     echo "Removing $A..."
