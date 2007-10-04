@@ -86,7 +86,7 @@ echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
 	{
 	    $op = "OUT";
 	}
-	echo "	<item>\n<guid>$repoidx$pkgname</guid>\n";
+	echo "	<item>\n<guid>$pkgname</guid>\n";
 	echo "		<title>".$op.":".$pkgname."-".$pkgver."</title>\n";
 	echo "		<link>http://".$_SERVER['HTTP_HOST'].substr($_SERVER['SCRIPT_NAME'], 0, -14)."detail.php?n=$pkgname&amp;repo=$repoidx</link>\n";
 	echo "		<pubDate>".date('r', $row[3])."</pubDate>\n";

@@ -1,8 +1,6 @@
-- Add repoidx to log table
 - send notification to admin
+- links to CVS
+- rpm support
 
 - captcha for send/flag
-- links to CVS
-
-- rpm support
 - deb support
