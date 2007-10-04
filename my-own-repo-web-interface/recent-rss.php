@@ -1,18 +1,18 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
-<HTML>
-<HEAD>
-    <TITLE>Packages<TITLE>
-    <META http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <LINK rel="stylesheet" type="text/css" href="theme.css" media="screen">
-</HEAD>
-<BODY>
-
 <?php
 include 'config.php';
 include 'common.php';
-include 'menu.php';
+
+header('Content-type: application/rss+xml; charset=utf-8');
+echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
 ?>
 
+
+<rss version="2.0">
+	<channel>
+	<title><?php echo $repos[$repoidx]['name']; ?></title>
+	<link><?php echo "http://".$_SERVER['HTTP_HOST'].substr($_SERVER['SCRIPT_NAME'], 0, -14)."search.php?repo=$repoidx"; ?></link>
+	<language>en</language>
+	<pubDate><?php echo date('r'); ?></pubDate>
 <?php
     // init
     try
@@ -61,9 +61,6 @@ include 'menu.php';
 	$where = "AND ($where)";
     }
 ?>
-
-<TABLE class="txt-table" width='100%'>
-<TR><TH>Operation<TH>Name<TH>Version<TH>Description<TH>Last updated</TR>
 <?php
     $counter = 1;
     foreach ($dbHandle->query("SELECT p.pkgname, p.pkgver, p.pkgdesc, p.lastupdated, log.op from packages as p, log WHERE p.pkgname = log.pkgname $where ORDER BY log.time DESC LIMIT 10") as $row)
@@ -89,10 +86,13 @@ include 'menu.php';
 	{
 	    $op = "OUT";
 	}
-	$rowclass = ($counter++ % 2) ? "even-row" : "odd-row";
-	echo "<TR class=\"$rowclass\"><TD>$op<TD><A HREF='detail.php?n=$pkgname&repo=$repoidx'>$pkgname</A><TD>$pkgver<TD>$pkgdesc<TD>$lastupdated</TR>\n";
+	echo "	<item>\n<guid>$repoidx$pkgname</guid>\n";
+	echo "		<title>".$op.":".$pkgname."-".$pkgver."</title>\n";
+	echo "		<link>http://".$_SERVER['HTTP_HOST'].substr($_SERVER['SCRIPT_NAME'], 0, -14)."detail.php?n=$pkgname&amp;repo=$repoidx</link>\n";
+	echo "		<pubDate>".date('r', $row[3])."</pubDate>\n";
+	echo "		<description>".$pkgdesc."</description>\n";
+	echo "	</item>\n";
     }
 ?>
-</TABLE>
-</BODY>
-</HTML>
+</channel>
+</rss>

@@ -1,7 +1,8 @@
-- RSS feed
+- Add repoidx to log table
+- send notification to admin
+
 - captcha for send/flag
 - links to CVS
-- send notification to admin
 
 - rpm support
 - deb support
