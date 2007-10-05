@@ -22,9 +22,9 @@ $OP_OFD = 4; # out of dated
 # Check usage, read parameters
 # ####################################################################
 
-if($#ARGV lt 2)
+if($#ARGV lt 3)
 {
-    print STDERR "Usage: my-own-repo-update [-i|--init] <pkg-format> dbi:SQLite:<path-to-repo-db> <path-to-packages>\n";
+    print STDERR "Usage: my-own-repo-update [-i|--init] <pkg-format> dbi:SQLite:<path-to-repo-db> <path-to-packages> <path-to-rcs>\n";
     exit 1;
 }
 
@@ -34,6 +34,7 @@ if( ($ARGV[0] =~ /^-i$/) || ($ARGV[0] =~ /^--init$/) )
     $driver = $ARGV[1];
     $reponame = $ARGV[2];
     $DIR = $ARGV[3];
+    $RCSBASEDIR = $ARGV[4];
 }
 else
 {
@@ -41,6 +42,12 @@ else
     $driver = $ARGV[0];
     $reponame = $ARGV[1];
     $DIR = $ARGV[2];
+    $RCSBASEDIR = $ARGV[3];
+}
+
+unless($RCSBASEDIR =~ /\/$/)
+{
+    $RCSBASEDIR .= "/";
 }
 
 do $MODULES_DIR."/".$driver.".pm";
@@ -60,7 +67,7 @@ sub init_db
     $db->do("DROP TABLE state");
     $db->do("DROP TABLE log");
 
-    $db->do("CREATE TABLE packages (id INTEGER PRIMARY KEY, pkgfile varchar(512), pkgname varchar(512), pkgver varchar(512), pkgdesc varchar(512), url varchar(512), builddate varchar(64), packager varchar(512), size integer, arch varchar(32), license varchar(512), depend varchar(512), backup varchar(512), filelist TEXT, lastupdated integer, newver varchar(64))");
+    $db->do("CREATE TABLE packages (id INTEGER PRIMARY KEY, pkgfile varchar(512), pkgname varchar(512), pkgver varchar(512), pkgdesc varchar(512), url varchar(512), builddate varchar(64), packager varchar(512), size integer, arch varchar(32), license varchar(512), depend varchar(512), backup varchar(512), filelist TEXT, lastupdated integer, newver varchar(64), pkgrcs varchar(256))");
     $db->do("CREATE TABLE state (id INTEGER PRIMARY KEY, name varchar(512), value varchar(512))");
     $db->do("CREATE TABLE log (id INTEGER PRIMARY KEY, time integer, op integer, pkgname varchar(512))");
 
@@ -126,18 +133,28 @@ while($pkgfile = readdir DIR)
 	    ($pkgname, $pkgver, $pkgdesc, $url, $builddate, $packager, $size, $arch, $license, $depend, $backup, $filelist) = add_package($packagefile);
 	    $pkgtime = time;
 	    # RCS search
+	    $pkgrcspath = `find $RCSBASEDIR -name $pkgname -type d`;
+	    chomp $pkgrcspath;
+	    if($pkgrcspath =~ /^$RCSBASEDIR(.+)$/g)
+	    {
+		$pkgrcs = $1;
+	    }
+	    else
+	    {
+		$pkgrcs = "";
+	    }
 	    # ##########
 	    if(pkg_exist($db, $pkgname))
 	    {
 		print STDERR "Updating: $packagefile\n";
 		$db->do("INSERT INTO log VALUES (NULL, $pkgtime, $OP_UPD, '$pkgname')");
-		$db->do("UPDATE packages SET pkgfile='$pkgfile', pkgver='$pkgver', pkgdesc='$pkgdesc', url='$url', builddate='$builddate', packager='$packager', size=$size, arch='$arch', license='$license', depend='$depend', backup='$backup', filelist=\"$filelist\", lastupdated=$pkgtime, newver='' WHERE pkgname='$pkgname'");
+		$db->do("UPDATE packages SET pkgfile='$pkgfile', pkgver='$pkgver', pkgdesc='$pkgdesc', url='$url', builddate='$builddate', packager='$packager', size=$size, arch='$arch', license='$license', depend='$depend', backup='$backup', filelist=\"$filelist\", lastupdated=$pkgtime, newver='', pkgrcs='$pkgrcs' WHERE pkgname='$pkgname'");
 	    }
 	    else
 	    {
 		print STDERR "Adding: $packagefile\n";
 		$db->do("INSERT INTO log VALUES (NULL, $pkgtime, $OP_ADD, '$pkgname')");
-		$db->do("INSERT INTO packages VALUES (NULL, '$pkgfile', '$pkgname', '$pkgver', '$pkgdesc', '$url', '$builddate', '$packager', $size, '$arch', '$license', '$depend', '$backup', \"$filelist\", $pkgtime, '')");
+		$db->do("INSERT INTO packages VALUES (NULL, '$pkgfile', '$pkgname', '$pkgver', '$pkgdesc', '$url', '$builddate', '$packager', $size, '$arch', '$license', '$depend', '$backup', \"$filelist\", $pkgtime, '', '$pkgrcs')");
 	    }
 	}
     }
