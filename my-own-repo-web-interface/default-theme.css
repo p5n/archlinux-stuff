@@ -87,3 +87,13 @@ body
 {
     font-weight: bold;
 }
+
+.feedback-form
+{
+    padding: 5px;
+    background-color: #CACACA;
+}
+
+.span-form
+{
+}
