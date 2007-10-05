@@ -5,6 +5,8 @@ include 'common.php';
     $pkgid =  urlencode($_GET['id']);
     $pkgname =  urlencode($_GET['n']);
     $nver =  urlencode($_GET['nver']);
+    $msg =  urlencode($_GET['msg']);
+    $unflag =  urlencode($_GET['unflag']);
 
     try
     {
@@ -15,14 +17,35 @@ include 'common.php';
 	die($exception->getMessage());
     }
 
-    if(!empty($nver))
+    if($unflag == 1)
     {
-	$timestamp = time();
-	$dbHandle->exec("UPDATE packages SET newver='$nver' WHERE pkgname='$pkgname'");
-	$dbHandle->exec("INSERT INTO log VALUES (NULL, $timestamp, $OP_OFD, '$pkgname')");
+        $timestamp = time();
+        $dbHandle->exec("UPDATE packages SET newver='' WHERE id='$pkgid'");
+        $dbHandle->exec("INSERT INTO log VALUES (NULL, $timestamp, $OP_UPD, '$pkgname')");
+	if($enableMailNotification)
+	{
+	    mail($repoOwnerEmail, "MY-OWN-REPO: $pkgname(unflagged)", "Package $pkgname unflagged");
+	}
 	header("Location: detail.php?repo=$repoidx&n=$pkgname&id=$pkgid");
 	exit(0);
     }
+
+    if(!empty($msg) || !empty($nver))
+    {
+	if($enableMailNotification)
+	{
+	    mail($repoOwnerEmail, "MY-OWN-REPO: $pkgname($nver)", $msg);
+	}
+	if(!empty($nver))
+	{
+	    $timestamp = time();
+	    $dbHandle->exec("UPDATE packages SET newver='$nver' WHERE pkgname='$pkgname'");
+	    $dbHandle->exec("INSERT INTO log VALUES (NULL, $timestamp, $OP_OFD, '$pkgname')");
+	}
+	header("Location: detail.php?repo=$repoidx&n=$pkgname&id=$pkgid");
+	exit(0);
+    }
+
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
 <HTML>
@@ -48,6 +71,7 @@ include 'common.php';
 
     foreach ($dbHandle->query("SELECT id, pkgname, pkgver, pkgdesc, url, builddate, packager, size, arch, license, depend, backup, filelist, lastupdated, newver from packages WHERE $wherecond") as $row)
     {
+	$pkgid = $row[0];
 	$pkgname = $row[1];
 	$pkgver = $row[2];
 	$pkgdesc = $row[3];
@@ -88,17 +112,31 @@ include 'common.php';
 	{
 	    if($enableMarkOutOfDate)
 	    {
+		echo "<DIV class='feedback-form'><P><SPAN class='field-title'>Feedback form</SPAN><P><SPAN class='span-form'>";
 		echo "<FORM action='detail.php' method=GET>";
-		echo "<P>Enter new version number:&nbsp;<INPUT class='input-text' type=text size=10 name=nver>";
 		echo "<INPUT type=hidden name=n value=\"$pkgname\">";
 		echo "<INPUT type=hidden name=repo value=\"$repoidx\">";
-		echo "<INPUT class='input-submit' type=submit name=submit value='Flag out of date'>";
-		echo "</FORM>";
+		if($enableMailNotification)
+		{
+		    echo "<P>Enter new version number (leave empty if you want just send message):&nbsp;<INPUT class='input-text' type=text size=10 name=nver>";
+		    echo "<P>Enter message to repo owner:<BR><TEXTAREA name=msg WRAP=virtual COLS=80 ROWS=10 class='input-text'></TEXTAREA><BR>";
+		    echo "<INPUT class='input-submit' type=submit name=submit value='Send or Flag out of date'>";
+		}
+		else
+		{
+		    echo "<P>Enter new version number:&nbsp;<INPUT class='input-text' type=text size=10 name=nver>";
+		    echo "<INPUT class='input-submit' type=submit name=submit value='Flag out of date'>";
+		}
+		echo "</FORM></SPAN></DIV>";
 	    }
 	}
 	else
 	{
 	    echo "<P class=red>Out of dated: new version: $newver\n";
+	    if($enableMarkOutOfDate)
+	    {
+		echo "<P class=red><A HREF='detail.php?n=$pkgname&id=$pkgid&unflag=1'>Unflag out of date</A>\n";
+	    }
 	}
     }
 ?>

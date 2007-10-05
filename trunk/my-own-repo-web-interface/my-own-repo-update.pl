@@ -6,7 +6,7 @@ use DBI;
 # GLOBAL CONFIGURATION
 # ####################################################################
 
-$VERSION = "0.2";
+$VERSION = "0.3";
 $MODULES_DIR = "/usr/lib/my-own-repo-web-interface";
 
 # ####################################################################
@@ -125,6 +125,8 @@ while($pkgfile = readdir DIR)
 	{
 	    ($pkgname, $pkgver, $pkgdesc, $url, $builddate, $packager, $size, $arch, $license, $depend, $backup, $filelist) = add_package($packagefile);
 	    $pkgtime = time;
+	    # RCS search
+	    # ##########
 	    if(pkg_exist($db, $pkgname))
 	    {
 		print STDERR "Updating: $packagefile\n";
