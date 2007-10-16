@@ -201,8 +201,8 @@ if ! in_array $CARCH ${arch[@]}; then
 	exit 1
 fi
 
-if [ "$install" -a ! -f "$install" ]; then
-	error "install scriptlet ($install) does not exist."
+if [ "$install" -a ! -f "$startcwd/$install" ]; then
+	error "install scriptlet ($startcwd/$install) does not exist."
 	exit 1
 fi
 
@@ -307,7 +307,7 @@ fi
 # check for an install script
 if [ "$install" != "" ]; then
 	msg "Copying install script..."
-	cp "$startdir/$install" "$startdir/.INSTALL"
+	cp "$startcwd/$install" "$startdir/.INSTALL"
 fi
 
 # tar it up
