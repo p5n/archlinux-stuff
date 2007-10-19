@@ -1,0 +1,14 @@
+binutils
+import_libs
+w32api_headers
+dummy_cegccdll
+bootstrap_gcc
+newlib
+gcc
+cegccdll
+cegccthrddll
+libstdcppdll
+profile
+docs
+gdb
+gdbstub
