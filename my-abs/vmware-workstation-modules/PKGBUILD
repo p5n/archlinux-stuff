@@ -1,0 +1,40 @@
+# Contributor: Alexander Fehr <pizzapunk gmail com>
+
+# Change this to proper kernel release
+_kernver=`uname -r`
+
+pkgname=vmware-workstation-modules
+pkgver=6.0.2_59824
+_pkgver=6.0.2-59824
+pkgrel=1
+pkgdesc="Kernel modules for VMware Workstation"
+arch=('i686' 'x86_64')
+url="http://www.vmware.com/products/ws/"
+license=('custom')
+depends=('kernel26')
+conflicts=('vmware-player-modules' 'vmware-server-modules')
+install=$pkgname.install
+
+[ $CARCH == i686 ] && source=(VMware-workstation-$_pkgver.i386.tar.gz \
+        http://platan.vc.cvut.cz/ftp/pub/vmware/vmware-any-any-update114.tar.gz)
+[ $CARCH == x86_64 ] && source=(VMware-workstation-$_pkgver.x86_64.tar.gz \
+        http://platan.vc.cvut.cz/ftp/pub/vmware/vmware-any-any-update114.tar.gz)
+
+build() {
+  cd $startdir/src/vmware-distrib/lib/modules/source
+  cp $startdir/src/vmware-any-any-update114/vmnet.tar .
+
+  # Build and install the kernel modules
+  for module in vmmon vmblock vmnet; do
+    tar xf $module.tar
+    make -C $module-only HEADER_DIR=/lib/modules/$_kernver/build/include VMWARE_VER=VME_V6 || return 1
+    install -D -m644 $module-only/$module.ko $startdir/pkg/lib/modules/$_kernver/misc/$module.ko
+  done
+
+  # License
+  mkdir -p $startdir/pkg/usr/share/licenses/$pkgname
+  install -m644 $startdir/src/vmware-distrib/doc/{EULA,open_source_licenses.txt} \
+    $startdir/pkg/usr/share/licenses/$pkgname
+
+  sed -i -e "s/KERNEL_VERSION='.*'/KERNEL_VERSION='$_kernver'/" $startdir/$pkgname.install
+}

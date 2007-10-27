@@ -1,0 +1,67 @@
+# Contributor: Alexander Fehr <pizzapunk@gmail.com>
+
+pkgname=vmware-workstation
+pkgver=6.0.2_59824
+_pkgver=6.0.2-59824
+pkgrel=1
+pkgdesc="Powerful desktop virtualization software"
+arch=('i686' 'x86_64')
+url="http://www.vmware.com/products/ws/"
+license=('custom')
+depends=('libxtst' 'libxi' 'libxrender' 'zlib' 'perl' 'vmware-workstation-modules')
+conflicts=('vmware-player' 'vmware-server')
+options=(!strip !libtool)
+install=$pkgname.install
+
+[ $CARCH == i686 ] && source=(VMware-workstation-$_pkgver.i386.tar.gz \
+        vmware \
+        vmworkstation.patch)
+[ $CARCH == x86_64 ] && source=(VMware-workstation-$_pkgver.x86_64.tar.gz \
+        vmware \
+        vmworkstation.patch)
+
+build() {
+  cd $startdir/src/vmware-distrib
+
+  # Patch for Arch packaging
+  patch -Np1 -i ../vmworkstation.patch || return 1
+
+  # Install binary files
+  mkdir -p $startdir/pkg/usr/bin
+  install -m755 bin/* $startdir/pkg/usr/bin
+  chmod u+s $startdir/pkg/usr/bin/vmware-ping
+
+  mkdir -p $startdir/pkg/usr/sbin
+  install -m755 sbin/* $startdir/pkg/usr/sbin
+  chmod u+s $startdir/pkg/usr/sbin/vmware-authd
+
+  # Install libs
+  mkdir -p $startdir/pkg/usr/lib/vmware
+  cp -a lib/* $startdir/pkg/usr/lib/vmware
+  rm -rf $startdir/pkg/usr/lib/vmware/modules/binary
+  chmod -R u+w $startdir/pkg/usr/lib/vmware
+  chmod u+s $startdir/pkg/usr/lib/vmware/bin/vmware-vmx
+  chmod u+s $startdir/pkg/usr/lib/vmware/bin-debug/vmware-vmx
+  chmod u+s $startdir/pkg/usr/lib/vmware/bin-stats/vmware-vmx
+
+  # Install configuration files
+  install -D -m755 etc/installer.sh $startdir/pkg/etc/vmware/installer.sh
+
+  # Create fake init directories
+  for i in `seq 0 6`; do
+    mkdir -p $startdir/pkg/etc/vmware/init.d/rc$i.d
+  done
+  install -D -m755 installer/services.sh $startdir/pkg/etc/vmware/init.d/vmware
+
+  # Install init script
+  install -D -m755 ../vmware $startdir/pkg/etc/rc.d/vmware
+
+  # Install man page
+  install -D -m644 man/man1/vmware.1.gz $startdir/pkg/usr/man/man1/vmware.1.gz
+
+  # Install license
+  mkdir -p $startdir/pkg/usr/share/licenses/$pkgname
+  install -m644 doc/{EULA,open_source_licenses.txt} \
+    $startdir/pkg/usr/share/licenses/$pkgname
+  ln -sf /usr/share/licenses/$pkgname/EULA $startdir/pkg/usr/lib/vmware/share/EULA.txt
+}
