@@ -1,0 +1,16 @@
+post_install() {
+  KERNEL_VERSION='2.6.23-ARCH'
+  depmod -a -v $KERNEL_VERSION > /dev/null 2>&1
+}
+
+post_upgrade() {
+  post_install
+}
+
+post_remove() {
+  post_install
+}
+
+op=$1
+shift
+$op $*
