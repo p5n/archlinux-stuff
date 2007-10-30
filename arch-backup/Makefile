@@ -1,7 +1,7 @@
-AVER=0.8.4
+AVER=0.8.5
 DIR=arch-backup-$(AVER)
 
-all: arch-backup.8 $(DIR).tar.gz
+all: $(DIR).tar.gz
 
 arch-backup.8:
 	LANG= LC_ALL= txt2man -r $(AVER) -t arch-backup -s 8 arch-backup.man.txt >arch-backup.8

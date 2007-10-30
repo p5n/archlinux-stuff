@@ -36,6 +36,8 @@ if [ "x$1" == "x" ]; then
     for config in ${BACKUP[@]}; do
 	if [ "$config" != "arch-backup.conf" ]; then
 	    echo "${C_SEL}BACKUP $config${C_NORM}"
+	    # clean previous vars
+	    unset TYPE USERS PACKAGES DIRS AFTER_BACKUP BEFORE_BACKUP COMMANDS HOST SMB_USER SMB_PASSWD SSH_PORT SSH_USER SSH_KEY
 	    source $CONFIG_DIR/$config
 
 	    [ "x$BEFORE_BACKUP" == "x" ] && BEFORE_BACKUP=true
@@ -57,6 +59,7 @@ else
     while [ "x$1" != "x" ]; do
 	if [ "$config" != "arch-backup.conf" ]; then
 	    echo "${C_SEL}BACKUP $1${C_NORM}"
+	    unset TYPE USERS PACKAGES DIRS AFTER_BACKUP BEFORE_BACKUP COMMANDS HOST SMB_USER SMB_PASSWD SSH_PORT SSH_USER SSH_KEY
     	    source $CONFIG_DIR/$1
 
 	    [ "x$BEFORE_BACKUP" == "x" ] && BEFORE_BACKUP=true
