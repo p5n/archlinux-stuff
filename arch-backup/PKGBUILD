@@ -9,7 +9,7 @@ license="GPL"
 depends=()
 backup=(etc/arch-backup/arch-backup.conf)
 source=(http://archlinux-stuff.googlecode.com/files/arch-backup-$pkgver.tar.gz)
-md5sums=('d84b7fd2eb89cc6e2eb707e785e834ce')
+md5sums=('89d7e00a1b10a3db66f106693bc3c5c5')
 
 build() {
   install -D -m 0644 $startdir/src/arch-backup-$pkgver/arch-backup.conf \
