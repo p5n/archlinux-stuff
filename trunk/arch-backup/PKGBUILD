@@ -1,7 +1,7 @@
 # Contributor: Sergej Pupykin <ps@lx-ltd.ru>
 arch=(i686 x86_64)
 pkgname=arch-backup
-pkgver=0.8.4
+pkgver=0.8.5
 pkgrel=1
 pkgdesc="trivial backup scripts (ssh/smb support)"
 url="http://code.google.com/p/archlinux-stuff/"
@@ -9,7 +9,7 @@ license="GPL"
 depends=()
 backup=(etc/arch-backup/arch-backup.conf)
 source=(http://archlinux-stuff.googlecode.com/files/arch-backup-$pkgver.tar.gz)
-md5sums=('6150f057fbc84aad1ff17bb220aed5f7')
+md5sums=('d84b7fd2eb89cc6e2eb707e785e834ce')
 
 build() {
   install -D -m 0644 $startdir/src/arch-backup-$pkgver/arch-backup.conf \
