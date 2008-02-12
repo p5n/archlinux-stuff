@@ -5,8 +5,7 @@ _kernver=`uname -r`
 
 pkgname=vmware-player-modules
 pkgver=2.0.2_59824
-_pkgver=2.0.2-59824
-pkgrel=3
+pkgrel=4
 pkgdesc="Kernel modules for VMware Player"
 arch=('i686' 'x86_64')
 url="http://www.vmware.com/products/player/"
@@ -14,16 +13,10 @@ license=('custom')
 depends=('kernel26')
 conflicts=('vmware-workstation-modules' 'vmware-server-modules')
 install=$pkgname.install
-
-[ $CARCH == i686 ] && source=(http://download3.vmware.com/software/vmplayer/VMware-player-$_pkgver.i386.tar.gz \
-        http://platan.vc.cvut.cz/ftp/pub/vmware/vmware-any-any-update114.tar.gz)
-
-[ $CARCH == x86_64 ] && source=(http://download3.vmware.com/software/vmplayer/VMware-player-$_pkgver.x86_64.tar.gz \
-        http://platan.vc.cvut.cz/ftp/pub/vmware/vmware-any-any-update114.tar.gz)
+source=(http://bio.artcradle.com/temp/vault/vmware-any-any-update-116.tgz)
 
 build() {
-  cd $startdir/src/vmware-player-distrib/lib/modules/source
-  cp $startdir/src/vmware-any-any-update113/vmnet.tar .
+  cd $startdir/src/vmware-any-any-update116/
 
   # Build and install the kernel modules
   for module in vmmon vmblock vmnet; do
