@@ -1,6 +1,6 @@
 pkgname=ion-my
-pkgver=3_20080207
-_pkgver=3-20080207
+pkgver=3_20080411
+_pkgver=3-20080411
 pkgrel=1
 pkgdesc="Ion is a tiling windowmanager with tabbed frames scriptable in Lua."
 arch=(i686 x86_64)
