@@ -21,7 +21,8 @@ if(defined $host)
     	    password         => $pass,
     	    initial_presence => -5,
     	    override_host => $host,
-    	    override_port => $port);
+    	    override_port => $port,
+	    ssl_enabled => 1);
 }
 else
 {
