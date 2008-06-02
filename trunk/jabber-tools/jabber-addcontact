@@ -2,6 +2,7 @@
 use strict;
 use AnyEvent;
 use Net::XMPP2::IM::Connection;
+use Net::XMPP2::IM::Roster;
 
 my $DEBUG   = 0;  # set to 1 if you want to see a protocol dump
 my $TIMEOUT = 600; # timeout the whole program after $TIMEOUT seconds
@@ -56,18 +57,11 @@ $con->reg_cb (
       $j->broadcast;
    },
    roster_update => sub {
-      my ($con, $roster, $contacts) = @_;
-      for my $contact ($roster->get_contacts) {
-         print "contact: " . $contact->jid
-             . ", name: " . $contact->name
-             . ", groups: " . (join ",", $contact->groups)
-             . ", subscription: " . $contact->subscription
-             . ", ask: " . $contact->ask
-             . "\n";
-      }
-      $j->broadcast;
+	my $ro = $con->{roster};
+	$ro->new_contact("test\@test.com", "name", "GRP", sub { $j->broadcast; });
    }
 );
+
 
 $con->connect;
 $j->wait;
