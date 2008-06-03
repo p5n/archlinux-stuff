@@ -3,6 +3,7 @@
 = Usage =
 
 jabber-tool-roster-dump <JID> <password> [<host> <port>]
+
 jabber-tool-roster-import <JID> <password> [<host> <port>]
 
 = Examples =
