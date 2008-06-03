@@ -12,7 +12,7 @@ Some my small projects here...
   * arch-repodiff - diff repos between 2 different arch's (i686 vs x86_64)
   * aur-sync - synchronizes Arch Linux Unsupported repository
   * echat - patched version of echat. (vypress chat 2.0 and utf8 compatible. locale KOI8-R tested, can execute external command on event if ECHAT_EVENT_COMMAND shell variable set to proper executable)
-  * jabber-tools - export/import roster and account register
+  * jabber-tools - export/import roster and account register ([http://code.google.com/p/archlinux-stuff/wiki/JabberTools README])
   * my-own-repo-web-interface - web interface for custom user repository. pacman, rpm, deb supported. ([http://code.google.com/p/archlinux-stuff/wiki/MyOwnRepo HowTo])
   * pacman scripts - list package in depends order, print src urls from PKGBUILD
   * xdg-menu - generates submenu to include into WM from XDG stuff (see http://wiki.archlinux.org/index.php/XdgMenu)
