@@ -1,19 +1,19 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -w
 use strict;
+use open ":utf8";
 use AnyEvent;
 use Net::XMPP2::IM::Connection;
+use Net::XMPP2::IM::Roster;
 
 my $DEBUG   = 0;  # set to 1 if you want to see a protocol dump
 my $TIMEOUT = 600; # timeout the whole program after $TIMEOUT seconds
-
-binmode STDOUT, ":utf8";
 
 my ($jid, $pass, $host, $port) = @ARGV;
 
 my $j = AnyEvent->condvar;
 
 my $con;
-if(defined $host)
+if(defined $host && defined $port)
 {
     $con =
 	Net::XMPP2::IM::Connection->new (
@@ -21,7 +21,11 @@ if(defined $host)
     	    password         => $pass,
     	    initial_presence => -5,
     	    override_host => $host,
-    	    override_port => $port)
+    	    override_port => $port);
+    shift @ARGV;
+    shift @ARGV;
+    shift @ARGV;
+    shift @ARGV;
 }
 else
 {
@@ -30,6 +34,8 @@ else
     	    jid              => $jid,
     	    password         => $pass,
     	    initial_presence => -5);
+    shift @ARGV;
+    shift @ARGV;
 }
 
 $con->reg_cb (
@@ -41,6 +47,28 @@ my $timer =
    AnyEvent->timer (
       after => 600, cb => sub { warn "got timeout, exiting..."; $j->broadcast }
    );
+
+sub my_add_contact
+{
+    my $line;
+    my $con = shift;
+    return if(!defined $con || !defined $con->{roster});
+
+    my $ro = $con->{roster};
+    if($line = <>)
+    {
+        if($line =~ /^contact: (.+), name: (.*), groups: (.*), subscription:/)
+        {
+	    $ro->new_contact($1, $2, $3, sub {&my_add_contact(@_);});
+	    print STDERR "Adding $2($1) into $3\n";
+	}
+    }
+    else
+    {
+        print STDERR "done\n";
+        $j->broadcast;
+    }
+}
 
 $con->reg_cb (
    session_ready => sub {
@@ -55,19 +83,9 @@ $con->reg_cb (
       warn "disconnected from $host:$port: $message\n";
       $j->broadcast;
    },
-   roster_update => sub {
-      my ($con, $roster, $contacts) = @_;
-      for my $contact ($roster->get_contacts) {
-         print "contact: " . $contact->jid
-             . ", name: " . $contact->name
-             . ", groups: " . (join ",", $contact->groups)
-             . ", subscription: " . $contact->subscription
-             . ", ask: " . $contact->ask
-             . "\n";
-      }
-      $j->broadcast;
-   }
+   roster_update => sub {&my_add_contact(@_);}
 );
+
 
 $con->connect;
 $j->wait;
