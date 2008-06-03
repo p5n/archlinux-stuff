@@ -10,6 +10,6 @@ jabber-tool-roster-import <JID> <password> [<host> <port>]
 
 = Examples =
 
-jabber-tool-roster-dump user@domain1.org 123456 | sed 's#domain1.org#domain2.org#' | jabber-tool-roster-import user@domain2.org 654321
+jabber-tool-roster-dump user@domain1.org 123456 | jabber-tool-roster-import user@domain2.org 654321
 
 jabber-tool-roster-dump sergej@qwe.ru 123456 | grep '@icq.qwe.ru' | sed 's#icq.qwe.ru#icq.vrn.asd.ru#' | jabber-tool-roster-import sergej@vrn.asd.ru 654321
