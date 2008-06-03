@@ -1,5 +1,7 @@
 #summary Jabber Tools README
 
+(based on http://search.cpan.org/dist/Net-XMPP2/ and its samples)
+
 = Usage =
 
 jabber-tool-roster-dump <JID> <password> [<host> <port>]
