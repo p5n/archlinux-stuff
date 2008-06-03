@@ -5,6 +5,8 @@ use AnyEvent;
 use Net::XMPP2::IM::Connection;
 use Net::XMPP2::IM::Roster;
 
+binmode STDIN, ":utf8";
+
 my $DEBUG   = 0;  # set to 1 if you want to see a protocol dump
 my $TIMEOUT = 600; # timeout the whole program after $TIMEOUT seconds
 
