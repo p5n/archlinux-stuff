@@ -12,12 +12,16 @@ jabber-tool-roster-import <JID> <password> [<host> <port>]
 
 == Move your roster to another server ==
 
-jabber-tool-roster-dump user@domain1.org 123456 | jabber-tool-roster-import user@domain2.org 654321
+jabber-tool-roster-dump user@domain1.org 123456 | \
+        jabber-tool-roster-import user@domain2.org 654321
 
 
 == Move ICQ contacts from one jabber transport to another ==
 
-jabber-tool-roster-dump sergej@qwe.ru 123456 | grep '@icq.qwe.ru' | sed 's#icq.qwe.ru#icq.vrn.asd.ru#' | jabber-tool-roster-import sergej@vrn.asd.ru 654321
+jabber-tool-roster-dump sergej@qwe.ru 123456 | \
+        grep '@icq.qwe.ru' | \
+        sed 's#icq.qwe.ru#icq.vrn.asd.ru#' | \
+        jabber-tool-roster-import sergej@vrn.asd.ru 654321
 
 = Source =
 
