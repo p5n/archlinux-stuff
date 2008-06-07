@@ -16,6 +16,32 @@ use Encode;
     127 => "bigint"
 );
 
+%NEEDSIZE = (
+    56 => 0,
+    167 => 1,
+    104 => 1,
+    36 => 0,
+    231 => 1,
+    61 => 0,
+    60 => 0,
+    34 => 1,
+    99 => 1,
+    127 => 0
+);
+
+%NEEDQUOTES = (
+    56 => 0,
+    167 => 1,
+    104 => 0,
+    36 => 0,
+    231 => 1,
+    61 => 1,
+    60 => 0,
+    34 => 1,
+    99 => 1,
+    127 => 0
+);
+
 sub get_tables
 {
     my $db = shift;
@@ -63,11 +89,11 @@ sub get_table_columns
 # MAIN
 #
 
-#$db = DBI->connect('dbi:Sybase:server=sergej;database=iStatServerDB',
+#$db = DBI->connect('dbi:Sybase:server=local;database=iStatServerDB',
 #		   'iStatDBUser',
 #		   'mjnGfhjkm{eqGjl,thtim@))^');
 
-$db = DBI->connect('dbi:Sybase:server=sergej;database=iWorldServerDB',
+$db = DBI->connect('dbi:Sybase:server=local;database=iWorldServerDB',
 		   'iWorldDBPublicUser',
 		   'VsRhextDct[@))%1');
 
@@ -79,7 +105,14 @@ foreach $i (@$tables)
     print "$i\n";
     foreach $j (@$t)
     {
-	print "    ".$j->{name}."(".$TYPES{$j->{type}}.":".$j->{len}.")\n"
+	if($NEEDSIZE{$j->{type}})
+	{
+	    print "    ".$j->{name}."(".$TYPES{$j->{type}}.":".$j->{len}.")\n";
+	}
+	else
+	{
+	    print "    ".$j->{name}."(".$TYPES{$j->{type}}.")\n";
+	}
     }
 }
 
