@@ -42,26 +42,6 @@ use Encode;
     127 => 0
 );
 
-sub get_tables
-{
-    my $db = shift;
-    my $sql = "SELECT name, id, xtype FROM sysobjects";
-    my $q = $db->prepare($sql);
-    $q->execute();
-
-    my $r;
-    my $ret = [];
-
-    while(@$r = $q->fetchrow_array())
-    {
-	if($r->[2] eq "U ")
-	{
-	    push @$ret, $r->[0];
-	}
-    }
-    return $ret;
-}
-
 sub get_table_columns
 {
     my $db = shift;
@@ -85,6 +65,40 @@ sub get_table_columns
     return $ret;
 }
 
+sub table_dump
+{
+    my $db = shift;
+    my $table = shift;
+
+    my $cols = get_table_columns($db, $table);
+    my @colnames = ();
+    my %colquotes = ();
+
+    map {push @colnames, $_->{name}; $coltypes{$_->{name}} = $NEEDQUOTES{$_->{type}}} @$cols;
+
+    my $sql = "select ".join(',', @colnames)." from $table";
+    my $q = $db->prepare($sql);
+    $q->execute();
+    my (@r, $i);
+
+    while(@r = $q->fetchrow_array())
+    {
+	print "insert into $table values (";
+	for($i=0; $i<scalar @r;$i++)
+	{
+	    if(!defined $r[$i])
+	    {
+		$r[$i] = "NULL";
+	    }
+	    elsif($coltypes{$colnames[$i]})
+	    {
+		$r[$i] = "'".$r[$i]."'";
+	    }
+	}
+	print join(',', @r).")\n";
+    }
+}
+
 #
 # MAIN
 #
@@ -105,23 +119,6 @@ $password="nt_admin";
 
 $db = DBI->connect("dbi:Sybase:server=$server;database=$database", $user, $password);
 
-$tables = get_tables($db);
-
-foreach $i (@$tables)
-{
-    $t = get_table_columns($db, $i);
-    print "$i\n";
-    foreach $j (@$t)
-    {
-	if($NEEDSIZE{$j->{type}})
-	{
-	    print "    ".$j->{name}."(".$TYPES{$j->{type}}.":".$j->{len}.")\n";
-	}
-	else
-	{
-	    print "    ".$j->{name}."(".$TYPES{$j->{type}}.")\n";
-	}
-    }
-}
+table_dump($db, "Persons");
 
 $db->disconnect();
