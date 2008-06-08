@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 
 # Copyright (c) 2003 SuSE Linux AG, Nuernberg, Germany. All rights reserved.
 #
@@ -862,7 +862,6 @@ sub read_includes ($$$)
                 $i++;
                 $i++;
             }
-
         }
         elsif ($tree->[$i] eq 'DefaultMergeDirs') {
             my $add_tree = read_menu_dir($DefaultMergeDir, $basedir);
@@ -870,15 +869,20 @@ sub read_includes ($$$)
         }
         elsif ($tree->[$i] eq 'LegacyDir') {
             if (ref($tree->[$i + 1][0]) eq 'HASH' and $tree->[$i + 1][1] eq '0') {
-
-                my $xml = read_legacy_dir($tree->[$i + 1][2]);
-                print STDERR "reading legacy directory '" . $tree->[$i + 1][2] . "'\n" if $verbose;
-
-                my $parser = new XML::Parser(Style => 'Tree');
-                my $add_tree = $parser->parse($xml);
-                $add_tree = remove_toplevel_Menu($add_tree);
-                splice @$tree, $i, 2, @$add_tree;
-
+		if( -d $tree->[$i + 1][2])
+		{
+            	    my $xml = read_legacy_dir($tree->[$i + 1][2]);
+            	    print STDERR "reading legacy directory '" . $tree->[$i + 1][2] . "'\n" if $verbose;
+            	    my $parser = new XML::Parser(Style => 'Tree');
+            	    my $add_tree = $parser->parse($xml);
+            	    $add_tree = remove_toplevel_Menu($add_tree);
+            	    splice @$tree, $i, 2, @$add_tree;
+		}
+		else
+		{
+            	    print STDERR "legacy directory '" . $tree->[$i + 1][2] . "' not found\n" if $verbose;
+            	    splice @$tree, $i, 2, ();
+		}
             }
             else {
                 print STDERR "wrong LegacyDir\n";
@@ -886,7 +890,6 @@ sub read_includes ($$$)
                 $i++;
                 $i++;
             }
-
         }
         elsif ($tree->[$i] eq 'KDELegacyDirs') {
             my @out;
