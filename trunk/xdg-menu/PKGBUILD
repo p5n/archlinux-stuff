@@ -1,15 +1,18 @@
-# Contributor: Sergej Pupykin <ps@lx-ltd.ru>
-arch=(i686 x86_64)
+# $Id: PKGBUILD,v 1.5 2008/01/16 16:09:47 sergej Exp $
+# Maintainer: Sergej Pupykin <sergej@aur.archlinux.org>
+# Contributor: Sergej Pupykin <sergej@aur.archlinux.org>
+
 pkgname=archlinux-xdg-menu
-pkgver=0.6
+pkgver=0.7
 pkgrel=1
 pkgdesc="automatic generate WM menu from xdg files"
+arch=('i686' 'x86_64')
 url="http://wiki.archlinux.org/index.php/XdgMenu"
-license="GPL"
+license=("GPL")
 depends=(perlxml)
 backup=(etc/update-menus.conf)
 source=(http://archlinux-stuff.googlecode.com/files/arch-xdg-menu-$pkgver.tar.gz)
-md5sums=('79a9dcb6fcff23ffc41f36760b8818dc')
+md5sums=('e954a9449d0cf8410281a603a3184f69')
 
 build() {
   cd $startdir/src
