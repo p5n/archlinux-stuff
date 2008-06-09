@@ -1,18 +1,23 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -w
 
-# Copyright (c) 2003 SuSE Linux AG, Nuernberg, Germany. All rights reserved.
 #
-# Author: nadvornik@suse.cz
+# xdg-menu for archlinux. based on suse xdg-menu written by <nadvornik@suse.cz>
+# Sergej Pupykin <pupykin.s@gmail.com>
 #
-#
+
+# >> Copyright (c) 2003 SuSE Linux AG, Nuernberg, Germany. All rights reserved.
+# >> 
+# >> Author: nadvornik@suse.cz
+# >> 
 
 use strict;
+no warnings qw(uninitialized prototype);
 use Getopt::Long;
 use Encode;
 use I18N::Langinfo qw(langinfo CODESET);
 use POSIX qw(locale_h);
 
-my $Version = "0.7";
+my $Version = "0.7.1";
 
 my $DefaultAppDirs;
 my $DefaultDirectoryDirs;
@@ -66,9 +71,13 @@ sub scan_AppDir ($$;$)
     check_file($dir);
     $topdir = $dir unless defined $topdir;
 
-    opendir(DIR, $dir) or return;
+    return if(check_file($dir) ne 'D');
 
-    foreach my $entry (readdir(DIR))
+    my $DIR;
+
+    opendir($DIR, $dir) or return;
+
+    foreach my $entry (readdir($DIR))
     {
         if ( -f "$dir/$entry" && $entry =~ /\.desktop$/ )
         {
@@ -79,7 +88,7 @@ sub scan_AppDir ($$;$)
             scan_AppDir ($pool, "$dir/$entry", $topdir);
         }
     }
-    closedir DIR;
+    closedir $DIR;
 }
 
 sub scan_DirectoryDir ($$;$)
@@ -719,7 +728,10 @@ sub read_menu_dir ($;$)
     }
 
 
-    check_file($dir);
+    if(check_file($dir) ne 'D')
+    {
+	return [];
+    }
 
     opendir(DIR, $dir);
 
@@ -1346,7 +1358,7 @@ sub preprocess_menu ($)
 
     $menu->{'entries'} = [ sort {$b->{'type'} cmp $a->{'type'} || $a->{'PrepName'} cmp $b->{'PrepName'}} @{$menu->{'entries'}} ];
 
-    my $i = 0;
+    $i = 0;
     my $prev_entry;
     while (defined $menu->{'entries'}[$i])
     {

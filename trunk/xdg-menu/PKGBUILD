@@ -3,7 +3,7 @@
 # Contributor: Sergej Pupykin <sergej@aur.archlinux.org>
 
 pkgname=archlinux-xdg-menu
-pkgver=0.7
+pkgver=0.7.1
 pkgrel=1
 pkgdesc="automatic generate WM menu from xdg files"
 arch=('i686' 'x86_64')
@@ -12,7 +12,7 @@ license=("GPL")
 depends=(perlxml)
 backup=(etc/update-menus.conf)
 source=(http://archlinux-stuff.googlecode.com/files/arch-xdg-menu-$pkgver.tar.gz)
-md5sums=('e954a9449d0cf8410281a603a3184f69')
+md5sums=('56746f70e1be833a6cfbc2f80bea9748')
 
 build() {
   cd $startdir/src
