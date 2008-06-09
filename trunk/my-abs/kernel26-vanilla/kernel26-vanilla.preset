@@ -1,0 +1,14 @@
+# mkinitcpio preset file for kernel26-vanilla
+
+########################################
+# DO NEVER EDIT THIS LINE:
+ALL_kver='2.6.25-vanilla'
+########################################
+
+PRESETS=('default' 'fallback')
+
+default_config="/etc/mkinitcpio.conf"
+default_image="/boot/kernel26-vanilla.img"
+
+fallback_config="/etc/mkinitcpio.d/kernel26-vanilla-fallback.conf"
+fallback_image="/boot/kernel26-vanilla-fallback.img" 
