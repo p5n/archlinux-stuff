@@ -1,0 +1,15 @@
+DESCRIPTION="TDS implementation"
+HOMEPAGE="http://freetds.org/"
+SRC_URI="http://ibiblio.org/pub/Linux/ALPHA/freetds/stable/${P}.tar.gz"
+SRC_DIR="${P}"
+
+src_compile() {
+    cd ${S}
+    ./configure --prefix=/usr --sysconfdir=/etc/freetds
+    make
+}
+
+src_install() {
+    cd ${S}
+    make DESTDIR=${D} install
+}

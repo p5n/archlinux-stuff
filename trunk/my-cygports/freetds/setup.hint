@@ -1,0 +1,4 @@
+category: Lib
+requires: 
+sdesc: "Free TDS protocol implementation"
+ldesc: "Usefull for MSSQL/Sybase RDBMS"
