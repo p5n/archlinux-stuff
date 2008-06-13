@@ -1,0 +1,5 @@
+  <shortcuts comment="Shortcuts" >
+   <alist comment="Action List" >
+    <show_offline type="QString" comment="Show Offline Contacts" >Ctrl+1</show_offline>
+   </alist>
+...

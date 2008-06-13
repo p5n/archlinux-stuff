@@ -1,0 +1,22 @@
+diff -wbBur psi/src/psiactionlist.cpp psi-build/src/psiactionlist.cpp
+--- psi/src/psiactionlist.cpp	2008-06-14 03:42:15.000000000 +0400
++++ psi-build/src/psiactionlist.cpp	2008-06-14 03:36:13.000000000 +0400
+@@ -21,6 +21,7 @@
+ #include "psiactionlist.h"
+ #include "iconset.h"
+ #include "psioptions.h"
++#include "shortcutmanager.h"
+ 
+ #include <qobject.h>
+ 
+@@ -93,7 +94,10 @@
+ 	for ( int i = 0; !(aName = QString(actionlist[i].name)).isEmpty(); i++ ) {
+ 		IconAction *action = actionlist[i].action;
+ 		if (action)
++		{
+ 			actions->addAction( aName, action );
++			action->setShortcuts(ShortcutManager::instance()->shortcuts("alist."+aName));
++		}
+ 	}
+ 
+ 	list->addList( actions );
