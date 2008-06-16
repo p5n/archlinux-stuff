@@ -1,5 +1,10 @@
 #!/usr/bin/perl -w
 
+#
+# Usage:
+#   $0 <server> <db> <user> <password> [--table-names-only]
+#
+
 use DBI;
 use Encode;
 
@@ -22,20 +27,23 @@ foreach $i (@$tables)
 {
     $t = get_table_columns($db, $i);
     print "$i\n";
-    foreach $j (@$t)
+    if(scalar @ARGV > 4)
     {
-	if($NEEDSIZE{$j->{type}}==2)
-	{
-	    print "    ".$j->{name}."(".$TYPES{$j->{type}}.":".$j->{len}.",".$j->{prec}.")\n";
-	}
-	elsif($NEEDSIZE{$j->{type}}==1)
-	{
-	    print "    ".$j->{name}."(".$TYPES{$j->{type}}.":".$j->{len}.")\n";
-	}
-	else
-	{
-	    print "    ".$j->{name}."(".$TYPES{$j->{type}}.")\n";
-	}
+        foreach $j (@$t)
+        {
+            if($NEEDSIZE{$j->{type}}==2)
+            {
+                print "    ".$j->{name}."(".$TYPES{$j->{type}}.":".$j->{len}.",".$j->{prec}.")\n";
+            }
+            elsif($NEEDSIZE{$j->{type}}==1)
+            {
+                print "    ".$j->{name}."(".$TYPES{$j->{type}}.":".$j->{len}.")\n";
+            }
+            else
+            {
+                print "    ".$j->{name}."(".$TYPES{$j->{type}}.")\n";
+            }
+        }
     }
 }
 

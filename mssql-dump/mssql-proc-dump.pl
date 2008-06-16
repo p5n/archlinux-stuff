@@ -1,5 +1,10 @@
 #!/usr/bin/perl -w
 
+#
+# Usage:
+#   $0 <server> <db> <user> <password> [<proc-name> [<proc-name [...]]]
+#
+
 use DBI;
 use Encode;
 
