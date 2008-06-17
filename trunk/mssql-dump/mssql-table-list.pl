@@ -27,7 +27,7 @@ foreach $i (@$tables)
 {
     $t = get_table_columns($db, $i);
     print "$i\n";
-    if(scalar @ARGV > 4)
+    if(scalar @ARGV <= 4)
     {
         foreach $j (@$t)
         {
