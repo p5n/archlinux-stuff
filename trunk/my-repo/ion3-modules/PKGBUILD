@@ -1,0 +1,38 @@
+# $Id: PKGBUILD,v 1.2 2008/01/16 16:09:48 sergej Exp $
+# Maintainer: Sergej Pupykin <sergej@aur.archlinux.org>
+
+pkgname=ion3-modules
+pkgver=20080411
+pkgrel=1
+pkgdesc="misc ion3 modules"
+arch=(i686 x86_64)
+url="http://modeemi.fi/~tuomov/repos/ion-scripts-3/"
+depends=('ion3' 'ion3-scripts')
+license=('GPL')
+source=(http://iki.fi/tuomov/dl/ion-3-$pkgver.tar.gz \
+	Makefile)
+md5sums=('09e87c46ddf41182a85e06e304aa15a7'
+         'b52b2ca447533baef7844af2483842bd')
+
+build() {
+  cd $startdir/src/ion-3-$pkgver
+
+  if [ -d ion-scripts-3 ];then
+    (cd ion-scripts-3 && darcs pull)
+  else
+    darcs get --partial http://iki.fi/tuomov/repos/ion-scripts-3
+  fi
+
+  sed -i "s#PREFIX=/usr/local#PREFIX=/usr#" system.mk || return 1
+  sed -i "s#ETCDIR=\$(PREFIX)/etc/ion3#ETCDIR=\$(PREFIX)/../etc/ion3#" system.mk || return 1
+  sed -i "s#LUA_DIR=/usr/local#LUA_DIR=/usr#" system.mk || return 1
+
+  mkdir mod_xkb && \
+  cp -f ./ion-scripts-3/misc/mod_xkb.c ../Makefile mod_xkb/ && \
+  sed -i "s|\t      de|\t      de mod_xkb|" modulelist.mk || return 1
+
+  make || return 1
+
+  mkdir -p $startdir/pkg/usr/lib/ion3/mod/ && \
+  cp ./mod_xkb/mod_xkb.so $startdir/pkg/usr/lib/ion3/mod/mod_xkb.so
+}
