@@ -1,0 +1,28 @@
+# Contributor: Georgij Kondratjev <smpuj@bk.ru>
+pkgname=ion3-scripts
+pkgver=20080618
+pkgrel=1
+pkgdesc="Scripts for ion3 from darcs repository"
+arch=('i686' 'x86_64')
+makedepends=('darcs')
+depends=('ion3')
+url="http://modeemi.fi/~tuomov/ion/"
+license=('GPL')
+
+_darcstrunk="http://iki.fi/tuomov/repos"
+_darcsmod="ion-scripts-3"
+
+build() {
+  cd $startdir/src
+  msg "Retrieving sources"
+  if [[ -d $_darcsmod/_darcs ]]; then
+    (cd $_darcsmod; darcs pull -a $_darcstrunk/$_darcsmod; cd ..)
+  else
+    darcs get --partial --set-scripts-executable $_darcstrunk/$_darcsmod
+  fi
+
+  msg "Starting build"
+
+  install -d $startdir/pkg/etc/ion3
+  find -name '*.lua' -exec cp {} $startdir/pkg/etc/ion3/ \;
+}
