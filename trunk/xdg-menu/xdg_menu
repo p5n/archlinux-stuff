@@ -1565,8 +1565,11 @@ sub output_icewm_menu ($;$)
 
     my $menu_name = $menu->{'PrepName'};
 
-    $output .= ' ' x $indent;
-    $output .= "menu \"$menu_name\" folder {\n";
+    if($indent)
+    {
+	$output .= ' ' x $indent;
+	$output .= "menu \"$menu_name\" folder {\n";
+    }
 
     foreach my $entry (@{$menu->{'entries'}})
     {
@@ -1590,8 +1593,12 @@ sub output_icewm_menu ($;$)
         }
 
     }
-    $output .= ' ' x $indent;
-    $output .= "}\n";
+
+    if($indent)
+    {
+	$output .= ' ' x $indent;
+	$output .= "}\n";
+    }
 
     return $output;
 }
