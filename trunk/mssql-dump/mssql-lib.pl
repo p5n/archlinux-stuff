@@ -81,7 +81,7 @@ sub get_procs
 
     while(@$r = $q->fetchrow_array())
     {
-        if($r->[2] eq "P ")
+        if( ($r->[2] eq "P ") or ($r->[2] eq "TR") or ($r->[2] eq "TF") )
         {
             push @$ret, $r->[0];
         }
