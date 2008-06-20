@@ -10,6 +10,20 @@ use DBI;
 #    fisql -S local -U sa -P password | \
 #    perl -ne "if(/(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s*/) {print \"\$1 => {name=>'\$2', len=>\$3, prec=>\$4, scale=>\$5, variable=>\$6},\\n\";}" | \
 #    tail -n +3
+#
+# C - key?
+# D - default value
+# F - foreign key
+# FN - function
+# IF - function?
+# P - Procedure
+# PK - primary key
+# S - system table
+# TF - ?
+# TR - trigger
+# U - user table
+# UQ - uniq
+# V - view
 
 %MSSQLTYPES = (
     34 => {name=>'image', len=>16, prec=>0, scale=>0, variable=>0},
