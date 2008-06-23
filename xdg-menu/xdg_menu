@@ -17,7 +17,7 @@ use Encode;
 use I18N::Langinfo qw(langinfo CODESET);
 use POSIX qw(locale_h);
 
-my $Version = "0.7.1";
+my $Version = "0.7.3";
 
 my $DefaultAppDirs;
 my $DefaultDirectoryDirs;
@@ -1861,9 +1861,12 @@ sub output_openbox3_inner_menu ($;$)
     $indent = 0 unless defined $indent;
     my $menu_name = $menu->{'PrepName'};
 
-    $output .= ' ' x $indent;
-    $output .= "<menu id=\"" . quote_xml($menu_name) . "\" label=\"".quote_xml($menu_name) . "\">\n";
-    #       $output .= "<menu label=\"".quote_xml($menu_name) . "\">\n";
+    if($indent != 0)
+    {
+	$output .= ' ' x $indent;
+	$output .= "<menu id=\"" . quote_xml($menu_name) . "\" label=\"".quote_xml($menu_name) . "\">\n";
+#       $output .= "<menu label=\"".quote_xml($menu_name) . "\">\n";
+    }
 
     foreach my $entry (@{$menu->{'entries'}})
     {
@@ -1887,10 +1890,13 @@ sub output_openbox3_inner_menu ($;$)
         {
             print STDERR "wrong menu entry type: $entry->{type}";
         }
-
     }
-    $output .= ' ' x $indent;
-    $output .= "</menu> <!-- $menu_name -->\n";
+
+    if($indent != 0)
+    {
+	$output .= ' ' x $indent;
+	$output .= "</menu> <!-- $menu_name -->\n";
+    }
 
     return $output;
 }
