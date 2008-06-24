@@ -13,7 +13,7 @@ depends=(perlxml)
 backup=(etc/update-menus.conf \
 	etc/xdg/menus/arch-applications.menu)
 source=(http://archlinux-stuff.googlecode.com/files/arch-xdg-menu-$pkgver.tar.gz)
-md5sums=('095c338c57394ead2ce335773b2e4efb')
+md5sums=('7f1e2a1fe4e7c9dca89cdcc72c9d2442')
 
 build() {
   cd $startdir/src
