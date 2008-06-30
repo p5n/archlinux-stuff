@@ -19,12 +19,6 @@ source=(ftp://ftp.kernel.org/pub/linux/kernel/v2.6/linux-$_basekernel.tar.bz2
         $pkgname.install
         $pkgname.preset
         mkinitcpio-$pkgname.conf)
-md5sums=('db95a49a656a3247d4995a797d333153'
-         'c4417bac6e03f5267538265224ca1900'
-         'b6004d601906136a7e68f7950e4155d9'
-         'e31a6c38b37384c34c4091584ec8634b'
-         '6ced623be00a8426bc5a5a85dfcda2b7'
-         '52c32f6b1e70e1076054f0026785b638')
 
 build() {
   cd $startdir/src/linux-$_basekernel
