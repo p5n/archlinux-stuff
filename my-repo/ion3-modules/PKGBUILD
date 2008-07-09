@@ -27,7 +27,7 @@ build() {
   sed -i "s#ETCDIR=\$(PREFIX)/etc/ion3#ETCDIR=\$(PREFIX)/../etc/ion3#" system.mk || return 1
   sed -i "s#LUA_DIR=/usr/local#LUA_DIR=/usr#" system.mk || return 1
 
-  mkdir mod_xkb && \
+  mkdir mod_xkb
   cp -f ./ion-scripts-3/misc/mod_xkb.c ../Makefile mod_xkb/ && \
   sed -i "s|\t      de|\t      de mod_xkb|" modulelist.mk || return 1
 
