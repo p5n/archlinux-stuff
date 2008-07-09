@@ -27,7 +27,11 @@ case "$PACKAGES" in
     dpkg)
 	dpkg -l >$BACKUP_DIR/_localhost-pkg-list.txt
 	;;
+    none)
+	echo "have no package manager"
+	;;
     *)
+	echo "unknown package manager type"
 	;;
 esac
 if [ $? -eq 0 ];then
@@ -71,7 +75,7 @@ done
 #
 for dir in ${DIRS[@]}; do
     echo ">>> Saving $dir..."
-    [ -d $dir ] && tar c $dir | $COMPRESS_CMD 1>$BACKUP_DIR/_localhost-dir-`echo $dir | tr '/' '_'`.tar.$COMPRESSED_EXT
+    [ -d $dir -o -f $dir ] && tar c $dir | $COMPRESS_CMD 1>$BACKUP_DIR/_localhost-dir-`echo $dir | tr '/' '_'`.tar.$COMPRESSED_EXT
     if [ $? -eq 0 ];then
         echo -e "...${MSG_OK}"
     else

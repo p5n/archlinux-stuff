@@ -31,7 +31,11 @@ case "$PACKAGES" in
     dpkg)
 	$SSH_COMMAND "dpkg -l" >$BACKUP_DIR/$HOST-pkg-list.txt
 	;;
+    none)
+	echo "have no package manager"
+	;;
     *)
+	echo "unknown package manager type"
 	;;
 esac
 if [ $? -eq 0 ];then
