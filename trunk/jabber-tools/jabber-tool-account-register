@@ -23,13 +23,13 @@ unless ($user && $pw) {
 print <<USAGE;
 usage:
   register account:
-     ./simple_register_example <jid> <password>
+     jabber-tool-account-register <jid> <password>
 
   unregister account:
-     ./simple_register_example <jid> <password> unregister
+     jabber-tool-account-register <jid> <password> unregister
 
   change password:
-     ./simple_register_example <jid> <password> chpw:<newpassword>
+     jabber-tool-account-register <jid> <password> chpw:<newpassword>
 
 USAGE
 die "\n";
