@@ -1,4 +1,10 @@
 #!/usr/bin/perl -w
+
+#
+# USAGE:
+#   jabber-tool-roster-import <jid> <password> [<host> <port>] [<input-file>]
+#
+
 use strict;
 use open ":utf8";
 use AnyEvent;
@@ -50,6 +56,8 @@ my $timer =
       after => 600, cb => sub { warn "got timeout, exiting..."; $j->broadcast }
    );
 
+$count = 0;
+$lines = 0;
 sub my_add_contact
 {
     my $line;
@@ -57,11 +65,12 @@ sub my_add_contact
     return if(!defined $con || !defined $con->{roster});
 
     my $ro = $con->{roster};
-    if($line = <>)
+    while(<>)
     {
-        if($line =~ /^contact: (.+), name: (.*), groups: (.*), subscription:/)
+	$lines++;
+        if(/^contact: (.+), name: (.*), groups: (.*), subscription:/)
         {
-	    $ro->new_contact($1, $2, $3, sub {&my_add_contact(@_);});
+	    $ro->new_contact($1, $2, $3, sub { $count++; 1; });
 	    print STDERR "Adding $2($1) into $3\n";
 	}
     }
@@ -91,3 +100,5 @@ $con->reg_cb (
 
 $con->connect;
 $j->wait;
+
+print "$count/$lines contacts imported\n";

@@ -1,4 +1,10 @@
 #!/usr/bin/perl
+
+#
+# USAGE:
+#   jabber-tool-roster-dump <jid> <password> [<host> <port>]
+#
+
 use strict;
 use open ":utf8";
 use AnyEvent;
