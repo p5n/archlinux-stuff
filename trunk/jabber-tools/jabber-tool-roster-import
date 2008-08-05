@@ -56,34 +56,52 @@ my $timer =
       after => 600, cb => sub { warn "got timeout, exiting..."; $j->broadcast }
    );
 
-$count = 0;
-$lines = 0;
+$main::count = 0;
+$main::lines = 0;
+@main::LINES = ();
+
+sub my_contact_callback
+{
+    $main::count++;
+    if($main::count == $main::lines)
+    {
+	$j->broadcast;
+    }
+    return 1;
+}
+
 sub my_add_contact
 {
     my $line;
     my $con = shift;
     return if(!defined $con || !defined $con->{roster});
 
-    my $ro = $con->{roster};
+    my $ro = $con->get_roster;
+    my $i;
+
     while(<>)
     {
-	$lines++;
-        if(/^contact: (.+), name: (.*), groups: (.*), subscription:/)
-        {
-	    $ro->new_contact($1, $2, $3, sub { $count++; 1; });
-	    print STDERR "Adding $2($1) into $3\n";
+	$main::lines++;
+	chomp;
+	if(/\S+/)
+	{
+	    $main::LINES[$main::lines - 1] = $_;
 	}
     }
-    else
+
+    foreach $i (@main::LINES)
     {
-        print STDERR "done\n";
-        $j->broadcast;
+        if($i =~ /^contact: (.+), name: (.*), groups: (.*), subscription:/)
+        {
+	    $ro->new_contact($1, $2, $3, sub { &my_contact_callback(@_);});
+	}
     }
 }
 
 $con->reg_cb (
    session_ready => sub {
       my ($con) = @_;
+      &my_add_contact($con);
    },
    error => sub {
       my ($con, $error) = @_;
@@ -94,11 +112,9 @@ $con->reg_cb (
       warn "disconnected from $host:$port: $message\n";
       $j->broadcast;
    },
-   roster_update => sub {&my_add_contact(@_);}
 );
-
 
 $con->connect;
 $j->wait;
 
-print "$count/$lines contacts imported\n";
+print "$main::count/$main::lines imported\n";
