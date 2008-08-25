@@ -1,6 +1,6 @@
 # Contributor: Georgij Kondratjev <smpuj@bk.ru>
 pkgname=ion3-scripts
-pkgver=20080709
+pkgver=20080826
 pkgrel=1
 pkgdesc="Scripts for ion3 from darcs repository"
 arch=('i686' 'x86_64')

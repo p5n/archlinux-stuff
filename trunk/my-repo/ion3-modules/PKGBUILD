@@ -2,7 +2,7 @@
 # Maintainer: Sergej Pupykin <sergej@aur.archlinux.org>
 
 pkgname=ion3-modules
-pkgver=20080707
+pkgver=20080825
 pkgrel=1
 pkgdesc="misc ion3 modules"
 arch=(i686 x86_64)
@@ -11,7 +11,7 @@ depends=('ion3' 'ion3-scripts')
 license=('GPL')
 source=(http://iki.fi/tuomov/dl/ion-3-$pkgver.tar.gz \
 	Makefile)
-md5sums=('3b2426f612c4d6b0c60f5d1bd0ef6807'
+md5sums=('8f0a8c93e80e967ad0dbe3f6cdd0bd3f'
          'b52b2ca447533baef7844af2483842bd')
 
 build() {
