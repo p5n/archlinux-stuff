@@ -29,6 +29,13 @@ export BACKUP_DIR=$BACKUP_BASE_DIR/arch-backup-$DATE-$BACKUP_SUFFIX
 
 mkdir -p $BACKUP_DIR
 
+[ -z "$BACKUP_OWNER" ] && BACKUP_OWNER=root:root
+[ -z "$BACKUP_PERMS_DIR" ] && BACKUP_PERMS_DIR=0700
+[ -z "$BACKUP_PERMS_FILE" ] && BACKUP_PERMS_FILE=0600
+
+chown $BACKUP_OWNER $BACKUP_DIR
+chmod $BACKUP_PERMS_DIR $BACKUP_DIR
+
 #
 # Backup
 #
@@ -91,3 +98,6 @@ cd $BACKUP_BASE_DIR && (ls -1 | sort | head -n -$NUM_BACKUPS | while read A; do
     echo "Removing $A..."
     rm -rf $A
 done)
+
+chown $BACKUP_OWNER $BACKUP_DIR/*
+chmod $BACKUP_PERMS_FILE $BACKUP_DIR/*
