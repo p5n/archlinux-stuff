@@ -1,5 +1,5 @@
 pkgname=ion3
-pkgver=20080825
+pkgver=20081002
 pkgrel=1
 pkgdesc="Ion is a tiling windowmanager with tabbed frames scriptable in Lua."
 arch=(i686 x86_64)
@@ -9,7 +9,7 @@ license=('GPL')
 conflicts=(ion)
 provides=(ion)
 source=(http://iki.fi/tuomov/dl/ion-3-$pkgver.tar.gz)
-md5sums=('8f0a8c93e80e967ad0dbe3f6cdd0bd3f')
+md5sums=('19f53c86d63553eae154803dd4ee010a')
 
 build() {
   cd $startdir/src/ion-3-$pkgver
