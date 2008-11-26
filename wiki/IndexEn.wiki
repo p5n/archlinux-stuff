@@ -16,4 +16,5 @@ Some my small projects here...
   * mssql-dump - dump MS SQL database into SQL script([http://code.google.com/p/archlinux-stuff/wiki/MssqlDump README])
   * my-own-repo-web-interface - web interface for custom user repository. pacman, rpm, deb supported. ([http://code.google.com/p/archlinux-stuff/wiki/MyOwnRepo HowTo])
   * pacman scripts - list package in depends order, print src urls from PKGBUILD
+  * ulogd-simple-log - compact text logging module for ulogd (IPs, ports, prefix, protocol, packet length)
   * xdg-menu - generates submenu to include into WM from XDG stuff (see http://wiki.archlinux.org/index.php/XdgMenu)
