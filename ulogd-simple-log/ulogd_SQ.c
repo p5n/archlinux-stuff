@@ -140,6 +140,21 @@ static void sighup_handler_print(int signal)
   switch (signal)
   {
     case SIGHUP:
+      if(of != NULL)
+      {
+        fclose(of);
+      }
+
+      config_parse_file("SQ", &sq_ce);
+
+      of = fopen(sq_ce.u.string, "a");
+      if (!of)
+      {
+        ulogd_log(ULOGD_FATAL, "can't open PKTLOG: %s\n",
+                  strerror(errno));
+        exit(2);
+      }
+
       break;
     default:
       break;
