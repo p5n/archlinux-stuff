@@ -1,5 +1,5 @@
 pkgname=ulogd-simple-log
-pkgver=1.0
+pkgver=1.1
 pkgrel=1
 pkgdesc="compact text logging module for ulogd"
 arch=(i686 x86_64)
@@ -7,7 +7,6 @@ url="http://code.google.com/p/archlinux-stuff/"
 license=('GPL')
 depends=(ulogd)
 source=(http://archlinux-stuff.googlecode.com/files/ulogd-simple-log-$pkgver.tar.gz)
-md5sums=('055bd7813b645409481214797f17d792')
 
 build() {
   cd "$srcdir/ulogd-simple-log"
