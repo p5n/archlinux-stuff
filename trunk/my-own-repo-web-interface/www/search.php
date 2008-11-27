@@ -24,10 +24,17 @@ include 'menu.php';
 	die($exception->getMessage());
     }
 
-    $keyword = urlencode($_GET['k']);
-    $where =  urlencode($_GET['s']);
-    $page =  urlencode($_GET['p']);
-    $perpage =  urlencode($_GET['pp']);
+    $keyword = "";
+    if(!empty($_GET['k'])) $keyword = urlencode($_GET['k']);
+
+    $where = "";
+    if(!empty($_GET['s'])) $where =  urlencode($_GET['s']);
+
+    $page = 0;
+    if(!empty($_GET['p'])) $page =  urlencode($_GET['p']);
+
+    $perpage = 100;
+    if(!empty($_GET['pp'])) $perpage =  urlencode($_GET['pp']);
 
     if(empty($perpage))
     {

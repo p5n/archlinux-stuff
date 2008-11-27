@@ -2,11 +2,14 @@
 include 'config.php';
 include 'common.php';
 
-    $pkgid =  urlencode($_GET['id']);
-    $pkgname =  urlencode($_GET['n']);
-    $nver =  urlencode($_GET['nver']);
-    $msg =  urlencode($_GET['msg']);
-    $unflag =  urlencode($_GET['unflag']);
+    $unflag = 0;
+    $pkgid = "";
+    $pkgname = "";
+    if(!empty($_GET['id'])) $pkgid =  urlencode($_GET['id']);
+    if(!empty($_GET['n'])) $pkgname =  urlencode($_GET['n']);
+    if(!empty($_GET['nver'])) $nver =  urlencode($_GET['nver']);
+    if(!empty($_GET['msg'])) $msg =  urlencode($_GET['msg']);
+    if(!empty($_GET['unflag'])) $unflag =  urlencode($_GET['unflag']);
 
     try
     {
@@ -20,8 +23,8 @@ include 'common.php';
     if($unflag == 1)
     {
         $timestamp = time();
-        $dbHandle->exec("UPDATE packages SET newver='' WHERE id='$pkgid'");
-        $dbHandle->exec("INSERT INTO log VALUES (NULL, $timestamp, $OP_UPD, '$pkgname')");
+        $dbHandle->exec("UPDATE packages SET newver='' WHERE id='$pkgid'") or die($dbHandle->errorInfo());
+        $dbHandle->exec("INSERT INTO log VALUES (NULL, $timestamp, $OP_UPD, '$pkgname')") or die($dbHandle->errorInfo());
 	if($enableMailNotification)
 	{
 	    mail($repoOwnerEmail, "MY-OWN-REPO: $pkgname(unflagged)", "Package $pkgname unflagged");
@@ -39,8 +42,8 @@ include 'common.php';
 	if(!empty($nver))
 	{
 	    $timestamp = time();
-	    $dbHandle->exec("UPDATE packages SET newver='$nver' WHERE pkgname='$pkgname'");
-	    $dbHandle->exec("INSERT INTO log VALUES (NULL, $timestamp, $OP_OFD, '$pkgname')");
+	    $rr1 = $dbHandle->exec("UPDATE packages SET newver='$nver' WHERE pkgname='$pkgname'");
+	    $rr2 = $dbHandle->exec("INSERT INTO log VALUES (NULL, $timestamp, $OP_OFD, '$pkgname')");
 	}
 	header("Location: detail.php?repo=$repoidx&n=$pkgname&id=$pkgid");
 	exit(0);
@@ -59,6 +62,7 @@ include 'common.php';
 <?php include 'menu.php'; ?>
 
 <?php
+
 
     if(empty($pkgid))
     {
@@ -135,7 +139,7 @@ include 'common.php';
 	    echo "<P class=red>Out of dated: new version: $newver\n";
 	    if($enableMarkOutOfDate)
 	    {
-		echo "<P class=red><A HREF='detail.php?n=$pkgname&id=$pkgid&unflag=1'>Unflag out of date</A>\n";
+		echo "<P class=red><A HREF='detail.php?n=$pkgname&id=$pkgid&unflag=1&repo=$repoidx'>Unflag out of date</A>\n";
 	    }
 	}
     }

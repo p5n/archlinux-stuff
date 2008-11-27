@@ -115,7 +115,7 @@ opendir DIR, $DIR || die("cannot open packages dir");
 
 while($pkgfile = readdir DIR)
 {
-    unless($pkgfile =~ /^\./ or $pkgfile =~ /\.db\.tar\.gz$/)
+    unless($pkgfile =~ /^\./ or $pkgfile =~ /\.db\.tar\.gz/)
     {
 	$packagefile = $DIR."/".$pkgfile;
 	# ($dev,$ino,$mode,$nlink,$uid,$gid,$rdev,$size,$atime,$mtime,$ctime,$blksize,$blocks)
