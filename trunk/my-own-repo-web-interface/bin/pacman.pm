@@ -19,7 +19,7 @@ sub add_package
     $backup = "";
     $filelist = "n/a";
 
-    $filelist = `tar xf $packagefile .FILELIST -O`;
+    $filelist = `tar tf $packagefile`;
 
     open(FH, "tar xf $packagefile .PKGINFO -O|") || die("tar failed");
 
