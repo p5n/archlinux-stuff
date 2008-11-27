@@ -1,26 +1,26 @@
 # Contributor: Vinay S Shastry <vinayshastry@gmail.com>
 
 pkgname=rpm
-pkgver=4.4.2.3
+pkgver=4.6.0rc1
+_pkgver=4.6.0-rc1
 pkgrel=1
 pkgdesc="Red Hat Package Manager"
 arch=('i686' 'x86_64')
 url="http://www.rpm.org/"
 license=('GPL')
 depends=('bzip2' 'sqlite3' 'popt' 'neon' 'beecrypt')
-source=(http://www.rpm.org/releases/rpm-4.4.x/$pkgname-$pkgver.tar.gz)
-md5sums=('b8f0661ac765ce1a2de66ca53e37af83')
+source=(http://rpm.org/releases/testing/rpm-${_pkgver}.tar.bz2)
+md5sums=('083184a85aec253cb4c4662c46379925')
 
 build() {
-  # Build seems to break with this set
-  unset MAKEFLAGS
+  cd $startdir/src/$pkgname-${_pkgver}
 
-  cd $startdir/src/$pkgname-$pkgver
+  export CFLAGS="-I/usr/include/db4.5 -I/usr/include/nss -I/usr/include/nspr $CFLAGS"
+  export CPPFLAGS="-I/usr/include/db4.5 -I/usr/include/nspr -I/usr/include/nss $CPPFLAGS"
 
-  # Use system popt
   rm -rf popt
   ./configure --prefix=/usr --without-python --without-selinux \
-              --without-perl
+              --without-perl --with-external-db
   make || return 1
   make DESTDIR=$startdir/pkg install
 }
