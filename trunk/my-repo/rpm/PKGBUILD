@@ -8,15 +8,15 @@ pkgdesc="Red Hat Package Manager"
 arch=('i686' 'x86_64')
 url="http://www.rpm.org/"
 license=('GPL')
-depends=('bzip2' 'sqlite3' 'popt' 'neon' 'beecrypt')
+depends=('bzip2' 'sqlite3' 'popt' 'neon' 'beecrypt' 'db')
 source=(http://rpm.org/releases/testing/rpm-${_pkgver}.tar.bz2)
 md5sums=('083184a85aec253cb4c4662c46379925')
 
 build() {
   cd $startdir/src/$pkgname-${_pkgver}
 
-  export CFLAGS="-I/usr/include/db4.5 -I/usr/include/nss -I/usr/include/nspr $CFLAGS"
-  export CPPFLAGS="-I/usr/include/db4.5 -I/usr/include/nspr -I/usr/include/nss $CPPFLAGS"
+  export CFLAGS="-I/usr/include/nss -I/usr/include/nspr $CFLAGS"
+  export CPPFLAGS="-I/usr/include/nspr -I/usr/include/nss $CPPFLAGS"
 
   rm -rf popt
   ./configure --prefix=/usr --without-python --without-selinux \
