@@ -7,7 +7,7 @@ use DBI;
 # ####################################################################
 
 $VERSION = "0.4";
-$MODULES_DIR = "/usr/lib/my-own-repo-web-interface";
+$MODULES_DIR = ".";
 
 # ####################################################################
 # DEFINES
@@ -115,7 +115,7 @@ opendir DIR, $DIR || die("cannot open packages dir");
 
 while($pkgfile = readdir DIR)
 {
-    unless($pkgfile =~ /^\./)
+    unless($pkgfile =~ /^\./ or $pkgfile =~ /\.db\.tar\.gz$/)
     {
 	$packagefile = $DIR."/".$pkgfile;
 	# ($dev,$ino,$mode,$nlink,$uid,$gid,$rdev,$size,$atime,$mtime,$ctime,$blksize,$blocks)
