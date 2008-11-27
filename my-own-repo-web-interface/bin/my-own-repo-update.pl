@@ -7,7 +7,7 @@ use DBI;
 # ####################################################################
 
 $VERSION = "0.4";
-$MODULES_DIR = ".";
+$MODULES_DIR = "./bin/";
 
 # ####################################################################
 # DEFINES
@@ -16,13 +16,13 @@ $MODULES_DIR = ".";
 $OP_ADD = 1;
 $OP_DEL = 2;
 $OP_UPD = 3;
-$OP_OFD = 4; # out of dated
+#$OP_OFD = 4; # out of dated
 
 # ####################################################################
 # Check usage, read parameters
 # ####################################################################
 
-if($#ARGV lt 3)
+if($#ARGV lt 2)
 {
     print STDERR "Usage: my-own-repo-update [-i|--init] <pkg-format> dbi:SQLite:<path-to-repo-db> <path-to-packages>\n";
     exit 1;
