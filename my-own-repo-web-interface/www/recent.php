@@ -24,10 +24,10 @@ include 'menu.php';
 	die($exception->getMessage());
     }
 
-    $upd = $_GET['u'];
-    $del = $_GET['d'];
-    $add = $_GET['a'];
-    $out = $_GET['o'];
+    $upd = empty($_GET['u']) ? 0 : $_GET['u'];
+    $del = empty($_GET['d']) ? 0 : $_GET['d'];
+    $add = empty($_GET['a']) ? 0 : $_GET['a'];
+    $out = empty($_GET['o']) ? 0 : $_GET['o'];
 
     $where = "";
     $started = "";

@@ -1,9 +1,6 @@
 <?php
-$repoidx = $_GET['repo'];
-if(empty($repoidx))
-{
-    $repoidx = 0;
-}
+$repoidx = 0;
+if(!empty($_GET['repo'])) $repoidx = $_GET['repo'];
 $REPODB = $repos[$repoidx]['db'];
 
 $OP_ADD = 1;

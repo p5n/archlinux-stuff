@@ -19,7 +19,7 @@ sub add_package
     $backup = "";
     $filelist = "n/a";
 
-    $filelist = `tar tf $packagefile`;
+    $filelist = `tar tf $packagefile | egrep -v '.PKGINFO|.CHANGELOG'`;
 
     open(FH, "tar xf $packagefile .PKGINFO -O|") || die("tar failed");
 
