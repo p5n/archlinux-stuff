@@ -4,7 +4,7 @@
     $repos[1]['db'] = "sqlite:/srv/ftp/archlinux/sergej-repo/db/sergej-repo-x86_64.db";
     $repos[1]['name'] = "sergej-repo(x86_64)";
 
-    $enableMarkOutOfDate = true;
-    $enableMailNotification = true;
+    $enableMarkOutOfDate = false;
+    $enableMailNotification = false;
     $repoOwnerEmail = "pupykin.s+sergej-repo@gmail.com";
 ?>
