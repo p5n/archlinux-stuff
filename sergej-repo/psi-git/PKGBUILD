@@ -10,6 +10,7 @@ depends=('qt' 'aspell' 'libxss' 'speex' 'ortp' 'glib2')
 source=(psi-icon-actions-shortcuts.patch)
 conflicts=('psi')
 provides=('psi')
+replaces=('psi-svn')
 license=('custom')
 url="http://psi-im.org/"
 
