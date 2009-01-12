@@ -1,13 +1,13 @@
 # Contributor: slubman <slubman.dndd@slubman.info>
 
 pkgname=psi-git
-pkgver=1198
+pkgver=20090112
 pkgrel=1
 pkgdesc="A jabber client SVN version"
 arch=('i686' 'x86_64')
 makedepends=('subversion')
 depends=('qt' 'aspell' 'libxss' 'speex' 'ortp' 'glib2')
-source=(psi-icon-actions-shortcuts.patch whiteboard.patch)
+source=(psi-icon-actions-shortcuts.patch)
 conflicts=('psi')
 provides=('psi')
 license=('custom')
@@ -20,32 +20,34 @@ build() {
   cd "$srcdir"
   msg "Connecting to GIT server...."
 
-  if [ -d $_gitname ] ; then
-    cd $_gitname && git pull origin
+  if [ -d ${_gitname} ] ; then
+    cd ${_gitname} && git pull origin && git submodule update
     msg "The local files are updated."
   else
-    git clone $_gitroot
+    git clone ${_gitroot}
+    (cd ${_gitname} && git submodule init && git submodule update)
   fi
 
   msg "GIT checkout done or server timeout"
   msg "Starting make..."
 
-#  rm -rf "$srcdir/$_gitname-build"
-#  cp -r "$srcdir/$_gitname" "$srcdir/$_gitname-build"
-  cd "$srcdir/$_gitname-build"
+  rm -rf "$srcdir/${_gitname}-build"
+  cp -Lr "$srcdir/${_gitname}" "$srcdir/${_gitname}-build"
+  cd "$srcdir/${_gitname}-build"
 
   # building
   msg "Starting build"
 
-#  patch -p1 <../psi-icon-actions-shortcuts.patch
-#  patch -p1 <../whiteboard.patch
+  patch -p1 <../psi-icon-actions-shortcuts.patch
+
+  sed -i 's|#CONFIG += psi_plugins|CONFIG += psi_plugins|' src/src.pro
 
   ./configure-jingle --prefix=/usr || return 1
   make || return 1
   make INSTALL_ROOT=$startdir/pkg install || return 1
 
   # Copy Psi license
-  install -D COPYING $startdir/pkg/usr/share/licenses/$pkgname/COPYING
+  install -D COPYING $startdir/pkg/usr/share/licenses/$pkgname/COPYING || return 1
 
   # Remove all those stupdid svn related files installed
   find $startdir/pkg -type d -name '.svn' | xargs rm -rf
