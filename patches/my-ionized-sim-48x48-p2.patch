@@ -1,0 +1,65 @@
+diff -wBbur ./sim-0.9.3/plugins/dock/dockwnd.cpp ./sim-0.9.3-MY/plugins/dock/dockwnd.cpp
+--- ./sim-0.9.3/plugins/dock/dockwnd.cpp	2004-03-30 10:37:17.000000000 +0400
++++ ./sim-0.9.3-MY/plugins/dock/dockwnd.cpp	2005-11-23 14:39:01.573106840 +0300
+@@ -625,8 +625,8 @@
+     Shell_NotifyIconA(NIM_ADD, &notifyIconData);
+     //}
+ #else
+-    setMinimumSize(22, 22);
+-    resize(22, 22);
++    setMinimumSize(48, 48);
++    resize(48, 48);
+ #if !defined(QT_MACOSX_VERSION) && !defined(QT_MAC)
+     bInit = false;
+     inTray = false;
+@@ -778,8 +778,8 @@
+     XSetCommand(dsp, win, argv, argc);
+ 
+     if (!inNetTray){
+-        move(-21, -21);
+-        resize(22, 22);
++        move(-47, -47);
++        resize(48, 48);
+     }
+ #endif
+     show();
+@@ -870,7 +870,7 @@
+             if (e->xclient.message_type == xembed_atom){
+                 inTray = true;
+                 bInit = true;
+-                resize(22, 22);
++                resize(48, 48);
+                 if (wharfIcon){
+                     delete wharfIcon;
+                     wharfIcon = NULL;
+@@ -891,8 +891,8 @@
+             }
+             bInit = true;
+             move(0, 0);
+-            resize(22, 22);
+-            XResizeWindow(dsp, winId(), 22, 22);
++            resize(48, 48);
++            XResizeWindow(dsp, winId(), 48, 48);
+         }
+     }
+     if (((e->type == FocusIn) || (e->type == Expose)) && !bInit){
+@@ -921,7 +921,18 @@
+ #endif
+ #endif
+     QPainter p(this);
+-    p.drawPixmap((width() - drawIcon.width())/2, (height() - drawIcon.height())/2, drawIcon);
++    if(bBlink)
++    {
++        QBrush brush(Qt::darkRed);
++        p.fillRect(0, 0, 48, 48, brush);
++    }
++    else
++    {
++        QBrush brush(Qt::darkGray);
++        p.fillRect(0, 0, 48, 48, brush);
++    }
++    p.scale(2, 2);
++    p.drawPixmap(4, 4, drawIcon);
+ }
+ 
+ void DockWnd::setIcon(const char *icon)
