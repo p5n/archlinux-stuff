@@ -1,6 +1,6 @@
 # Contributor: slubman <slubman.dndd@slubman.info>
 
-pkgname=psi-svn
+pkgname=psi-git
 pkgver=1198
 pkgrel=1
 pkgdesc="A jabber client SVN version"
