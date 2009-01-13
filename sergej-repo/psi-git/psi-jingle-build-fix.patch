@@ -1,0 +1,327 @@
+diff -wbBur psi/third-party/libjingle/talk/base/asynctcpsocket.cc psi-build/third-party/libjingle/talk/base/asynctcpsocket.cc
+--- psi/third-party/libjingle/talk/base/asynctcpsocket.cc	2009-01-11 20:51:32.000000000 +0300
++++ psi-build/third-party/libjingle/talk/base/asynctcpsocket.cc	2009-01-13 14:31:43.000000000 +0300
+@@ -25,6 +25,8 @@
+  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  */
+ 
++#include <string.h>
++
+ #if defined(_MSC_VER) && _MSC_VER < 1300
+ #pragma warning(disable:4786)
+ #endif
+@@ -167,7 +169,7 @@
+   int len = socket_->Recv(inbuf_ + inpos_, insize_ - inpos_);
+   if (len < 0) {
+     // TODO: Do something better like forwarding the error to the user.
+-    LOG(INFO) << "recvfrom: " << errno << " " <<  std::strerror(errno);
++    LOG(INFO) << "recvfrom: " << errno << " " <<  strerror(errno);
+     return;
+   }
+ 
+diff -wbBur psi/third-party/libjingle/talk/base/base64.h psi-build/third-party/libjingle/talk/base/base64.h
+--- psi/third-party/libjingle/talk/base/base64.h	2009-01-11 20:51:32.000000000 +0300
++++ psi-build/third-party/libjingle/talk/base/base64.h	2009-01-13 14:32:19.000000000 +0300
+@@ -22,8 +22,8 @@
+   static string decode(const string & data);
+   static string encodeFromArray(const char * data, size_t len);
+ private:
+-  static const string Base64::Base64Table;
+-  static const string::size_type Base64::DecodeTable[];
++  static const string Base64Table;
++  static const string::size_type DecodeTable[];
+ };
+ 
+ #endif
+diff -wbBur psi/third-party/libjingle/talk/base/bytebuffer.cc psi-build/third-party/libjingle/talk/base/bytebuffer.cc
+--- psi/third-party/libjingle/talk/base/bytebuffer.cc	2009-01-11 20:51:32.000000000 +0300
++++ psi-build/third-party/libjingle/talk/base/bytebuffer.cc	2009-01-13 14:32:40.000000000 +0300
+@@ -25,6 +25,8 @@
+  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  */
+ 
++#include <string.h>
++
+ #include "talk/base/basictypes.h"
+ #include "talk/base/bytebuffer.h"
+ #include "talk/base/byteorder.h"
+diff -wbBur psi/third-party/libjingle/talk/base/messagequeue.h psi-build/third-party/libjingle/talk/base/messagequeue.h
+--- psi/third-party/libjingle/talk/base/messagequeue.h	2009-01-11 20:51:32.000000000 +0300
++++ psi-build/third-party/libjingle/talk/base/messagequeue.h	2009-01-13 14:33:07.000000000 +0300
+@@ -28,6 +28,8 @@
+ #ifndef __MESSAGEQUEUE_H__
+ #define __MESSAGEQUEUE_H__
+ 
++#include <string.h>
++
+ #include "talk/base/basictypes.h"
+ #include "talk/base/criticalsection.h"
+ #include "talk/base/socketserver.h"
+diff -wbBur psi/third-party/libjingle/talk/base/physicalsocketserver.cc psi-build/third-party/libjingle/talk/base/physicalsocketserver.cc
+--- psi/third-party/libjingle/talk/base/physicalsocketserver.cc	2009-01-11 20:51:32.000000000 +0300
++++ psi-build/third-party/libjingle/talk/base/physicalsocketserver.cc	2009-01-13 14:35:42.000000000 +0300
+@@ -25,6 +25,9 @@
+  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  */
+ 
++#include <string.h>
++#include <algorithm>
++
+ #if defined(_MSC_VER) && _MSC_VER < 1300
+ #pragma warning(disable:4786)
+ #endif
+diff -wbBur psi/third-party/libjingle/talk/base/socketadapters.cc psi-build/third-party/libjingle/talk/base/socketadapters.cc
+--- psi/third-party/libjingle/talk/base/socketadapters.cc	2009-01-11 20:51:32.000000000 +0300
++++ psi-build/third-party/libjingle/talk/base/socketadapters.cc	2009-01-13 14:38:32.000000000 +0300
+@@ -134,7 +134,7 @@
+   int len = socket_->Recv(buffer_ + data_len_, buffer_size_ - data_len_);
+   if (len < 0) {
+     // TODO: Do something better like forwarding the error to the user.
+-    LOG(INFO) << "Recv: " << errno << " " <<  std::strerror(errno);
++    LOG(INFO) << "Recv: " << errno << " " <<  strerror(errno);
+     return;
+   }
+ 
+diff -wbBur psi/third-party/libjingle/talk/base/stringutils.h psi-build/third-party/libjingle/talk/base/stringutils.h
+--- psi/third-party/libjingle/talk/base/stringutils.h	2009-01-11 20:51:32.000000000 +0300
++++ psi-build/third-party/libjingle/talk/base/stringutils.h	2009-01-13 14:37:05.000000000 +0300
+@@ -255,7 +255,7 @@
+ template<>
+ struct Traits<char> {
+   typedef std::string string;
+-  inline static const char* Traits<char>::empty_str() { return ""; }
++  inline static const char* empty_str() { return ""; }
+ };
+ 
+ ///////////////////////////////////////////////////////////////////////////////
+diff -wbBur psi/third-party/libjingle/talk/p2p/base/port.cc psi-build/third-party/libjingle/talk/p2p/base/port.cc
+--- psi/third-party/libjingle/talk/p2p/base/port.cc	2009-01-11 20:51:32.000000000 +0300
++++ psi-build/third-party/libjingle/talk/p2p/base/port.cc	2009-01-13 14:41:13.000000000 +0300
+@@ -25,6 +25,8 @@
+  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  */
+ 
++#include <string.h>
++
+ #if defined(_MSC_VER) && _MSC_VER < 1300
+ #pragma warning(disable:4786)
+ #endif
+@@ -281,7 +283,7 @@
+ 
+   if (stun_msg->type() == STUN_BINDING_REQUEST) {
+     if ((remote_frag_len < 0)
+-        || (std::memcmp(username_attr->bytes(),
++        || (memcmp(username_attr->bytes(),
+                         username_frag_.c_str(), username_frag_.size()) != 0)) {
+       LOG(LERROR) << "Received STUN request with bad username";
+       SendBindingErrorResponse(stun_msg.get(), addr, STUN_ERROR_BAD_REQUEST,
+@@ -294,7 +296,7 @@
+   } else if ((stun_msg->type() == STUN_BINDING_RESPONSE)
+       || (stun_msg->type() == STUN_BINDING_ERROR_RESPONSE)) {
+     if ((remote_frag_len < 0)
+-        || (std::memcmp(username_attr->bytes() + remote_frag_len,
++        || (memcmp(username_attr->bytes() + remote_frag_len,
+                         username_frag_.c_str(), username_frag_.size()) != 0)) {
+       LOG(LERROR) << "Received STUN response with bad username";
+       // Do not send error response to a response
+@@ -739,7 +741,7 @@
+   if (valid) {
+     std::string username_fragment = port_->username_fragment();
+     int offset = (int)(username_attr->length() - username_fragment.size());
+-    if (std::memcmp(username_attr->bytes() + offset,
++    if (memcmp(username_attr->bytes() + offset,
+         username_fragment.c_str(), username_fragment.size()) != 0) {
+       LOG(LERROR) << "Received STUN response with bad username";
+       valid = false;
+diff -wbBur psi/third-party/libjingle/talk/p2p/base/relayport.cc psi-build/third-party/libjingle/talk/p2p/base/relayport.cc
+--- psi/third-party/libjingle/talk/p2p/base/relayport.cc	2009-01-11 20:51:32.000000000 +0300
++++ psi-build/third-party/libjingle/talk/p2p/base/relayport.cc	2009-01-13 14:42:32.000000000 +0300
+@@ -25,6 +25,8 @@
+  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  */
+ 
++#include <string.h>
++
+ #if defined(_MSC_VER) && _MSC_VER < 1300
+ #pragma warning(disable:4786)
+ #endif
+@@ -212,7 +214,7 @@
+   if (size < 24 + magic_cookie_.size()) {
+     return false;
+   } else {
+-    return 0 == std::memcmp(data + 24,
++    return 0 == memcmp(data + 24,
+                             magic_cookie_.c_str(),
+                             magic_cookie_.size());
+   }
+@@ -375,7 +377,7 @@
+ 
+   socket_->SignalReadPacket.connect(this, &RelayEntry::OnReadPacket);
+   if (socket_->Bind(local_addr_) < 0)
+-    LOG(INFO) << "bind: " << std::strerror(socket_->GetError());
++    LOG(INFO) << "bind: " << strerror(socket_->GetError());
+ 
+   for (unsigned i = 0; i < port_->options().size(); ++i)
+     socket_->SetOption(port_->options()[i].first, port_->options()[i].second);
+@@ -568,7 +570,7 @@
+   }
+   int sent = socket_->SendTo(data, size, ra->address);
+   if (sent <= 0) {
+-    LOG(LS_VERBOSE) << "sendto: " << std::strerror(socket_->GetError());
++    LOG(LS_VERBOSE) << "sendto: " << strerror(socket_->GetError());
+     assert(sent < 0);
+   }
+   return sent;
+diff -wbBur psi/third-party/libjingle/talk/p2p/base/stun.cc psi-build/third-party/libjingle/talk/p2p/base/stun.cc
+--- psi/third-party/libjingle/talk/p2p/base/stun.cc	2009-01-11 20:51:32.000000000 +0300
++++ psi-build/third-party/libjingle/talk/p2p/base/stun.cc	2009-01-13 14:44:14.000000000 +0300
+@@ -25,6 +25,8 @@
+  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  */
+ 
++#include <string.h>
++
+ #include "talk/base/logging.h"
+ #include "talk/p2p/base/stun.h"
+ #include <iostream>
+@@ -384,7 +386,7 @@
+ 
+ void StunByteStringAttribute::CopyBytes(const void* bytes, uint16 length) {
+   char* new_bytes = new char[length];
+-  std::memcpy(new_bytes, bytes, length);
++  memcpy(new_bytes, bytes, length);
+   SetBytes(new_bytes, length);
+ }
+ 
+diff -wbBur psi/third-party/libjingle/talk/p2p/base/tcpport.cc psi-build/third-party/libjingle/talk/p2p/base/tcpport.cc
+--- psi/third-party/libjingle/talk/p2p/base/tcpport.cc	2009-01-11 20:51:32.000000000 +0300
++++ psi-build/third-party/libjingle/talk/p2p/base/tcpport.cc	2009-01-13 14:45:14.000000000 +0300
+@@ -61,7 +61,7 @@
+   socket_ = thread->socketserver()->CreateAsyncSocket(SOCK_STREAM);
+   socket_->SignalReadEvent.connect(this, &TCPPort::OnAcceptEvent);
+   if (socket_->Bind(address) < 0)
+-    LOG(INFO) << "bind: " << std::strerror(socket_->GetError());
++    LOG(INFO) << "bind: " << strerror(socket_->GetError());
+ }
+ 
+ TCPPort::~TCPPort() {
+@@ -111,7 +111,7 @@
+ #endif // WIN32
+   if (allow_listen) {
+     if (socket_->Listen(5) < 0)
+-      LOG(INFO) << "listen: " << std::strerror(socket_->GetError());
++      LOG(INFO) << "listen: " << strerror(socket_->GetError());
+   } else {
+     LOG(INFO) << "not listening due to firewall restrictions";
+   }
+@@ -157,7 +157,7 @@
+   AsyncSocket * newsocket = static_cast<AsyncSocket *>(socket->Accept(&incoming.addr));
+   if (!newsocket) {
+     // TODO: Do something better like forwarding the error to the user.
+-    LOG(INFO) << "accept: " << socket_->GetError() << " " <<  std::strerror(socket_->GetError());
++    LOG(INFO) << "accept: " << socket_->GetError() << " " <<  strerror(socket_->GetError());
+     return;
+   }
+   incoming.socket = new AsyncTCPSocket(newsocket);
+diff -wbBur psi/third-party/libjingle/talk/session/phone/linphonemediaengine.cc psi-build/third-party/libjingle/talk/session/phone/linphonemediaengine.cc
+--- psi/third-party/libjingle/talk/session/phone/linphonemediaengine.cc	2009-01-11 20:51:32.000000000 +0300
++++ psi-build/third-party/libjingle/talk/session/phone/linphonemediaengine.cc	2009-01-13 15:05:12.000000000 +0300
+@@ -27,6 +27,9 @@
+ #include "talk/third_party/mediastreamer/msspeexdec.h"
+ #endif
+ }
++
++#include <speex/speex.h>
++
+ #include <ortp/ortp.h>
+ #include <netdb.h>
+ #include <unistd.h>
+@@ -139,7 +142,7 @@
+  
+ #ifdef HAVE_SPEEX
+   ms_speex_codec_init();
+-  rtp_profile_set_payload(&av_profile, 110, &speex_wb);
++  rtp_profile_set_payload(&av_profile, 110, &payload_type_speex_wb);
+   codecs_.push_back(Codec(110, "speex", 8));
+ #endif
+ 
+@@ -149,7 +152,7 @@
+   codecs_.push_back(Codec(102, "iLBC", 4));
+ #endif
+ 
+-  rtp_profile_set_payload(&av_profile, 0, &pcmu8000);
++  rtp_profile_set_payload(&av_profile, 0, &payload_type_pcmu8000);
+   codecs_.push_back(Codec(0, "PCMU", 2));
+   
+ return true;
+diff -wbBur psi/third-party/libjingle/talk/third_party/mediastreamer/audiostream.c psi-build/third-party/libjingle/talk/third_party/mediastreamer/audiostream.c
+--- psi/third-party/libjingle/talk/third_party/mediastreamer/audiostream.c	2009-01-11 20:51:32.000000000 +0300
++++ psi-build/third-party/libjingle/talk/third_party/mediastreamer/audiostream.c	2009-01-13 15:07:06.000000000 +0300
+@@ -217,8 +217,8 @@
+ 	ms_filter_set_property(stream->decoder,MS_FILTER_PROPERTY_FREQ,&pt->clock_rate);
+ 	ms_filter_set_property(stream->decoder,MS_FILTER_PROPERTY_BITRATE,&pt->normal_bitrate);
+ 	
+-	ms_filter_set_property(stream->encoder,MS_FILTER_PROPERTY_FMTP, (void*)pt->fmtp);
+-	ms_filter_set_property(stream->decoder,MS_FILTER_PROPERTY_FMTP,(void*)pt->fmtp);
++	ms_filter_set_property(stream->encoder,MS_FILTER_PROPERTY_FMTP, (void*)pt->send_fmtp);
++	ms_filter_set_property(stream->decoder,MS_FILTER_PROPERTY_FMTP,(void*)pt->recv_fmtp);
+ 	/* create the synchronisation source */
+ 	stream->timer=ms_timer_new();
+ 	
+diff -wbBur psi/third-party/libjingle/talk/third_party/mediastreamer/msrtprecv.c psi-build/third-party/libjingle/talk/third_party/mediastreamer/msrtprecv.c
+--- psi/third-party/libjingle/talk/third_party/mediastreamer/msrtprecv.c	2009-01-11 20:51:32.000000000 +0300
++++ psi-build/third-party/libjingle/talk/third_party/mediastreamer/msrtprecv.c	2009-01-13 15:09:44.000000000 +0300
+@@ -26,7 +26,7 @@
+ MSMessage *msgb_2_ms_message(mblk_t* mp){
+ 	MSMessage *msg;
+ 	MSBuffer *msbuf;
+-	if (mp->b_datap->ref_count!=1) return NULL; /* cannot handle properly non-unique buffers*/
++	if (mp->b_datap->db_ref!=1) return NULL; /* cannot handle properly non-unique buffers*/
+ 	/* create a MSBuffer using the mblk_t buffer */
+ 	msg=ms_message_alloc();
+ 	msbuf=ms_buffer_alloc(0);
+@@ -120,7 +120,7 @@
+ 		gint got=0;
+ 		/* we are connected with queues (surely for video)*/
+ 		/* use the sync system time to compute a timestamp */
+-		PayloadType *pt=rtp_profile_get_payload(r->rtpsession->profile,r->rtpsession->payload_type);
++		PayloadType *pt=rtp_profile_get_payload(r->rtpsession->snd.profile,r->rtpsession->snd.telephone_events_pt);
+ 		if (pt==NULL) {
+ 			ms_warning("ms_rtp_recv_process(): NULL RtpPayload- skipping.");
+ 			return;
+diff -wbBur psi/third-party/libjingle/talk/third_party/mediastreamer/msrtpsend.c psi-build/third-party/libjingle/talk/third_party/mediastreamer/msrtpsend.c
+--- psi/third-party/libjingle/talk/third_party/mediastreamer/msrtpsend.c	2009-01-11 20:51:32.000000000 +0300
++++ psi-build/third-party/libjingle/talk/third_party/mediastreamer/msrtpsend.c	2009-01-13 15:10:57.000000000 +0300
+@@ -85,7 +85,7 @@
+ {
+ 	guint32 clockts;
+ 	/* use the sync system time to compute a timestamp */
+-	PayloadType *pt=rtp_profile_get_payload(r->rtpsession->profile,r->rtpsession->payload_type);
++	PayloadType *pt=rtp_profile_get_payload(r->rtpsession->snd.profile,r->rtpsession->snd.telephone_events_pt);
+ 	g_return_val_if_fail(pt!=NULL,0);
+ 	clockts=(guint32)(((double)synctime * (double)pt->clock_rate)/1000.0);
+ 	ms_trace("ms_rtp_send_process: sync->time=%i clock=%i",synctime,clockts);
+diff -wbBur psi/third-party/libjingle/talk/xmpp/xmppclient.h psi-build/third-party/libjingle/talk/xmpp/xmppclient.h
+--- psi/third-party/libjingle/talk/xmpp/xmppclient.h	2009-01-11 20:51:32.000000000 +0300
++++ psi-build/third-party/libjingle/talk/xmpp/xmppclient.h	2009-01-13 14:47:12.000000000 +0300
+@@ -133,7 +133,7 @@
+     }
+   }
+ 
+-  std::string XmppClient::GetStateName(int state) const {
++  std::string GetStateName(int state) const {
+     switch (state) {
+       case STATE_PRE_XMPP_LOGIN:      return "PRE_XMPP_LOGIN";
+       case STATE_START_XMPP_LOGIN:  return "START_XMPP_LOGIN";
+diff -wbBur psi/third-party/libjingle/talk/xmpp/xmpppassword.h psi-build/third-party/libjingle/talk/xmpp/xmpppassword.h
+--- psi/third-party/libjingle/talk/xmpp/xmpppassword.h	2009-01-11 20:51:32.000000000 +0300
++++ psi-build/third-party/libjingle/talk/xmpp/xmpppassword.h	2009-01-13 14:36:29.000000000 +0300
+@@ -28,6 +28,8 @@
+ #ifndef _XMPPPASSWORD_H_
+ #define _XMPPPASSWORD_H_
+ 
++#include <string.h>
++
+ #include "talk/base/linked_ptr.h"
+ #include "talk/base/scoped_ptr.h"
+ 
