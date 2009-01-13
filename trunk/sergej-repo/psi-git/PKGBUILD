@@ -1,13 +1,14 @@
 # Contributor: slubman <slubman.dndd@slubman.info>
 
 pkgname=psi-git
-pkgver=20090112
+pkgver=20090113
 pkgrel=1
 pkgdesc="A jabber client SVN version"
 arch=('i686' 'x86_64')
 makedepends=('subversion')
-depends=('qt' 'aspell' 'libxss' 'speex' 'ortp' 'glib2')
-source=(psi-icon-actions-shortcuts.patch)
+depends=('qt' 'aspell' 'libxss' 'speex' 'ortp' 'glib2' 'libjingle')
+source=(psi-icon-actions-shortcuts.patch
+	psi-jingle-build-fix.patch)
 conflicts=('psi')
 provides=('psi')
 replaces=('psi-svn')
@@ -40,10 +41,11 @@ build() {
   msg "Starting build"
 
   patch -p1 <../psi-icon-actions-shortcuts.patch
+  patch -p1 <../psi-jingle-build-fix.patch
 
   sed -i 's|#CONFIG += psi_plugins|CONFIG += psi_plugins|' src/src.pro
 
-  ./configure-jingle --prefix=/usr || return 1
+  ./configure-jingle --enable-jingle --enable-google-ft --prefix=/usr || return 1
   make || return 1
   make INSTALL_ROOT=$startdir/pkg install || return 1
 
