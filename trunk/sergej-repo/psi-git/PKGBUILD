@@ -45,7 +45,7 @@ build() {
 
   sed -i 's|#CONFIG += psi_plugins|CONFIG += psi_plugins|' src/src.pro
 
-  ./configure-jingle --enable-jingle --enable-google-ft --prefix=/usr || return 1
+  ./configure-jingle --enable-jingle --prefix=/usr || return 1
   make || return 1
   make INSTALL_ROOT=$startdir/pkg install || return 1
 
