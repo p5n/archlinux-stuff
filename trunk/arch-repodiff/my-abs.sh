@@ -6,9 +6,6 @@ if [ "x$1" == "x" ]; then
 fi
 
 ABSROOT=$1
-[ -f /usr/bin/cvsup ] && CVSUP=/usr/bin/cvsup
-[ -f /usr/bin/csup  ] && CVSUP=/usr/bin/csup
-supdir=/etc/arch-repodiff
 
 ############################################3
 
@@ -24,17 +21,17 @@ echo "${SEL}ARCH: x86_64${NORM}"
 # core
 echo "${SEL}[core/x86_64]${NORM}"
 mkdir -p $ABSROOT/x86_64/core
-$CVSUP -L 1 -r 0 -g -b $ABSROOT/x86_64 -P m -c .sup $supdir/supfile.core-64
+rsync -mrtv --no-motd --delete-after --delete-excluded rsync.archlinux.org::abs/x86_64/core $ABSROOT/x86_64
 
 # extra
 echo "${SEL}[extra/x86_64]${NORM}"
 mkdir -p $ABSROOT/x86_64/extra
-$CVSUP -L 1 -r 0 -g -b $ABSROOT/x86_64 -P m -c extra/.sup $supdir/supfile.extra-64
+rsync -mrtv --no-motd --delete-after --delete-excluded rsync.archlinux.org::abs/x86_64/extra $ABSROOT/x86_64
 
 # community
 echo "${SEL}[community/x86_64]${NORM}"
 mkdir -p $ABSROOT/x86_64/community
-$CVSUP -L 1 -r 0 -g -b $ABSROOT/x86_64 -P m -c community/.sup $supdir/supfile.community-64
+rsync -mrtv --no-motd --delete-after --delete-excluded rsync.archlinux.org::abs/x86_64/community $ABSROOT/x86_64
 
 #
 # i686
@@ -45,14 +42,14 @@ echo "${SEL}ARCH: i686${NORM}"
 # core
 echo "${SEL}[core/i686]${NORM}"
 mkdir -p $ABSROOT/i686/core
-$CVSUP -L 1 -r 0 -g -b $ABSROOT/i686 -P m -c .sup $supdir/supfile.core
+rsync -mrtv --no-motd --delete-after --delete-excluded rsync.archlinux.org::abs/i686/core $ABSROOT/i686
 
 # extra
 echo "${SEL}[extra/i686]${NORM}"
 mkdir -p $ABSROOT/i686/extra
-$CVSUP -L 1 -r 0 -g -b $ABSROOT/i686 -P m -c extra/.sup $supdir/supfile.extra
+rsync -mrtv --no-motd --delete-after --delete-excluded rsync.archlinux.org::abs/i686/extra $ABSROOT/i686
 
 # community
 echo "${SEL}[community/i686]${NORM}"
 mkdir -p $ABSROOT/i686/community
-$CVSUP -L 1 -r 0 -g -b $ABSROOT/i686 -P m -c community/.sup $supdir/supfile.community
+rsync -mrtv --no-motd --delete-after --delete-excluded rsync.archlinux.org::abs/i686/community $ABSROOT/i686
