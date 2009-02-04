@@ -92,7 +92,7 @@ print IDXFH "<HTML><HEAD><TITLE>$title</TITLE></HEAD>\n";
 print IDXFH "<link rel=\"stylesheet\" type=\"text/css\" href=\"$cssurl\" media=\"screen\">\n";
 print IDXFH "<BODY><H1>$title</H1>\n";
 print IDXFH "<TABLE width='100%' class=table>\n";
-print IDXFH "<TR class=header><TH>#<TH>Group<TH>Package<TH>$arch1<TH>$arch2</TR>\n";
+print IDXFH "<TR class=header><TH>#<TH>Package<TH>$arch1<TH>$arch2</TR>\n";
 
 $counter = 0;
 $count_hidden = 0;
@@ -152,7 +152,7 @@ foreach $i (sort keys %PKGS)
 
     if($p1 ne $p2)
     {
-	print "DIFF: $repo-$group-$pkg\n";
+	print "DIFF: $repo-$pkg\n";
 
 	if($v1 eq $v2)
 	{
@@ -161,8 +161,8 @@ foreach $i (sort keys %PKGS)
 
 	if( ($p1 ne "-") && ($p2 ne "-") )
 	{
-    	    system("diff2html -N $basedir/$arch1/$repo/$group/$pkg/PKGBUILD $basedir/$arch2/$repo/$group/$pkg/PKGBUILD >$destdir/$repo-$group-$pkg.html");
-	    $diffurl = "<A HREF=\"$repo-$group-$pkg.html\">$pkg</A>";
+    	    system("diff2html -N $basedir/$arch1/$repo/$group/$pkg/PKGBUILD $basedir/$arch2/$repo/$group/$pkg/PKGBUILD >$destdir/$repo-$pkg.html");
+	    $diffurl = "<A HREF=\"$repo-$pkg.html\">$pkg</A>";
 	}
 	else
 	{
@@ -172,11 +172,11 @@ foreach $i (sort keys %PKGS)
 	$class = $counter % 2;
 	if($p1 lt $p2)
 	{
-    	    print IDXFH "<TR class=row$class><TD>$counter<TD>$group<TD>$diffurl<TD class=outdated>$org_p1<TD>$org_p2</TR>\n";
+    	    print IDXFH "<TR class=row$class><TD>$counter<TD>$diffurl<TD class=outdated>$org_p1<TD>$org_p2</TR>\n";
 	}
 	else
 	{
-    	    print IDXFH "<TR class=row$class><TD>$counter<TD>$group<TD>$diffurl<TD>$org_p1<TD class=outdated>$org_p2</TR>\n";
+    	    print IDXFH "<TR class=row$class><TD>$counter<TD>$diffurl<TD>$org_p1<TD class=outdated>$org_p2</TR>\n";
 	}
 	$counter++;
     }
