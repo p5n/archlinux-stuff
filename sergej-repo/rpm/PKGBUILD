@@ -1,16 +1,16 @@
 # Contributor: Vinay S Shastry <vinayshastry@gmail.com>
 
 pkgname=rpm
-pkgver=4.6.0rc1
-_pkgver=4.6.0-rc1
+pkgver=4.6.0
+_pkgver=4.6.0
 pkgrel=1
 pkgdesc="Red Hat Package Manager"
 arch=('i686' 'x86_64')
 url="http://www.rpm.org/"
 license=('GPL')
 depends=('bzip2' 'sqlite3' 'popt' 'neon' 'beecrypt' 'db')
-source=(http://rpm.org/releases/testing/rpm-${_pkgver}.tar.bz2)
-md5sums=('083184a85aec253cb4c4662c46379925')
+source=(http://rpm.org/releases/rpm-4.6.x/rpm-${_pkgver}.tar.bz2)
+md5sums=('77bf389f87f61ff53b068a9870aa91ca')
 
 build() {
   cd $startdir/src/$pkgname-${_pkgver}
