@@ -38,10 +38,10 @@ pkglibdir = $(libdir)/tvision
 pkgincludedir = $(includedir)/tvision
 top_builddir = ..
 
-ACLOCAL = ${SHELL} /home/sergej/aur/tvision2/tvision-0.8/missing --run aclocal
-AUTOCONF = ${SHELL} /home/sergej/aur/tvision2/tvision-0.8/missing --run autoconf
-AUTOMAKE = ${SHELL} /home/sergej/aur/tvision2/tvision-0.8/missing --run automake
-AUTOHEADER = ${SHELL} /home/sergej/aur/tvision2/tvision-0.8/missing --run autoheader
+ACLOCAL = ${SHELL} /home/sergej/MY/archlinux-stuff.svn/trunk/tvision-ng/missing --run aclocal
+AUTOCONF = ${SHELL} /home/sergej/MY/archlinux-stuff.svn/trunk/tvision-ng/missing --run autoconf
+AUTOMAKE = ${SHELL} /home/sergej/MY/archlinux-stuff.svn/trunk/tvision-ng/missing --run automake
+AUTOHEADER = ${SHELL} /home/sergej/MY/archlinux-stuff.svn/trunk/tvision-ng/missing --run autoheader
 
 INSTALL = /bin/install -c
 INSTALL_PROGRAM = ${INSTALL}
@@ -56,8 +56,8 @@ NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
 host_alias = 
-host_triplet = i686-pc-linux-gnu
-AMTAR = ${SHELL} /home/sergej/aur/tvision2/tvision-0.8/missing --run tar
+host_triplet = x86_64-unknown-linux-gnu
+AMTAR = ${SHELL} /home/sergej/MY/archlinux-stuff.svn/trunk/tvision-ng/missing --run tar
 AS = @AS@
 AWK = gawk
 CC = gcc
@@ -78,7 +78,7 @@ STRIP = strip
 VERSION = 0.8
 am__include = include
 am__quote = 
-install_sh = /home/sergej/aur/tvision2/tvision-0.8/install-sh
+install_sh = /home/sergej/MY/archlinux-stuff.svn/trunk/tvision-ng/install-sh
 
 AUTOMAKE_OPTIONS = foreign
 
