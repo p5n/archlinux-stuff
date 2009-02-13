@@ -1,0 +1,18 @@
+#!/usr/bin/make
+# Automatically generated from RHIDE projects, don't edit
+#
+
+OBJFILES=\
+	./terminal$(ExOBJ) 
+
+LIBRARIES=
+
+test$(ExEXE):: \
+	./terminal$(ExOBJ) \
+	$(MAKEFILE_DEPS) 
+	$(RHIDE_COMPILE_LINK)
+
+./terminal$(ExOBJ):: terminal.cc \
+	$(MAKEFILE_DEPS) 
+	$(RHIDE_COMPILE_CC)
+

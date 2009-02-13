@@ -41,7 +41,7 @@ build() {
   msg "Starting build"
 
   patch -p1 <../psi-icon-actions-shortcuts.patch
-  patch -p1 <../psi-jingle-build-fix.patch
+#  patch -p1 <../psi-jingle-build-fix.patch
 
   sed -i 's|#CONFIG += psi_plugins|CONFIG += psi_plugins|' src/src.pro
 
