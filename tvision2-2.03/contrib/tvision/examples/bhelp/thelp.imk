@@ -1,0 +1,108 @@
+#!/usr/bin/make
+# Automatically generated from RHIDE projects, don't edit
+#
+
+OBJFILES=\
+	./bhelp$(ExOBJ) \
+	./thelp$(ExOBJ) 
+
+LIBRARIES=
+
+thelp$(ExEXE):: \
+	./bhelp$(ExOBJ) \
+	./thelp$(ExOBJ) \
+	$(MAKEFILE_DEPS) 
+	$(RHIDE_COMPILE_LINK)
+
+./bhelp$(ExOBJ):: bhelp.cc \
+	bhelp.h \
+	$(INCLUDE_DIR)/compatlayer.h \
+	$(INCLUDE_DIR)/tv.h \
+	$(INCLUDE_DIR)/tv/collectn.h \
+	$(INCLUDE_DIR)/tv/configtv.h \
+	$(INCLUDE_DIR)/tv/fpbase.h \
+	$(INCLUDE_DIR)/tv/fpstream.h \
+	$(INCLUDE_DIR)/tv/helpbase.h \
+	$(INCLUDE_DIR)/tv/intl.h \
+	$(INCLUDE_DIR)/tv/iopstrm.h \
+	$(INCLUDE_DIR)/tv/ipstream.h \
+	$(INCLUDE_DIR)/tv/no_mss.h \
+	$(INCLUDE_DIR)/tv/nscoll.h \
+	$(INCLUDE_DIR)/tv/object.h \
+	$(INCLUDE_DIR)/tv/objects.h \
+	$(INCLUDE_DIR)/tv/opstream.h \
+	$(INCLUDE_DIR)/tv/point.h \
+	$(INCLUDE_DIR)/tv/pstream.h \
+	$(INCLUDE_DIR)/tv/rect.h \
+	$(INCLUDE_DIR)/tv/ssc_streams.h \
+	$(INCLUDE_DIR)/tv/stddlg.h \
+	$(INCLUDE_DIR)/tv/streambl.h \
+	$(INCLUDE_DIR)/tv/strmblcl.h \
+	$(INCLUDE_DIR)/tv/system.h \
+	$(INCLUDE_DIR)/tv/tobjstrm.h \
+	$(INCLUDE_DIR)/tv/ttypes.h \
+	$(INCLUDE_DIR)/tv/tvconfig.h \
+	$(INCLUDE_DIR)/tv/tvobjs.h \
+	$(INCLUDE_DIR)/tv/tvutil.h \
+	$(INCLUDE_DIR)/tv/views.h \
+	$(INCLUDE_DIR)/tv/yes_mss.h \
+	$(MAKEFILE_DEPS) 
+	$(RHIDE_COMPILE_CC)
+
+./thelp$(ExOBJ):: thelp.cc \
+	bhelp.h \
+	$(INCLUDE_DIR)/cl/getopt.h \
+	$(INCLUDE_DIR)/cl/unistd.h \
+	$(INCLUDE_DIR)/compatlayer.h \
+	$(INCLUDE_DIR)/tv.h \
+	$(INCLUDE_DIR)/tv/app.h \
+	$(INCLUDE_DIR)/tv/applictn.h \
+	$(INCLUDE_DIR)/tv/button.h \
+	$(INCLUDE_DIR)/tv/collectn.h \
+	$(INCLUDE_DIR)/tv/configtv.h \
+	$(INCLUDE_DIR)/tv/desktop.h \
+	$(INCLUDE_DIR)/tv/dialog.h \
+	$(INCLUDE_DIR)/tv/dialogs.h \
+	$(INCLUDE_DIR)/tv/drawbuf.h \
+	$(INCLUDE_DIR)/tv/event.h \
+	$(INCLUDE_DIR)/tv/fpbase.h \
+	$(INCLUDE_DIR)/tv/fpstream.h \
+	$(INCLUDE_DIR)/tv/group.h \
+	$(INCLUDE_DIR)/tv/help.h \
+	$(INCLUDE_DIR)/tv/helpbase.h \
+	$(INCLUDE_DIR)/tv/ifpstrm.h \
+	$(INCLUDE_DIR)/tv/intl.h \
+	$(INCLUDE_DIR)/tv/iopstrm.h \
+	$(INCLUDE_DIR)/tv/ipstream.h \
+	$(INCLUDE_DIR)/tv/listbox.h \
+	$(INCLUDE_DIR)/tv/lstviewr.h \
+	$(INCLUDE_DIR)/tv/msgbox.h \
+	$(INCLUDE_DIR)/tv/no_mss.h \
+	$(INCLUDE_DIR)/tv/nscoll.h \
+	$(INCLUDE_DIR)/tv/object.h \
+	$(INCLUDE_DIR)/tv/objects.h \
+	$(INCLUDE_DIR)/tv/opstream.h \
+	$(INCLUDE_DIR)/tv/palette.h \
+	$(INCLUDE_DIR)/tv/point.h \
+	$(INCLUDE_DIR)/tv/program.h \
+	$(INCLUDE_DIR)/tv/pstream.h \
+	$(INCLUDE_DIR)/tv/rect.h \
+	$(INCLUDE_DIR)/tv/scrlbar.h \
+	$(INCLUDE_DIR)/tv/scroller.h \
+	$(INCLUDE_DIR)/tv/ssc_streams.h \
+	$(INCLUDE_DIR)/tv/stddlg.h \
+	$(INCLUDE_DIR)/tv/streambl.h \
+	$(INCLUDE_DIR)/tv/system.h \
+	$(INCLUDE_DIR)/tv/tkeys.h \
+	$(INCLUDE_DIR)/tv/tobjstrm.h \
+	$(INCLUDE_DIR)/tv/ttypes.h \
+	$(INCLUDE_DIR)/tv/tvconfig.h \
+	$(INCLUDE_DIR)/tv/tvobjs.h \
+	$(INCLUDE_DIR)/tv/tvutil.h \
+	$(INCLUDE_DIR)/tv/view.h \
+	$(INCLUDE_DIR)/tv/views.h \
+	$(INCLUDE_DIR)/tv/window.h \
+	$(INCLUDE_DIR)/tv/yes_mss.h \
+	$(MAKEFILE_DEPS) 
+	$(RHIDE_COMPILE_CC)
+
