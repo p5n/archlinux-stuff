@@ -13,8 +13,8 @@
 // modify TDemoWindow::makeInterior and constructor
 
 #include <stdlib.h>             // for exit(), random()
-#include <iostream.h>
-#include <fstream.h>            // for ifstream
+#include <iostream>
+#include <fstream>            // for ifstream
 #include <stdio.h>              // for puts() etc
 #include <string.h>             // for strlen etc
 #include <ctype.h>

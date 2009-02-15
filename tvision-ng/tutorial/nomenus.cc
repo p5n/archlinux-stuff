@@ -18,6 +18,7 @@
 #define Uses_TView
 #define Uses_TWindow
 
+#include <string.h>
 #include <tvision/tv.h>
 
 //define a custom background

@@ -32,7 +32,7 @@ __link( RButton )
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
-#include <strstream.h>
+#include <sstream>
 #include <iomanip.h>
 
 #include "calc.h"

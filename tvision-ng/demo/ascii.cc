@@ -32,8 +32,8 @@ __link( RWindow )
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
-#include <strstream.h>
-#include <iomanip.h>
+#include <sstream>
+#include <iomanip>
 
 #include "ascii.h"
 
@@ -208,7 +208,7 @@ void TReport::draw()
     TDrawBuffer buf;
     char        color = getColor(6);
     char        str[80];
-    ostrstream  statusStr( str, sizeof str );
+    ostringstream  statusStr( str, sizeof str );
 
     statusStr
       << "  Char: " << (char ) ((asciiChar == 0) ? 0x20 : asciiChar)

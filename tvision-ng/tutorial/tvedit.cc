@@ -28,7 +28,7 @@
 #define Uses_TStatusLine
 #define Uses_TSubMenu
 
-#include <fstream.h>
+#include <fstream>
 #include <signal.h>
 #include <stdarg.h>
 #include <stdio.h>
