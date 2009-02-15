@@ -84,8 +84,9 @@ void Demo::aboutDlgBox()
     executeDialog(aboutBox);
 }
 
-void main()
+int main()
 {
 	Demo a;
 	a.run();
+  return 0;
 }

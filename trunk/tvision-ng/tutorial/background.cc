@@ -20,9 +20,10 @@ Demo::Demo(): TProgInit(&Demo::initStatusLine, &Demo::initMenuBar,
 {
 }
 
-void main()
+int main()
 {
 	TDeskTop::defaultBkgrnd = '?';
 	Demo a;
 	a.run();
+  return 0;
 }

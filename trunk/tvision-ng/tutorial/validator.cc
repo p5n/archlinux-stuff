@@ -130,8 +130,9 @@ MyDialog::MyDialog():
 	selectNext(False);
 }
 
-void main()
+int main()
 {
 	Demo a;
 	a.run();
+  return 0;
 }
