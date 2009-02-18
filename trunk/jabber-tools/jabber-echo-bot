@@ -1,0 +1,72 @@
+#!/usr/bin/perl
+
+#
+# USAGE:
+#   jabber-echo-bot <jid> <password> [<host> <port>]
+#
+
+use strict;
+use open ":utf8";
+use AnyEvent;
+use Net::XMPP2::IM::Connection;
+
+binmode STDOUT, ":utf8";
+
+my $DEBUG   = 0;  # set to 1 if you want to see a protocol dump
+my $TIMEOUT = 600; # timeout the whole program after $TIMEOUT seconds
+
+my ($jid, $pass, $host, $port) = @ARGV;
+
+my $j = AnyEvent->condvar;
+
+my $con;
+if(defined $host)
+{
+    $con =
+	Net::XMPP2::IM::Connection->new (
+    	    jid              => $jid,
+    	    password         => $pass,
+	    resource	     => "jabber echo bot",
+    	    initial_presence => -5,
+    	    override_host => $host,
+    	    override_port => $port)
+}
+else
+{
+    $con =
+	Net::XMPP2::IM::Connection->new (
+    	    jid              => $jid,
+    	    password         => $pass,
+	    resource	     => "jabber echo bot",
+    	    initial_presence => -5);
+}
+
+my $timer =
+   AnyEvent->timer (
+      after => 600, cb => sub { warn "got timeout, exiting..."; $j->broadcast }
+   );
+
+$con->reg_cb (
+   session_ready => sub {
+      my ($con) = @_;
+      print "session ready\n";
+   },
+   error => sub {
+      my ($con, $error) = @_;
+      warn "error: " . $error->string . "\n";
+   },
+   disconnect => sub {
+      my ($con, $host, $port, $message) = @_;
+      warn "disconnected from $host:$port: $message\n";
+      $j->broadcast;
+   },
+   message => sub {
+      my ($con, $msg) = @_;
+      print "MSG: ".$msg->from()." : ".$msg->body()."\n";
+      my $r = Net::XMPP2::IM::Message->new(body => $msg->body(), to => $msg->from());
+      $r->send($con);
+   }
+);
+
+$con->connect;
+$j->wait;
