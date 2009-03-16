@@ -1,12 +1,13 @@
 # Contributor: slubman <slubman.dndd@slubman.info>
 
 pkgname=psi-git
-pkgver=20090113
+pkgver=20090316
 pkgrel=1
 pkgdesc="A jabber client SVN version"
 arch=('i686' 'x86_64')
 makedepends=('subversion')
-depends=('qt' 'aspell' 'libxss' 'speex' 'ortp' 'glib2' 'libjingle')
+#depends=('qt' 'aspell' 'libxss' 'speex' 'ortp' 'glib2' 'libjingle')
+depends=('qt' 'aspell' 'libxss' 'speex' 'ortp' 'glib2')
 source=(psi-icon-actions-shortcuts.patch
 	psi-jingle-build-fix.patch)
 conflicts=('psi')
@@ -33,19 +34,20 @@ build() {
   msg "GIT checkout done or server timeout"
   msg "Starting make..."
 
-  rm -rf "$srcdir/${_gitname}-build"
-  cp -Lr "$srcdir/${_gitname}" "$srcdir/${_gitname}-build"
+##  rm -rf "$srcdir/${_gitname}-build"
+##  cp -Lr "$srcdir/${_gitname}" "$srcdir/${_gitname}-build"
   cd "$srcdir/${_gitname}-build"
 
   # building
   msg "Starting build"
 
-  patch -p1 <../psi-icon-actions-shortcuts.patch
+##  patch -p1 <../psi-icon-actions-shortcuts.patch
 #  patch -p1 <../psi-jingle-build-fix.patch
 
-  sed -i 's|#CONFIG += psi_plugins|CONFIG += psi_plugins|' src/src.pro
+##  sed -i 's|#CONFIG += psi_plugins|CONFIG += psi_plugins|' src/src.pro
 
-  ./configure-jingle --enable-jingle --prefix=/usr || return 1
+#  ./configure-jingle --enable-jingle --prefix=/usr || return 1
+##  ./configure --prefix=/usr || return 1
   make || return 1
   make INSTALL_ROOT=$startdir/pkg install || return 1
 
