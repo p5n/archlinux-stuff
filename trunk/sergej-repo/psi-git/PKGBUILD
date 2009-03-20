@@ -1,7 +1,7 @@
 # Contributor: slubman <slubman.dndd@slubman.info>
 
 pkgname=psi-git
-pkgver=20090316
+pkgver=20090320
 pkgrel=1
 pkgdesc="A jabber client SVN version"
 arch=('i686' 'x86_64')
@@ -20,6 +20,7 @@ _gitroot="git://git.psi-im.org/psi.git"
 _gitname="psi"
 
 build() {
+if false; then
   cd "$srcdir"
   msg "Connecting to GIT server...."
 
@@ -48,6 +49,9 @@ build() {
 
 #  ./configure-jingle --enable-jingle --prefix=/usr || return 1
   ./configure --prefix=/usr || return 1
+else
+  cd "$srcdir/${_gitname}-build"
+fi
   make || return 1
   make INSTALL_ROOT=$startdir/pkg install || return 1
 
