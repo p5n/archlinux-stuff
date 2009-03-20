@@ -20,7 +20,7 @@ _gitroot="git://git.psi-im.org/psi.git"
 _gitname="psi"
 
 build() {
-if false; then
+if true; then
   cd "$srcdir"
   msg "Connecting to GIT server...."
 
