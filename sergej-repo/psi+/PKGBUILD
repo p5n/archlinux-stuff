@@ -1,6 +1,6 @@
 # Contributor: Nicktian Lezver <nicktian@mailru>
 pkgname="psi+"
-pkgver=353
+pkgver=387
 pkgrel=1
 pkgdesc="Psi Mod from psi-dev@conference.jabber.ru"
 url="http://code.google.com/p/psi-dev/"
@@ -19,7 +19,7 @@ _gitname__="psi"
 
 build() {
   cd $srcdir
-if false; then
+if true; then
   msg "Getting patches from SVN"
   msg "connecting to ${_svntrunk}"
   if [ -d $srcdir/${_svnmod} ] ; then
@@ -56,6 +56,8 @@ if false; then
   sh series.txt
   msg "Building $pkgname ..."
 
+  sed -i 's|#CONFIG += whiteboarding|CONFIG += whiteboarding|' src/src.pro
+  sed -i 's|#CONFIG += psi_plugins|CONFIG += psi_plugins|' src/src.pro
   ./configure --prefix=/usr
 else
   cd $srcdir/${_gitname__}-build
@@ -65,5 +67,5 @@ fi
 
   # Copy Psi license
   install -D COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING" || return 1
-  rm -r $srcdir/${_gitname__}-build
+#  rm -r $srcdir/${_gitname__}-build
 }
