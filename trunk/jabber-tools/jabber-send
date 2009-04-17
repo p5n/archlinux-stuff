@@ -11,6 +11,7 @@ use AnyEvent;
 use Net::XMPP2::IM::Connection;
 
 binmode STDOUT, ":utf8";
+binmode STDIN, ":utf8";
 
 my $DEBUG   = 0;  # set to 1 if you want to see a protocol dump
 my $TIMEOUT = 600; # timeout the whole program after $TIMEOUT seconds
@@ -18,6 +19,7 @@ my $TIMEOUT = 600; # timeout the whole program after $TIMEOUT seconds
 my ($jid, $pass, $host, $port) = @ARGV;
 
 my $j = AnyEvent->condvar;
+my $session_ready = AnyEvent->condvar;
 
 my $con;
 if(defined $host)
@@ -26,10 +28,14 @@ if(defined $host)
 	Net::XMPP2::IM::Connection->new (
     	    jid              => $jid,
     	    password         => $pass,
-	    resource	     => "jabber echo bot",
+	    resource	     => "jabber bot",
     	    initial_presence => -5,
     	    override_host => $host,
-    	    override_port => $port)
+    	    override_port => $port);
+   shift @ARGV;
+   shift @ARGV;
+   shift @ARGV;
+   shift @ARGV;
 }
 else
 {
@@ -37,18 +43,28 @@ else
 	Net::XMPP2::IM::Connection->new (
     	    jid              => $jid,
     	    password         => $pass,
-	    resource	     => "jabber echo bot",
+	    resource	     => "jabber bot",
     	    initial_presence => -5);
+   shift @ARGV;
+   shift @ARGV;
 }
 
 my $timer =
    AnyEvent->timer (
-      after => $TIMEOUT, cb => sub { warn "got timeout, exiting..."; $j->broadcast }
+      after => 30, cb => sub { warn "got timeout, exiting..."; $j->broadcast }
    );
+
+my @tos=split /\s+/, <>;
+my $body = "";
+while(<>)
+{
+    $body .= $_;
+}
 
 $con->reg_cb (
    session_ready => sub {
       my ($con) = @_;
+      $session_ready->broadcast;
       print "session ready\n";
    },
    error => sub {
@@ -60,13 +76,18 @@ $con->reg_cb (
       warn "disconnected from $host:$port: $message\n";
       $j->broadcast;
    },
-   message => sub {
-      my ($con, $msg) = @_;
-      print "MSG: ".$msg->from()." : ".$msg->body()."\n";
-      my $r = Net::XMPP2::IM::Message->new(body => $msg->body(), to => $msg->from());
-      $r->send($con);
-   }
 );
 
 $con->connect;
+$session_ready->wait;
+
+my $to;
+foreach $to (@tos)
+{
+    chomp $to;
+    print "sending to $to\n";
+    my $r = Net::XMPP2::IM::Message->new(connection => $con, body => $body, to => $to, from => $jid);
+    $r->send;
+}
+
 $j->wait;
