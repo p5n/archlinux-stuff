@@ -1,0 +1,25 @@
+# Contributor: Piotr Beling <qwak@stud.ics.p.lodz.pl>
+
+pkgname=firefox-noscript
+pkgver=1.9.2.6
+_firefox_ver=3.0
+pkgrel=1
+pkgdesc="plugin for firefox which disables script"
+arch=('i686' 'x86_64')
+url="http://noscript.net/"
+license=('GPL2')
+depends=(firefox)
+makedepends=('unzip')
+_addons_file=52347
+source=(https://addons.mozilla.org/downloads/file/$_addons_file/noscript-$pkgver-fx+sm+fn.xpi)
+md5sums=('4ff9afbd3e6bd19d714f0dea81e43a3a')
+
+build() {
+    cd $srcdir		|| return 1
+    #this method comes from gentoo (http://kambing.ui.edu/gentoo-portage/eclass/mozextension.eclass):
+    local emid=$(sed -n -e '/<\?em:id>\?/!d; s/.*\([\"{].*[}\"]\).*/\1/; s/\"//g; p; q' install.rdf) || return 1
+    local dstdir=$pkgdir/usr/lib/firefox-$_firefox_ver/extensions/${emid}
+    install -d $dstdir		|| return 1
+    cp -R * $dstdir		|| return 1
+    rm $dstdir/noscript-$pkgver-fx+sm+fn.xpi
+}

@@ -1,0 +1,25 @@
+# Contributor: Piotr Beling <qwak@stud.ics.p.lodz.pl>
+
+pkgname=firefox-adblock-plus
+pkgver=1.0.2
+_firefox_ver=3.0
+pkgrel=1
+pkgdesc="plugin for firefox which block ads and banners"
+arch=('i686' 'x86_64')
+url="http://adblockplus.org/"
+license=('GPL')
+depends=(firefox)
+makedepends=('unzip')
+_addons_file=42123
+source=(https://addons.mozilla.org/downloads/file/$_addons_file/adblock_plus-$pkgver-fx+sm+tb.xpi)
+md5sums=('b5bfbff7f834266c52a0cfca45e8f6f2')
+
+build() {
+    cd $srcdir		|| return 1
+    #this method comes from gentoo (http://kambing.ui.edu/gentoo-portage/eclass/mozextension.eclass):
+    local emid=$(sed -n -e '/<\?em:id>\?/!d; s/.*\([\"{].*[}\"]\).*/\1/; s/\"//g; p; q' install.rdf) || return 1
+    local dstdir=$pkgdir/usr/lib/firefox-$_firefox_ver/extensions/${emid}
+    install -d $dstdir		|| return 1
+    cp -R * $dstdir		|| return 1
+    rm $dstdir/adblock_plus-$pkgver-fx+sm+tb.xpi
+}
