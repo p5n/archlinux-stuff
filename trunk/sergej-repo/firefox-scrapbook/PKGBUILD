@@ -1,16 +1,16 @@
-pkgname=firefox-noscript
-pkgver=1.9.2.6
+pkgname=firefox-scrapbook
+pkgver=1.3.3.9
 _firefox_ver=3.0
 pkgrel=1
-pkgdesc="plugin for firefox which disables script"
+pkgdesc="plugin for firefox which can save and organize saved pages"
 arch=('i686' 'x86_64')
-url="http://noscript.net/"
+url="http://amb.vis.ne.jp/mozilla/scrapbook/"
 license=('GPL2')
 depends=(firefox)
 makedepends=('unzip')
-_addons_file=52347
-source=(https://addons.mozilla.org/downloads/file/$_addons_file/noscript-$pkgver-fx+sm+fn.xpi)
-md5sums=('4ff9afbd3e6bd19d714f0dea81e43a3a')
+_addons_file=41964
+source=(https://addons.mozilla.org/downloads/file/$_addons_file/scrapbook-$pkgver-fx.xpi)
+md5sums=('75dee7a08b1ef1837d3c0bb5d0cb51a8')
 
 build() {
     cd $srcdir		|| return 1
@@ -19,5 +19,5 @@ build() {
     local dstdir=$pkgdir/usr/lib/firefox-$_firefox_ver/extensions/${emid}
     install -d $dstdir		|| return 1
     cp -R * $dstdir		|| return 1
-    rm $dstdir/noscript-$pkgver-fx+sm+fn.xpi
+    rm $dstdir/scrapbook-$pkgver-fx.xpi
 }
