@@ -1,6 +1,6 @@
 # Contributor: Nicktian Lezver <nicktian@mailru>
 pkgname="psi+"
-pkgver=387
+pkgver=468
 pkgrel=1
 pkgdesc="Psi Mod from psi-dev@conference.jabber.ru"
 url="http://code.google.com/p/psi-dev/"
@@ -19,7 +19,7 @@ _gitname__="psi"
 
 build() {
   cd $srcdir
-if true; then
+if false; then
   msg "Getting patches from SVN"
   msg "connecting to ${_svntrunk}"
   if [ -d $srcdir/${_svnmod} ] ; then
