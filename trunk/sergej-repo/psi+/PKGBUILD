@@ -19,7 +19,7 @@ _gitname__="psi"
 
 build() {
   cd $srcdir
-if false; then
+if true; then
   msg "Getting patches from SVN"
   msg "connecting to ${_svntrunk}"
   if [ -d $srcdir/${_svnmod} ] ; then
