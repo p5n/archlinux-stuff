@@ -1,0 +1,35 @@
+# Contributor: Konstantin Sharlaimov <konstantin.sharlaimov@gmail.com>
+
+pkgname=ipcad
+pkgver=3.7.3
+pkgrel=1
+pkgdesc="IP Cisco Accounting Daemon"
+arch=('i686' 'x86_64')
+url="http://lionet.info/ipcad/"
+license=("GPL")
+depends=('netkit-rsh' 'libpcap')
+backup=(etc/ipcad/ipcad.conf)
+source=('http://lionet.info/soft/ipcad-3.7.3.tar.gz'
+	'ipcad')
+md5sums=('125605249958894148ec26d3c88189f5'
+         'b61b0ffa3ace50342b0b5ffff2256e60')
+
+build() {
+  cd ${startdir}/src/${pkgname}-${pkgver}/
+
+  mkdir -p ${startdir}/pkg/etc/rc.d \
+    ${startdir}/pkg/usr/share/man/man{5,8} \
+    $pkgdir/var/lib/ipcad
+
+  sed -i '32,1i#include <linux/netfilter.h>' loop-ipq.c
+
+  ./configure --prefix=/usr --sysconfdir=/etc/ipcad --mandir=/usr/share/man --enable-static --disable-shared
+  make || return 1
+  make DESTDIR=${startdir}/pkg install || return 1
+  make DESTDIR=${startdir}/pkg install-man || return 1
+
+  install -m 755 ${startdir}/src/ipcad ${startdir}/pkg/etc/rc.d && \
+  sed -i 's#/adm/tmp#/var/lib/ipcad#' $pkgdir/etc/ipcad/ipcad.conf* && \
+  touch $pkgdir/var/lib/ipcad/ipcad.dump && \
+  chmod 0600 $pkgdir/var/lib/ipcad/ipcad.dump
+}
