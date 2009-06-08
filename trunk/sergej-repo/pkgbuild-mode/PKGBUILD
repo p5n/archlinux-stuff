@@ -1,0 +1,19 @@
+# Maintainer: Eric Belanger <eric@archlinux.org>
+# Contributor: Oscar Carlsson (monotux@gmail.com)
+
+pkgname=pkgbuild-mode
+pkgver=0.9
+pkgrel=1
+pkgdesc="A major mode for creating packages with emacs"
+arch=('i686' 'x86_64')
+url="http://www.hoetzel.info/Hacking/emacs/"
+license=("GPL")
+depends=('emacs')
+install=pkgbuild-mode.install
+#source=(http://www.hoetzel.info/Hacking/emacs/$pkgname.el)
+source=(http://arch.pp.ru/~sergej/dl/pkgbuild-mode.el.gz)
+md5sums=('e84935c4238a5f0ca7a44a4ac37954b3')
+
+build() {
+  install -D -m644 $startdir/src/pkgbuild-mode.el $startdir/pkg/usr/share/emacs/site-lisp/pkgbuild-mode.el
+}
