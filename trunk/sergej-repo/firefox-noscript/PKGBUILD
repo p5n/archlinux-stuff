@@ -1,5 +1,5 @@
 pkgname=firefox-noscript
-pkgver=1.9.2.6
+pkgver=1.9.3.3
 _firefox_ver=3.0
 pkgrel=1
 pkgdesc="plugin for firefox which disables script"
@@ -8,9 +8,11 @@ url="http://noscript.net/"
 license=('GPL2')
 depends=(firefox)
 makedepends=('unzip')
-_addons_file=52347
-source=(https://addons.mozilla.org/downloads/file/$_addons_file/noscript-$pkgver-fx+sm+fn.xpi)
-md5sums=('4ff9afbd3e6bd19d714f0dea81e43a3a')
+#_addons_file=52347
+#source=(https://addons.mozilla.org/downloads/file/$_addons_file/noscript-$pkgver-fx+sm+fn.xpi)
+source=(http://software.informaction.com/data/releases/noscript-$pkgver.xpi)
+#md5sums=('4ff9afbd3e6bd19d714f0dea81e43a3a')
+md5sums=('0d6e23c4a77f004a66c32e71a10055ba')
 
 build() {
     cd $srcdir		|| return 1

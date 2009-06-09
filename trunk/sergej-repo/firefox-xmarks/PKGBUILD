@@ -1,5 +1,5 @@
 pkgname=firefox-xmarks
-pkgver=3.1.0
+pkgver=3.1.1
 _firefox_ver=3.0
 pkgrel=1
 pkgdesc="plugin for firefox which synchronizes bookmarks and passwords"
@@ -8,18 +8,20 @@ url="http://www.xmarks.com/"
 license=('custom')
 depends=(firefox)
 makedepends=('unzip')
-_addons_file=52383
-source=(https://addons.mozilla.org/downloads/file/$_addons_file/xmarks-$pkgver-fx.xpi)
-md5sums=('a30355777ddcc566a5b22167b119300d')
+#_addons_file=52383
+#source=(https://addons.mozilla.org/downloads/file/$_addons_file/xmarks-$pkgver-fx.xpi)
+source=(https://static.xmarks.com/clients/firefox/xmarks-$pkgver.xpi)
+md5sums=('402be1cb07fd877b30c360d7d8a5811e')
 
 build() {
     cd $srcdir		|| return 1
     #this method comes from gentoo (http://kambing.ui.edu/gentoo-portage/eclass/mozextension.eclass):
     local emid=$(sed -n -e '/<\?em:id>\?/!d; s/.*\([\"{].*[}\"]\).*/\1/; s/\"//g; p; q' install.rdf) || return 1
     local dstdir=$pkgdir/usr/lib/firefox-$_firefox_ver/extensions/${emid}
+    mkdir -p $pkgdir/usr/share/licenses/$pkgname/
     install -d $dstdir		|| return 1
     cp -R * $dstdir		|| return 1
-    rm $dstdir/xmarks-$pkgver-fx.xpi
+    rm $dstdir/xmarks-$pkgver.xpi
 
     cat <<EOF >$pkgdir/usr/share/licenses/$pkgname/license
 Copyright 2009 XMarks, Inc.  All Rights Reserved.
