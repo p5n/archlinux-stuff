@@ -1,0 +1,70 @@
+pkgname=mc-git
+pkgver=20090625
+pkgrel=1
+pkgdesc="GNU Midnight Commander is a s-lang based file manager"
+url="http://midnight-commander.org/"
+arch=('i686' 'x86_64')
+license=('GPL')
+depends=('glibc' 'glib2' 'slang')
+makedepends=('git' 'pkgconfig' 'automake' 'autoconf')
+conflicts=('mc' 'mc-cvs' 'mc-fork-svn' 'mc-mp' 'mc-slavz' 'mc-suse')
+provides=('mc')
+options=(!distcc)
+source=(PKGBUILD.syntax)
+install=mc-git.install
+md5sums=('38f5f5fd769ec92d4738974db896c301')
+
+_gitroot="git://midnight-commander.org/git/mc.git"
+_gitname="mc"
+
+build() {
+    cd ${srcdir}
+
+if [ $NOEXTRACT -ne 1 ]; then
+    msg "Connecting to the git repository..."
+    if [ -d ${srcdir}/${_gitname} ]; then
+        cd ${_gitname}
+        git pull origin
+    else
+        git clone ${_gitroot}
+    fi
+    msg "GIT checkout done or server timeout"
+
+    rm -rf ${srcdir}/${_gitname}-build
+    cp -Lr  ${srcdir}/${_gitname} ${srcdir}/${_gitname}-build
+    cd ${srcdir}/${_gitname}-build
+
+    ./autogen.sh
+
+    export MCREVISION="$(git describe --tags)"
+
+    msg "Configuring..."
+    CFLAGS="-std=gnu99" ./configure                     \
+        --prefix=/usr               \
+        --sysconfdir=/etc           \
+        --libexecdir=/usr/lib       \
+        --enable-background         \
+        --enable-network            \
+        --enable-netcode            \
+        --enable-charset            \
+        --enable-nls                \
+        --with-vfs                  \
+        --with-edit                 \
+        --with-screen=slang         \
+        --with-x                 \
+        --with-samba             \
+        --without-gpm-mouse         \
+        --without-gnome             \
+        --without-debug             \
+        --without-included-gettext  \
+        --disable-dependency-tracking
+else
+    cd ${srcdir}/${_gitname}-build
+fi
+    msg "Starting make..."
+    make || return 1
+    make DESTDIR=${pkgdir} install || return 1
+
+    install -D -m0644 $srcdir/PKGBUILD.syntax $pkgdir/usr/share/mc/syntax/PKGBUILD.syntax && \
+    rm -f $pkgdir/usr/share/mc/extfs/u7z
+}
