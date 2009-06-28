@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-$destdir = "/var/abs/unsupported";
+$destdir = $ARGV[0];
 $aur_zone_shift = -6*3600;
 
 use POSIX;
@@ -35,9 +35,9 @@ while(<FH>)
     if(/.a href=.(\S+)\/">/)
     {
 	$name = $1;
-	if(/(\d{2})-(\S{3})-(\d{4}) (\d{2}):(\d{2})\s+/)
+	if(/(\d{4})-(\S{3})-(\d{2}) (\d{2}):(\d{2}):\d{2}</)
 	{
-	    $PACKAGES{$name} = POSIX::mktime(0, $5, $4, $1, $months{$2}-1, $3-1900);
+	    $PACKAGES{$name} = POSIX::mktime(0, $5, $4, $3, $months{$2}-1, $1-1900);
 	}
     }
 }
