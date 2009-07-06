@@ -1,6 +1,6 @@
 pkgname=firefox-noscript
-pkgver=1.9.3.3
-_firefox_ver=3.0
+pkgver=1.9.5
+_firefox_ver=3.5
 pkgrel=1
 pkgdesc="plugin for firefox which disables script"
 arch=('i686' 'x86_64')
@@ -8,11 +8,8 @@ url="http://noscript.net/"
 license=('GPL2')
 depends=(firefox)
 makedepends=('unzip')
-#_addons_file=52347
-#source=(https://addons.mozilla.org/downloads/file/$_addons_file/noscript-$pkgver-fx+sm+fn.xpi)
 source=(http://software.informaction.com/data/releases/noscript-$pkgver.xpi)
-#md5sums=('4ff9afbd3e6bd19d714f0dea81e43a3a')
-md5sums=('0d6e23c4a77f004a66c32e71a10055ba')
+md5sums=('203a82724e12e4b0d3ea99fa61fe39d3')
 
 build() {
     cd $srcdir		|| return 1
@@ -20,6 +17,7 @@ build() {
     local emid=$(sed -n -e '/<\?em:id>\?/!d; s/.*\([\"{].*[}\"]\).*/\1/; s/\"//g; p; q' install.rdf) || return 1
     local dstdir=$pkgdir/usr/lib/firefox-$_firefox_ver/extensions/${emid}
     install -d $dstdir		|| return 1
+    sed -i 's#<em:maxVersion>.*</em:maxVersion>#<em:maxVersion>3.*</em:maxVersion>#' install.rdf
     cp -R * $dstdir		|| return 1
-    rm $dstdir/noscript-$pkgver-fx+sm+fn.xpi
+    rm $dstdir/noscript-$pkgver.xpi
 }
