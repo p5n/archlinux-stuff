@@ -1668,9 +1668,26 @@ sub output_awesome_menu ($;$)
     $indent = 0 unless defined $indent;
 
     my $menu_name = "menu".md5_hex($menu->{'PrepName'});
+    if($indent == 0)
+    {
+        $menu_name = "xdgmenu";
+    }
+
+    foreach my $entry (@{$menu->{'entries'}})
+    {
+        if ($entry->{type} eq 'menu')
+        {
+            push @pending_list, $entry;
+        }
+    }
+
+    foreach my $entry (@pending_list)
+    {
+        $output .= output_awesome_menu ($entry->{'menu'}, $indent + 1);
+    }
 
     $output .= ' ' x $indent;
-    $output = $menu_name." = {";
+    $output .= $menu_name." = {";
 
     foreach my $entry (@{$menu->{'entries'}})
     {
@@ -1681,14 +1698,13 @@ sub output_awesome_menu ($;$)
             my $name = $desktop->{'PrepName'};
             my $exec = $desktop->{'PrepExec'};
 
-	    $exec =~ s/"/\\"/g;
+            $exec =~ s/"/\\"/g;
 
             $output .= ' ' x $indent;
             $output .= "    {\"$name\", \"$exec\"},\n";
         }
         elsif ($entry->{type} eq 'menu')
         {
-            push @pending_list, $entry;
             $output .= "    {\"".$entry->{'menu'}->{'PrepName'}."\", "."menu".md5_hex($entry->{'menu'}->{'PrepName'})."},\n";
         }
         else
@@ -1698,12 +1714,7 @@ sub output_awesome_menu ($;$)
 
     }
     $output .= ' ' x $indent;
-    $output .= "}\n";
-
-    foreach my $entry (@pending_list)
-    {
-        $output .= output_awesome_menu ($entry->{'menu'}, $indent + 1);
-    }
+    $output .= "}\n\n";
 
     return $output;
 }
