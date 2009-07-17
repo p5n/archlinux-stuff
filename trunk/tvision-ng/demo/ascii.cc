@@ -208,7 +208,7 @@ void TReport::draw()
     TDrawBuffer buf;
     char        color = getColor(6);
     char        str[80];
-    ostringstream  statusStr( str, sizeof str );
+    ostringstream  statusStr( str );
 
     statusStr
       << "  Char: " << (char ) ((asciiChar == 0) ? 0x20 : asciiChar)

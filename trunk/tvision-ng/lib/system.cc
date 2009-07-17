@@ -2310,7 +2310,7 @@ long int filelength(std::ifstream &fd)
 
 void expandPath(const char *path, char *dir, char *file)
 {
-	char *tag = strrchr(path, '/');
+	char *tag = (char*)strrchr(path, '/');
 
 	/* the path is in the form /dir1/dir2/file ? */
 
