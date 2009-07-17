@@ -33,7 +33,7 @@ __link( RButton )
 #include <stdlib.h>
 #include <ctype.h>
 #include <sstream>
-#include <iomanip.h>
+#include <iomanip>
 
 #include "calc.h"
 
@@ -160,7 +160,7 @@ void TCalcDisplay::setDisplay(double r)
 {
     int  len;
     char str[64];
-    ostrstream displayStr( str, sizeof str );
+    ostringstream displayStr( str );
 
     if(r < 0.0)
         {

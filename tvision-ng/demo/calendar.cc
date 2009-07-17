@@ -29,8 +29,8 @@ __link( RWindow )
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
-#include <strstream.h>
-#include <iomanip.h>
+#include <sstream>
+#include <iomanip>
 #include <time.h>
 
 #include "calendar.h"
@@ -146,7 +146,7 @@ void TCalendarView::draw()
 
     buf.moveChar(0, ' ', color, 22);
 
-    ostrstream s1( str, sizeof str);
+    ostringstream s1( str);
     s1 << setw(9) << monthNames[month] << " " << setw(4) << year
       << " " << (char) 30 << "  " << (char) 31 << " " << ends;
 
@@ -166,7 +166,7 @@ void TCalendarView::draw()
                 buf.moveStr((short)(j*3), "   ", color);
             else
                 {
-                ostrstream s2( str, sizeof str );
+                ostringstream s2( str);
 		s2 << setw(2) << (int) current << ends;
                 if(year == curYear && month == curMonth && current ==
 			(int)curDay)
