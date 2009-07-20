@@ -21,9 +21,11 @@ backup=(etc/ziproxy/ziproxy.conf
 	var/lib/ziproxy/error/500.html
 	var/lib/ziproxy/error/503.html)
 source=(http://internap.dl.sourceforge.net/sourceforge/ziproxy/$pkgname-$pkgver.tar.bz2
-	ziproxy)
+	ziproxy
+	ziproxy.logrotate)
 md5sums=('cfc7d59d31bb889121dd9f1e77bc0124'
-         '41108c6c91481053947c39615fd6f165')
+         '41108c6c91481053947c39615fd6f165'
+         '286e7d17c9443be825a178d812668f31')
 
 build() {
   cd $srcdir/$pkgname-$pkgver
@@ -41,5 +43,6 @@ build() {
   install -m644 etc/ziproxy/* $pkgdir/etc/ziproxy && \
   install -m644 var/ziproxy/error/* $pkgdir/var/lib/ziproxy/error && \
   echo "ZIPROXY_ARGS=\"-c /etc/ziproxy/ziproxy.conf\"" >$pkgdir/etc/conf.d/ziproxy && \
-  install -m755 $srcdir/ziproxy $pkgdir/etc/rc.d
+  install -m755 $srcdir/ziproxy $pkgdir/etc/rc.d && \
+  install -Dm0644 $srcdir/ziproxy.logrotate $pkgdir/etc/logrotate.d/ziproxy
 }
