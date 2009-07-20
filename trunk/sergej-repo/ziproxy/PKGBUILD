@@ -28,7 +28,7 @@ md5sums=('cfc7d59d31bb889121dd9f1e77bc0124'
 build() {
   cd $srcdir/$pkgname-$pkgver
 
-  ./configure --prefix=/usr
+  ./configure --prefix=/usr --with-jasper
   make || return 1
   make DESTDIR=$pkgdir install || return 1
 
