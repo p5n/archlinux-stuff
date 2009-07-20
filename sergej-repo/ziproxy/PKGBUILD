@@ -1,8 +1,8 @@
 # Contributor: Yejun Yang yejunx AT gmail DOT com
 
 pkgname=ziproxy
-pkgver=2.6.0
-pkgrel=4
+pkgver=2.7.0
+pkgrel=1
 pkgdesc="Ziproxy is forwarding, non-caching, compressing HTTP proxy server."
 arch=('i686' 'x86_64')
 url="http://ziproxy.sourceforge.net/"
@@ -22,8 +22,8 @@ backup=(etc/ziproxy/ziproxy.conf
 	var/lib/ziproxy/error/503.html)
 source=(http://internap.dl.sourceforge.net/sourceforge/ziproxy/$pkgname-$pkgver.tar.bz2
 	ziproxy)
-md5sums=('b7d57ace56a3be34446ef1b68ac85205'
-	'41108c6c91481053947c39615fd6f165')
+md5sums=('cfc7d59d31bb889121dd9f1e77bc0124'
+         '41108c6c91481053947c39615fd6f165')
 
 build() {
   cd $srcdir/$pkgname-$pkgver
