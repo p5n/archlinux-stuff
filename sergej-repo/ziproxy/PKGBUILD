@@ -29,7 +29,7 @@ source=(http://internap.dl.sourceforge.net/sourceforge/ziproxy/$pkgname-$pkgver.
 md5sums=('cfc7d59d31bb889121dd9f1e77bc0124'
          '41108c6c91481053947c39615fd6f165'
          '286e7d17c9443be825a178d812668f31'
-         'ee776d904fe12f9a4b5aff13c587c4bd')
+         '3d2f9208b5ab6738c136049e1fd2e433')
 
 build() {
   cd $srcdir/$pkgname-$pkgver
