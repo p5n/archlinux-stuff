@@ -151,9 +151,11 @@ foreach my $row (@$all)
     $packagefile = $DIR."/".$$row[1];
     if(!stat $packagefile)
     {
+	$pkgtime = time;
+	$pkgname = $$row[0];
 	print STDERR "Deleting: $packagefile\n";
 	$db->do("INSERT INTO log VALUES (NULL, $pkgtime, $OP_DEL, '$pkgname')");
-	$db->do("DELETE FROM packages WHERE pkgname='".$$row[0]."'");
+	$db->do("DELETE FROM packages WHERE pkgname='$pkgname'");
     }
 }
 
