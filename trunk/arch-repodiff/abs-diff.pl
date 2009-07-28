@@ -105,6 +105,7 @@ $count_hidden = 0;
 $count_reldiff = 0;
 $count_absent = 0;
 
+mloop:
 foreach $i (sort keys %PKGS)
 {
     if($i =~ /^(.+)\/(.+)$/)
@@ -115,6 +116,11 @@ foreach $i (sort keys %PKGS)
     else
     {
         die("bad param");
+    }
+
+    if($pkg =~ /^lib32\-.+/)
+    {
+	next mloop;
     }
 
     $org_p1 = `arch-repodiff-pkginfo $basedir/$arch1/$repo/$group/$pkg/PKGBUILD`;
