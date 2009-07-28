@@ -6,7 +6,8 @@ pkgdesc="Psi Mod from psi-dev@conference.jabber.ru"
 url="http://code.google.com/p/psi-dev/"
 license=('GPL2')
 arch=('i686' 'x86_64')
-depends=('qt' 'aspell' 'libxss' 'openssl' 'dbus' 'zlib' 'libjingle')
+depends=('qt' 'aspell' 'libxss' 'openssl' 'dbus' 'zlib')
+optdepends=('psimedia: for voice calls')
 makedepends=("subversion")
 conflicts=('psi-git' 'psi' 'psi-svn')
 provides=('psi')
@@ -18,7 +19,7 @@ _gitname__="psi"
 
 build() {
   cd $srcdir
-if false; then
+if true; then
   msg "Getting patches from SVN"
   msg "connecting to ${_svntrunk}"
   if [ -d $srcdir/${_svnmod} ] ; then
