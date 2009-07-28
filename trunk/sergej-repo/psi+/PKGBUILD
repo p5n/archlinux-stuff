@@ -1,12 +1,12 @@
 # Contributor: Nicktian Lezver <nicktian@mailru>
 pkgname="psi+"
-pkgver=738
+pkgver=795
 pkgrel=1
 pkgdesc="Psi Mod from psi-dev@conference.jabber.ru"
 url="http://code.google.com/p/psi-dev/"
 license=('GPL2')
 arch=('i686' 'x86_64')
-depends=('qt' 'aspell' 'libxss' 'openssl' 'dbus' 'zlib')
+depends=('qt' 'aspell' 'libxss' 'openssl' 'dbus' 'zlib' 'libjingle')
 makedepends=("subversion")
 conflicts=('psi-git' 'psi' 'psi-svn')
 provides=('psi')
@@ -58,6 +58,7 @@ if false; then
   sed -i 's|#CONFIG += whiteboarding|CONFIG += whiteboarding|' src/src.pro
   sed -i 's|#CONFIG += psi_plugins|CONFIG += psi_plugins|' src/src.pro
   ./configure --prefix=/usr
+  sed -i '1,1i#include <QDebug>' src/sxe/sxerecord.cpp src/sxe/sxeedit.cpp
 else
   cd $srcdir/${_gitname__}-build
 fi
