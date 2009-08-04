@@ -35,16 +35,10 @@ open FIND, "find $basedir/$arch1/$repo -name PKGBUILD -exec dirname {} \\; |" ||
 while(<FIND>)
 {
     chomp;
-    if($repo ne "community" and /\/($template)$/i)
+    if(/\/($template)$/i)
     {
         $group = ".";
 	$pkg = $1;
-	$PKGS{$group."/".$pkg} = 1;
-    }
-    elsif($repo eq "community" and /\/($template)\/($template)$/i)
-    {
-        $group = $1;
-	$pkg = $2;
 	$PKGS{$group."/".$pkg} = 1;
     }
     else
