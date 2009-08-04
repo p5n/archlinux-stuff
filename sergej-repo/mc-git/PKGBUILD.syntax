@@ -1,23 +1,24 @@
 # Sergej Pupykin <pupykin.s@gmail.com>
 
 context default
+    keyword whole linestart pkgbase brightblue
     keyword whole linestart pkgname brightblue
     keyword whole linestart pkgver brightblue
     keyword whole linestart pkgrel brightblue
-    keyword whole linestart pkgdesc brightblue
+    keyword whole linestart \[\s\]*pkgdesc brightblue
     keyword whole linestart arch brightblue
     keyword whole linestart url brightblue
     keyword whole linestart license brightblue
-    keyword whole linestart groups brightblue
-    keyword whole linestart depends brightblue
-    keyword whole linestart makedepends brightblue
-    keyword whole linestart optdepends brightblue
-    keyword whole linestart provides brightblue
-    keyword whole linestart conflicts brightblue
-    keyword whole linestart replaces brightblue
+    keyword whole linestart \[\s\]*groups brightblue
+    keyword whole linestart \[\s\]*depends brightblue
+    keyword whole linestart \[\s\]*makedepends brightblue
+    keyword whole linestart \[\s\]*optdepends brightblue
+    keyword whole linestart \[\s\]*provides brightblue
+    keyword whole linestart \[\s\]*conflicts brightblue
+    keyword whole linestart \[\s\]*replaces brightblue
     keyword whole linestart backup brightblue
     keyword whole linestart options brightblue
-    keyword whole linestart install brightblue
+    keyword whole linestart \[\s\]*install brightblue
     keyword whole linestart source brightblue
     keyword whole linestart noextract brightblue
     keyword whole linestart backup brightblue
@@ -130,6 +131,7 @@ wholechars abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._
     keyword whole bsh cyan
     keyword whole cat cyan
     keyword whole cd cyan
+    keyword whole cmake cyan
     keyword whole chgrp cyan
     keyword whole chmod cyan
     keyword whole chown cyan
@@ -179,6 +181,7 @@ wholechars abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._
     keyword whole netstat cyan
     keyword whole nice cyan
     keyword whole nisdomainname cyan
+    keyword whole patch cyan
     keyword whole ping cyan
     keyword whole ps cyan
     keyword whole pwd cyan
@@ -329,6 +332,7 @@ wholechars abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._
     keyword whole chgrp cyan
     keyword whole chmod cyan
     keyword whole chown cyan
+    keyword whole cmake cyan
     keyword whole cp cyan
     keyword whole cpio cyan
     keyword whole csh cyan
@@ -374,6 +378,7 @@ wholechars abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._
     keyword whole netstat cyan
     keyword whole nice cyan
     keyword whole nisdomainname cyan
+    keyword whole patch cyan
     keyword whole ping cyan
     keyword whole ps cyan
     keyword whole pwd cyan

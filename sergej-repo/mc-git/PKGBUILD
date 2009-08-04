@@ -12,7 +12,7 @@ provides=('mc')
 options=(!distcc)
 source=(PKGBUILD.syntax)
 install=mc-git.install
-md5sums=('38f5f5fd769ec92d4738974db896c301')
+md5sums=('494f163dcb08ad73657ed064b7252a67')
 
 _gitroot="git://midnight-commander.org/git/mc.git"
 _gitname="mc"
