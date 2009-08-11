@@ -8,7 +8,7 @@ arch=('i686' 'x86_64')
 url="http://java.sun.com/"
 license=('custom')
 options=('docs')
-source=('http://cds.sun.com/is-bin/INTERSHOP.enfinity/WFS/CDS-CDS_Developer-Site/en_US/-/USD/VerifyItem-Start/jdk-6u10-docs.zip?BundledLineItemUUID=ujRIBe.lOIMAAAEhg1c_51_W&OrderID=KeVIBe.loowAAAEhdVc_51_W&ProductID=vEZIBe.pSRoAAAEb288vh9aV&FileName=/jdk-6u10-docs.zip')
+source=('ftp://ftp.cs.wcupa.edu/pub/rkline/general/jdk-6u10-docs.zip')
 md5sums=('01a8f6b06f6a5396a96dd656162710e6')
 
 build(){
