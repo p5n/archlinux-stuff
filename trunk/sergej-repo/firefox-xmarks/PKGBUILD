@@ -1,17 +1,15 @@
 pkgname=firefox-xmarks
-pkgver=3.1.1
+pkgver=3.3.1
 _firefox_ver=3.5
 pkgrel=1
 pkgdesc="plugin for firefox which synchronizes bookmarks and passwords"
-arch=('i686' 'x86_64')
+arch=('any')
 url="http://www.xmarks.com/"
 license=('custom')
 depends=(firefox)
 makedepends=('unzip')
-#_addons_file=52383
-#source=(https://addons.mozilla.org/downloads/file/$_addons_file/xmarks-$pkgver-fx.xpi)
 source=(https://static.xmarks.com/clients/firefox/xmarks-$pkgver.xpi)
-md5sums=('402be1cb07fd877b30c360d7d8a5811e')
+md5sums=('501906e476988a044714838493daf4f8')
 
 build() {
     cd $srcdir		|| return 1
