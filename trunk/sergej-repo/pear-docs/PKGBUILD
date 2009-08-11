@@ -1,0 +1,19 @@
+# Contributor: Andrea Scarpino <andrea@archlinux.org>
+
+pkgname=pear-docs
+pkgver=1.7.2
+pkgrel=1
+pkgdesc="Set of HTML documentation for PEAR."
+arch=('i686' 'x86_64')
+url="http://pear.php.net/manual"
+license=('openpub')
+depends=('php')
+options=('docs')
+source=(http://pear.php.net/distributions/manual/pear_manual_en.tar.gz)
+md5sums=('a4387cd640d9546479ba3a1f98f177f2')
+
+build(){
+  cd $srcdir
+  install -d $pkgdir/usr/share/doc/pear
+  cp -rf pear_manual_en/* $pkgdir/usr/share/doc/pear || return 1
+}

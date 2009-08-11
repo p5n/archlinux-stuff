@@ -1,0 +1,19 @@
+# Contributor: Andrea Scarpino <bash.lnx@gmail.com>
+
+pkgname=ruby-docs
+pkgver=1.8.6
+pkgrel=1
+pkgdesc="Set of HTML documentation for Ruby."
+arch=('i686' 'x86_64')
+url="http://www.ruby-doc.org/"
+license=('GPL')
+depends=('ruby')
+options=('docs')
+source=(http://www.ruby-doc.org/download/ruby-$pkgver-core-rdocs.tgz)
+md5sums=('788c26ea48796d21929f7a44e36ca630')
+
+build(){
+  cd "$srcdir/core-1.8.6_HEAD"
+  mkdir -p "$pkgdir/usr/share/doc/ruby"
+  cp -rf * "$pkgdir/usr/share/doc/ruby" || return 1
+}
