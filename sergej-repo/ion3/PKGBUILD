@@ -1,18 +1,22 @@
 pkgname=ion3
 pkgver=20090110
-pkgrel=1
+pkgrel=2
 pkgdesc="Ion is a tiling windowmanager with tabbed frames scriptable in Lua."
 arch=(i686 x86_64)
 url="http://iki.fi/tuomov/ion/"
 depends=('libsm' 'lua')
+makedepends=('rubber' 'latex2html')
 license=('GPL')
 conflicts=(ion)
 provides=(ion)
-source=(http://iki.fi/tuomov/dl/ion-3-$pkgver.tar.gz)
-md5sums=('1f17be1e87187b4af7de047187cc4930')
+options=(docs)
+source=(http://iki.fi/tuomov/dl/ion-3-$pkgver.tar.gz
+	http://iki.fi/tuomov/dl/ion-doc-3-$pkgver.tar.gz)
+md5sums=('1f17be1e87187b4af7de047187cc4930'
+         '0ec0b5568864cda00053cdaad84f3885')
 
 build() {
-  cd $startdir/src/ion-3-$pkgver
+  cd $srcdir/ion-3-$pkgver
 
   sed -i "s#PREFIX=/usr/local#PREFIX=/usr#" system.mk || return 1
   sed -i "s#ETCDIR=\$(PREFIX)/etc/ion3#ETCDIR=\$(PREFIX)/../etc/ion3#" system.mk || return 1
@@ -22,4 +26,10 @@ build() {
 
   sed -i "s#PREFIX=/usr#PREFIX=$startdir/pkg/usr#" system.mk || return 1
   make install || return 1
+
+  # docs
+  cd $srcdir/ion-doc-3-$pkgver
+  sed -i 's#.*tocbibind.*##' macros.tex
+  make TOPDIR=$srcdir/ion-3-$pkgver RUBBER_PS=dvips all || return 1
+  make TOPDIR=$srcdir/ion-3-$pkgver RUBBER_PS=dvips install
 }

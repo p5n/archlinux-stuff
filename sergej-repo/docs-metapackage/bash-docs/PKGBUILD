@@ -1,0 +1,19 @@
+# Contributor: Andrea Scarpino <andrea@archlinux.org>
+
+pkgname=bash-docs
+pkgver=6.0.05
+pkgrel=1
+pkgdesc="Set of HTML documentation for bash scripting."
+arch=('i686' 'x86_64')
+url="http://tldp.org/LDP/abs/html/"
+license=('GPL')
+depends=('bash')
+options=('docs')
+source=(http://www.tldp.org/LDP/abs/abs-guide.html.tar.gz)
+md5sums=('cd4bd8bc92d6fd42741e55d4c8da2afa')
+
+build(){
+  cd "$srcdir/abs-guide"
+  install -d ${pkgdir}/usr/share/doc/bash
+  cp -rf * ${pkgdir}/usr/share/doc/bash || return 1
+}
