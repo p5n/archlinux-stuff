@@ -1,8 +1,8 @@
 pkgname=wanderlust-more-wl-git
-pkgver=20090713
+pkgver=20090811
 pkgrel=1
 pkgdesc="Mail/News reader supporting IMAP4rev1 for emacs."
-arch=(i686 x86_64)
+arch=('any')
 url="http://www.gohome.org/wl"
 license=('GPL')
 depends=('emacs' 'emacs-apel>=10.7' 'flim' 'semi')
