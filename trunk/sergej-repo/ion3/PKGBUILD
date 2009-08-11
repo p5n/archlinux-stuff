@@ -30,6 +30,7 @@ build() {
   # docs
   cd $srcdir/ion-doc-3-$pkgver
   sed -i 's#.*tocbibind.*##' macros.tex
-  make TOPDIR=$srcdir/ion-3-$pkgver RUBBER_PS=dvips all || return 1
-  make TOPDIR=$srcdir/ion-3-$pkgver RUBBER_PS=dvips install
+  sed -i 's#RUBBER_PS=.*#RUBBER_PS=dvips#' Makefile
+  make -j1 TOPDIR=$srcdir/ion-3-$pkgver RUBBER_PS=dvips all || return 1
+  make -j1 TOPDIR=$srcdir/ion-3-$pkgver RUBBER_PS=dvips install
 }
