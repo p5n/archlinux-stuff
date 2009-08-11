@@ -4,12 +4,12 @@ pkgname=mysql-docs
 pkgver=5.1
 pkgrel=1
 pkgdesc="Set of HTML documentation for MySQL."
-arch=('i686' 'x86_64')
+arch=('any')
 url="http://dev.mysql.com/doc/"
 license=('GPL')
 options=('docs')
 source=(http://downloads.mysql.com/docs/refman-$pkgver-en.html-chapter.tar.gz)
-md5sums=('d672cdcfeb5979f0e0c7660d338a63c8')
+md5sums=('4e10c43a6fabee9ab5f3f5e46a6b2294')
 
 build(){
   cd "$srcdir"

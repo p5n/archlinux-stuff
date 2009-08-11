@@ -5,8 +5,8 @@ pkgdesc="all arch documentation"
 arch=(any)
 url="http://archlinux.org"
 license=('custom')
-depends=('arch-wiki-docs' 'atk-docs' 'bash-docs' 'css-docs' 'e16-docs' 'gcc-docs' 'glib-docs' 'glib2-docs'
-	 'gtk2-docs' 'html-docs' 'jdk-docs' 'lua-docs' 'mysql-docs' 'pango-docs' 'pear-docs' 'php-docs'
+depends=('arch-wiki-docs' 'atk-docs' 'bash-docs' 'css-docs' 'gcc-docs' 'glib2-docs'
+	 'gtk2-docs' 'html-docs' 'jdk-docs' 'mysql-docs' 'pango-docs' 'pear-docs' 'php-docs'
 	 'perl-docs' 'python-docs' 'ruby-docs' 'x-docs-pdf' 'xhtml-docs' 'rfc'
 	 'tldp-howtos-html' 'tldp-howtos-html-ru' 'tldp-howtos-html-single' 'tldp-howtos-txt'
 	 'freedesktop-docs' 'qt-doc' 'qt3-doc')
