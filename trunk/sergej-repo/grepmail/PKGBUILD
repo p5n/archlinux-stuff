@@ -1,8 +1,8 @@
 pkgname=grepmail
 pkgver=5.3033
-pkgrel=1
+pkgrel=2
 pkgdesc="Search for emails in a normal or compressed mailbox using a regular expression or date constraint"
-arch=(i686 x86_64)
+arch=('any')
 url="http://grepmail.sourceforge.net/"
 license=('GPL')
 depends=('perl-date-manip' 'perl-timedate' 'perl-mail-mbox-messageparser' 'perl-digest-md5')
