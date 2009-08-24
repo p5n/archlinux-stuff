@@ -10,9 +10,8 @@ url="http://delta.affinix.com/psimedia/"
 depends=('speex' 'gstreamer0.10-base' 'qt')
 install=psimedia.install
 source=(http://delta.affinix.com/download/psimedia/$pkgname-$pkgver.tar.bz2 \
-	psimedia.sh \
-	psimedia.install)
-md5sums=('1be71c37d71c655ffc2c53cf86c77a7a' 'dc69469bdba0537d346d5622a5f5d221' '481686252c6fbd601b7f2d1275dd6fa2')
+	psimedia.sh)
+md5sums=('1be71c37d71c655ffc2c53cf86c77a7a' 'dc69469bdba0537d346d5622a5f5d221')
 
 build() {
     cd $srcdir/$pkgname-$pkgver
