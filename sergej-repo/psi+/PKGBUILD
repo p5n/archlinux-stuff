@@ -1,6 +1,6 @@
 # Contributor: Nicktian Lezver <nicktian@mailru>
 pkgname="psi+"
-pkgver=976
+pkgver=991
 pkgrel=1
 pkgdesc="Psi Mod from psi-dev@conference.jabber.ru"
 url="http://code.google.com/p/psi-dev/"
