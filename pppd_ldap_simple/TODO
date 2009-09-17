@@ -1,0 +1,13 @@
+TODO list for pppd(8) LDAP plugin
+
+ Handle radiusSimultaneousUse attribute i.e. limit number of simultaneous logins with the same user name. Functionality similar with utmp is already implemented. Enhance tools to handle logins database.
+
+ Implement CHAP and M$CHAP/M$CHAPv2 authentication. If LDAP server holds user's password (NT or LANManager) hashes (sambaPassword, etc) use it to perform response computation. Else use {cleartext} password.
+
+ Login date and time periods permissions management. Get information from LDAP server and compute session time limit to kick-off user.
+
+ Set MS DNS and WINS IP addresses if they are present in LDAP response.
+
+ Add proxyarp entry if LDAP response contains radiusProxyArp = YES (TRUE,1).
+
+ Handle realms. If user name contains "@" perform search with ou=$realm,$basedn. Add additional option "ldapdefuserdn" which sets default baseDN to perform search.

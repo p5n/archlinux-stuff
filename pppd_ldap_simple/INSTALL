@@ -1,0 +1,49 @@
+ This docs can be outdated. For the latest versions please refere to project page:
+ http://sourceforge.net/projects/pppd-ldap
+
+ The plugin has an idea of direct LDAP access instead of making RADIUS servers and so on. At the same time plugin uses RADIUS-LDAPv3 schema to store attributes and it's values. Seems being suitable for small providers and corporate network access services.
+
+ There is a great difference between corporate needs and ISP needs. One of them and the main goal of ISP is a necessity of accounting (ISP's always count what they are paid for). In corporate networks accounting is used rarely (except when organization is an ISP for their employees). The main goal of the corporate needs when deploying new services (such as remote access for home-working employees, affiliates, clients and so on) is to REDUCE overhead in managing additional accounts in separate databases/files, etc. LDAP server and pppd_ldap plugin helps keeping everything at the right and the same place. If you are an ISP who needs accounting - USE radius! I want to predict appearance of the questions kind of "Why do we need pppd_ldap if I can use RADIUS?". If you can - use it. pppd_ldap plugin was written to be usefull in corporate environment and it's needs in mind.
+
+ Installation process is very simple. You'll need OpenLDAP 2.x development library and pppd >= 2.4.2. Plugin was tested only on Linux i386 machine and is not guaranteed to work on any other platforms. We need some work towards this direction. I am sure it can work fine on Sparc/Solaris but there are no any suitable testing environment in the woods. You can get the latest pppd(8) version from ftp://ftp.samba.org/pub/ppp/. Version higher or equal to 2.4.2 is important because necessary plugin "hooks" performed starting from this version. Anyway I've some thoughts about < 2.4.2 porting. It is still in wide use.
+
+ Compile and install pppd as usual. After that copy tarball to pppd/plugins and extract archive:
+
+ $ tar -zxvf pppd_ldap.tgz
+
+ After that:
+
+ $ cd pppd_ldap
+ $ make
+
+ pppd(8) usually stores it's plugins in /lib/ppp/<VERSION> directory. To get your pppd version run "pppd --version".
+
+ $ cp pppd_ldap.so /usr/lib/ppp/{YOUR_PPPD_VERSION}
+
+ To compile in debugging messages uncomment "DEBUG=y" line in Makefile.
+
+ To enable SSL/TLS code uncomment "TLS=y" line in Makefile.
+
+ You'll need to add RADIUS-LDAPv3.schema to your slapd.conf file. After that create test PPP acount. Please refere to radius.ldif file and don't forget to set user's password with ldappasswd(1) tool (or any other suitable). After that you can run pppd(8) with options. Please note, that plugin options become available only after "plugin pppd_ldap.so".
+
+ Sample "server-side" command line:
+
+ $ pppd /dev/ttyS1 115200 192.168.0.1: auth -chap +pap plugin pppd_ldap.so \
+   ldaphost helen.nordcomp.ru userbasedn ou=People,dc=nordcomp,dc=ru ldapdn\
+   cn=pppd,ou=Daemon,dc=nordcomp,dc=ru ldappw testing123 ldaptimeout 25
+
+ You can use traditional /etc/ppp/options file. Don't forget to set "plugin pppd_ldap.so" option BEFORE plugin's specific options!!!
+
+ TROUBLESHOOTING
+
+ Use debugging options! :))
+
+ BUGS
+
+ Submit to http://unix.nordcomp.ru/forum.html or mail to me <sitkarew@nordcomp.ru>
+
+ GREETINGS:
+
+ http://unix.nordcomp.ru
+ http://www.xoky.net
+
