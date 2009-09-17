@@ -178,14 +178,12 @@ static int ldap_pap_auth(char *user, char *password, char **msgp,
 	LDAPMessage	*ldap_entry;
 
 	/* Initiate session and bind to LDAP server */
-
 	if ((ldap = ldap_init(ldap_host, ldap_port)) == NULL) {
 		error("LDAP: failed to initialize session\n");
 		return -1;
 	}
 
 	/* Set LDAP specific options such as timeout, version and tls */
-
 	if ((rc = ldap_set_option(ldap, LDAP_OPT_PROTOCOL_VERSION,
 		&version) != LDAP_OPT_SUCCESS)) {
 		error("LDAP: failed to set protocol version\n");
@@ -205,7 +203,6 @@ static int ldap_pap_auth(char *user, char *password, char **msgp,
 	}
 
 #ifdef OPT_WITH_TLS
-
 	/* Some servers support only LDAPS but not TLS */
 	if ((ldap_port == LDAPS_PORT) && ldap_usetls) {
 		int tls_opt = LDAP_OPT_X_TLS_HARD;
@@ -227,11 +224,9 @@ static int ldap_pap_auth(char *user, char *password, char **msgp,
 		return -1;
 		}
 	};
-
 #endif
 
 	/* Perform binding at last */
-
 	if ((rc = ldap_bind_s(ldap, ldap_dn, ldap_pw, LDAP_AUTH_SIMPLE)) != LDAP_SUCCESS) {
 		ldap_get_option(ldap, LDAP_OPT_ERROR_NUMBER, &ldap_errno);
 		error("LDAP: failed to bind: %s\n",ldap_err2string(rc));
@@ -240,7 +235,6 @@ static int ldap_pap_auth(char *user, char *password, char **msgp,
 	}
 
 	/* Form a search filter from supplied peer's credentials */
-
 	if ((rc = snprintf(filter, LDAP_FILT_MAXSIZ,"(uid=%s)",
 		 user)) == -1) {
 		error("LDAP: LDAP filter too big\n");
@@ -253,7 +247,6 @@ static int ldap_pap_auth(char *user, char *password, char **msgp,
 #endif
 
 	/* Perform search*/
-
 	if ((rc = ldap_search_s(ldap, userbasedn, LDAP_SCOPE_SUBTREE, filter,
 		NULL, 0, &ldap_mesg)) != LDAP_SUCCESS) {
 		ldap_get_option(ldap, LDAP_OPT_ERROR_NUMBER, &ldap_errno);
@@ -264,7 +257,6 @@ static int ldap_pap_auth(char *user, char *password, char **msgp,
 	};
 
 	/* If search returned more than 2 results or 0 - something is wrong! */
-
 	if ( ldap_mesg == NULL ){
 		info("LDAP: No such user \"%s\"\n",user);
 		ldap_unbind(ldap);
@@ -284,34 +276,32 @@ static int ldap_pap_auth(char *user, char *password, char **msgp,
 
 	ldap_entry = ldap_first_entry(ldap, ldap_mesg);
 
-		if ((rc = snprintf(userdn,MAX_BUF,"%s",ldap_get_dn(ldap,ldap_entry))) == -1)
+	if ((rc = snprintf(userdn,MAX_BUF,"%s",ldap_get_dn(ldap,ldap_entry))) == -1)
 		warn("LDAP: user DN stripped\n");
 
 #ifdef DEBUG
 	info("LDAP: rebind DN: %s\n",userdn);
 #endif
 
-		if ((rc = ldap_simple_bind_s(ldap,userdn,password)) != LDAP_SUCCESS) {
-			error("LDAP: username or password incorrect\n");
-			*msgp = "Username or password incorrect!";
-			ldap_unbind(ldap);
-			ldap_msgfree(ldap_mesg);
-			return 0;
-		}
+	if ((rc = ldap_simple_bind_s(ldap,userdn,password)) != LDAP_SUCCESS) {
+		error("LDAP: username or password incorrect\n");
+		*msgp = "Username or password incorrect!";
+		ldap_unbind(ldap);
+		ldap_msgfree(ldap_mesg);
+		return 0;
+	}
 
-		/* Set pppd options */
-
-		ldap_setoptions(ldap, ldap_mesg, &ldap_data);
+	/* Set pppd options */
+	ldap_setoptions(ldap, ldap_mesg, &ldap_data);
 
 #ifdef DEBUG
-		info("LDAP: Auth success\n");
+	info("LDAP: Auth success\n");
 #endif
-		*msgp = "Access OK!";
-		ldap_data.access_ok = 1;
+	*msgp = "Access OK!";
+	ldap_data.access_ok = 1;
 
-		/* Write ppp_utmp data in place */
-
-		return 1;
+	/* Write ppp_utmp data in place */
+	return 1;
 }
 
 static void ldap_ip_choose(u_int32_t *addrp)
