@@ -1,0 +1,114 @@
+This docs can be outdated. For the latest versions please refere to project page:
+http://sourceforge.net/projects/pppd-ldap
+
+	--- LDAP-enabled pppd(8) ---
+
+	NAME
+
+	pppd_ldap.so - LDAP authentication and information retrieval plugin for
+	pppd(8)
+
+	SYNOPSIS
+
+	pppd <option> plugin pppd_ldap.so
+
+	DESCRIPTION
+
+ LDAP plugin pppd_ldap.so permits pppd to perform PAP (in future CHAP will be
+ added) authentication against LDAP server instead of the usual
+ /etc/ppp/pap-secrets and other files.  LDAP plugin is linked with OpenLDAP
+ -lldap library. You'll need to have development part of OpenLDAP library to
+ build plugin successfuly. After successfull reception of peer's credentials,
+ pppd_ldap rebinds with supplied username and password. If operation succeeds,
+ pppd_ldap sets different pppd(8) options according to user information ret-
+ rieved from LDAP directory. If operation fails, pppd(8) performs it's
+ ordinary operations.
+
+ Search operation constructs search filter using peer name attaching "uid="
+ prefix. Thus, uid attribute is used as a login name. After completing search
+ operation, pppd_ldap rebinds with the entry's DN. For example if user logs in
+ using login name "tofik" and the entry looks like
+
+ dn: cn=Anton A. Postnikov,ou=People,dc=nordcomp,dc=ru
+ objectClass: radiusProfile
+ objectClass: inetOrgPerson
+ ....
+ uid: tofik
+
+ plugin searches for the entry using (uid=tofik) and then rebinds with DN
+ cn=Anton A. Postnikov,ou=People,dc=nordcomp,dc=ru. This behavior allows to
+ establish user's DN in different styles.
+
+ Plugin uses RADIUS-LDAPv3.schema provided with FreeRadius tarballs. Currently
+ plugin can use the following attributes and set appropriate values;
+
+	Mandatory attributes
+
+ 	dialupAccess - this attribute should be set to YES if we allow PPP connec-
+	tion or empty. If this attribute's value is set to FALSE, login is disabl-
+	ed.
+
+	radiusAuthType - SHOULD be set to LDAP.
+
+	Additional attributes
+
+ 	radiusFramedIPAddress - this attribute determines IP address of the
+	authenticating peer. If attribute is not set, normal actions are performed.
+	If peer's addres is set by runtime pppd(8) options, it is used if
+	LDAP user record has no radiusFramedIPAddress attribute.
+
+	radiusSessionTimeout - this attribute defines session timeout in seconds.
+	Connection will be destroyed by pppd(8) after session timeout.
+
+	radiusIdleTimeout - this attribute defines idle timeout in seconds.
+
+	OPTIONS
+
+  LDAP plugin introduces some additional options:
+
+  ldaphost <hostname>
+  	Sets LDAP server host name. By default "localhost" is assumed.
+
+  example: ldaphost helga.komitex.ru
+
+  ldapport <number>
+
+ Sets LDAP sever port number. By default LDAP_PORT (389) is used. pppd_ldap
+ now supports TLS/SSL. If your LDAP server talks only LDAPS, then set
+ ldapport to 636.
+
+  example: ldapport 555
+
+  ldapdn <DN>
+
+ Set to DN to bind with LDAP server, who has enough rights to read necessary
+ attributes in LDAP Directory.
+
+  example: ldapdn "cn=pppd,ou=Daemon,dc=nordcomp,dc=ru"
+
+  ldappw <password>
+
+ Set to ldapdn password. Seems not very good... I'll change this behavior
+ someday.
+
+  userbasedn <basedn>
+
+ Set to the base DN where to perform search for user accounts in LDAP directory.
+
+  example: "ou=Users,dc=nordcomp,dc=ru"
+
+  ldaptimeout <number>
+
+ ldap search timeout (in sec). 15 seconds assumed by default. set to any
+ suitable value.
+  example: ldaptimeout 25
+
+  ldapnettimeout <number>
+
+ Sets network operation timeout in seconds. Defaults to 10 seconds.
+
+  ldapusetls
+
+ Enables TLS/SSL connection with LDAP server. Make sure you have specified
+ correct ldaphost! If ldaphost name doesn't match server's certificate canonical
+ name, connection terminates immediately.
