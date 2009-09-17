@@ -215,15 +215,15 @@ static int ldap_pap_auth(char *user, char *password, char **msgp,
 	}
 
 	if (ldap_usetls) {
-	#ifdef DEBUG
+#ifdef DEBUG
 		info("LDAP: Setting TLS option -> ON\n");
-	#endif
+#endif
 		if((rc = ldap_start_tls_s(ldap, NULL, NULL) != LDAP_SUCCESS)) {
 		ldap_get_option(ldap, LDAP_OPT_ERROR_NUMBER, &ldap_errno);
 		error("LDAP: failed to initiate TLS: %s\n", ldap_err2string(ldap_errno));
 		return -1;
 		}
-	};
+	}
 #endif
 
 	/* Perform binding at last */
