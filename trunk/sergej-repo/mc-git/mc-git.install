@@ -3,15 +3,6 @@ post_install() {
     # for more actual info see mc/src/cons.saver.c
     chown root:tty /usr/lib/mc/cons.saver
     chmod u+s /usr/lib/mc/cons.saver
-    cat <<EOF
->>> To highlight pkgbuilds, append to your Syntax file:
-
-file PKGBUILD Arch\\sPKGBUILD
-include PKGBUILD.syntax
-
-file \\.install$ Arch\\sinstall
-include sh.syntax
-EOF
 }
 
 op=$1
