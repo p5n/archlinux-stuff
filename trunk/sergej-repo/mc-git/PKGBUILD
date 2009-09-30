@@ -1,5 +1,5 @@
 pkgname=mc-git
-pkgver=20090921
+pkgver=20090930
 pkgrel=1
 pkgdesc="GNU Midnight Commander is a s-lang based file manager"
 url="http://midnight-commander.org/"
@@ -10,9 +10,7 @@ makedepends=('git' 'pkgconfig' 'automake' 'autoconf')
 conflicts=('mc' 'mc-cvs' 'mc-fork-svn' 'mc-mp' 'mc-slavz' 'mc-suse')
 provides=('mc')
 options=(!distcc)
-source=(PKGBUILD.syntax)
 install=mc-git.install
-md5sums=('494f163dcb08ad73657ed064b7252a67')
 
 _gitroot="git://midnight-commander.org/git/mc.git"
 _gitname="mc"
@@ -65,6 +63,5 @@ fi
     make || return 1
     make DESTDIR=${pkgdir} install || return 1
 
-    install -D -m0644 $srcdir/PKGBUILD.syntax $pkgdir/usr/share/mc/syntax/PKGBUILD.syntax && \
     rm -f $pkgdir/usr/share/mc/extfs/u7z
 }
