@@ -1,5 +1,5 @@
 pkgname=mc-git
-pkgver=20091026
+pkgver=20091030
 pkgrel=1
 pkgdesc="GNU Midnight Commander is a s-lang based file manager"
 url="http://midnight-commander.org/"
@@ -33,7 +33,7 @@ if [ $NOEXTRACT -ne 1 ]; then
     cd ${srcdir}/${_gitname}-build
 
     patch -p0 syntax/Makefile.am <<EOF
-2,61c2,65
+2,61c2,64
 < 	ada95.syntax		\\
 < 	awk.syntax		\\
 < 	aspx.syntax		\\
@@ -157,8 +157,7 @@ if [ $NOEXTRACT -ne 1 ]; then
 >         unknown.syntax \\
 >         verilog.syntax \\
 >         vhdl.syntax \\
->         xml.syntax \\
->         yum.repo.syntax
+>         xml.syntax
 EOF
 
     ./autogen.sh
