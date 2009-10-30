@@ -1,5 +1,0 @@
-post_install() {
-    echo
-    echo "You should relogin before use psimedia plugin."
-    echo
-}
