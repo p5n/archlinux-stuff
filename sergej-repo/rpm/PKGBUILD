@@ -1,8 +1,8 @@
 # Contributor: Vinay S Shastry <vinayshastry@gmail.com>
 
-pkgname=rpm
+pkgname="rpm"
 pkgver=4.7.1
-pkgrel=2
+pkgrel=3
 pkgdesc="Red Hat Package Manager"
 arch=('i686' 'x86_64')
 url="http://www.rpm.org/"
@@ -19,7 +19,7 @@ build() {
   rm -rf popt
 
   [ $NOEXTRACT -eq 1 ] || ./configure --prefix=/usr --without-python --without-selinux \
-              --without-perl --with-external-db --localstatedir=/var
+              --without-perl --with-external-db --localstatedir=/var --enable-sqlite3
   make || return 1
   make DESTDIR=$startdir/pkg install
 }
