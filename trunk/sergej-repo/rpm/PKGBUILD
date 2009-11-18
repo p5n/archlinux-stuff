@@ -2,7 +2,7 @@
 
 pkgname=rpm
 pkgver=4.7.1
-pkgrel=1
+pkgrel=2
 pkgdesc="Red Hat Package Manager"
 arch=('i686' 'x86_64')
 url="http://www.rpm.org/"
@@ -19,7 +19,7 @@ build() {
   rm -rf popt
 
   [ $NOEXTRACT -eq 1 ] || ./configure --prefix=/usr --without-python --without-selinux \
-              --without-perl --with-external-db
+              --without-perl --with-external-db --localstatedir=/var
   make || return 1
   make DESTDIR=$startdir/pkg install
 }
