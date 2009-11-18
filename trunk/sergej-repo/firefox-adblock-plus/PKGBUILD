@@ -1,5 +1,5 @@
 pkgname=firefox-adblock-plus
-pkgver=1.1
+pkgver=1.1.1
 _firefox_ver=3.5
 pkgrel=1
 pkgdesc="plugin for firefox which block ads and banners"
@@ -10,7 +10,7 @@ depends=(firefox)
 makedepends=('unzip')
 _addons_file=1865
 source=(http://releases.mozilla.org/pub/mozilla.org/addons/${_addons_file}/adblock_plus-$pkgver-fx+sm+tb.xpi)
-md5sums=('ddc0d09b2f1086c8da0c664f48e09942')
+md5sums=('6ea1304754d1d4ebbc4558d9c73fec18')
 
 build() {
     cd $srcdir		|| return 1
