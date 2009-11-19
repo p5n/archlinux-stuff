@@ -1,5 +1,5 @@
 pkgname=mc-git
-pkgver=20091030
+pkgver=20091119
 pkgrel=1
 pkgdesc="GNU Midnight Commander is a s-lang based file manager"
 url="http://midnight-commander.org/"
