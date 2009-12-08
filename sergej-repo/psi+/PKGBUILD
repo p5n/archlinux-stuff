@@ -1,6 +1,6 @@
 # Contributor: Nicktian Lezver <nicktian@mailru>
 pkgname="psi+"
-pkgver=991
+pkgver=1451
 pkgrel=1
 pkgdesc="Psi Mod from psi-dev@conference.jabber.ru"
 url="http://code.google.com/p/psi-dev/"
@@ -44,12 +44,12 @@ if true; then
     git submodule update
   fi
   msg "GIT checkout done or server timeout"
-   
+
   [ -d $srcdir/${_gitname__}-build ] && rm -r $srcdir/${_gitname__}-build
   cp -r $srcdir/${_gitname__} $srcdir/${_gitname__}-build
 
   msg "Copying patches to build directory"
-  cp $srcdir/patches/* $srcdir/${_gitname__}-build/	    
+  cp $srcdir/patches/* $srcdir/${_gitname__}-build/
 
   cd $srcdir/${_gitname__}-build
   msg "Applying patches"
