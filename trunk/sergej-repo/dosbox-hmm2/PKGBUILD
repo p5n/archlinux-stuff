@@ -1,0 +1,20 @@
+pkgname=hmm2
+pkgver=1.0
+pkgrel=1
+pkgdesc="Heroes of might and magick II"
+arch=(any)
+url="http://www.nival.com"
+license=('GPL')
+depends=(dosbox bash)
+makedepends=(unrar)
+source=('http://oldgames.ru:8080/H/HeroesM&M2_PoL.rar')
+md5sums=('2345816e5781574f7ff0bc25f71ba96a')
+
+build() {
+  cd "$srcdir/"
+  unrar x 'HeroesM&M2_PoL.rar' || return 1
+  mkdir -p $pkgdir/usr/share/ $pkgdir/usr/bin/
+  cp -r HEROES2 $pkgdir/usr/share/heroes2 || return 1
+  echo -e "#!/bin/sh\n\ndosbox -c 'mount c /usr/share/heroes2' -c 'c:' -c 'heroes2' -c 'exit'" >$pkgdir/usr/bin/heroes2
+  chmod 0755 $pkgdir/usr/bin/heroes2
+}
