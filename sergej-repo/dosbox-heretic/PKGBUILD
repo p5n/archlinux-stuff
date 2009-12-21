@@ -1,0 +1,24 @@
+pkgname=heretic
+pkgver=1.0
+pkgrel=1
+pkgdesc="Heretic"
+arch=(any)
+url="http://oldgames.ru"
+license=('GPL')
+depends=(dosbox bash)
+makedepends=(unrar)
+source=('http://oldgames.ru:8080/H/heretic.rar')
+md5sums=('9e3ff522a3db4704cfc2bcd5ddc15b06')
+
+build() {
+  cd "$srcdir/"
+  unrar x 'heretic.rar' || return 1
+
+  local game=heretic
+
+  mkdir -p $pkgdir/usr/share/ $pkgdir/usr/bin/
+  cp -r HERETIC $pkgdir/usr/share/$game || return 1
+  echo -e "#!/bin/sh\n\ndosbox -c 'mount c /usr/share/$game' -c 'c:' -c '$game' -c 'exit'" >$pkgdir/usr/bin/$game
+  chmod 0755 $pkgdir/usr/bin/$game
+}
+
