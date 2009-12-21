@@ -1,7 +1,7 @@
 pkgname=heretic
 pkgver=1.0
 pkgrel=1
-pkgdesc="Heretic"
+pkgdesc="Heretic 3D shooter game"
 arch=(any)
 url="http://oldgames.ru"
 license=('GPL')
