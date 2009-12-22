@@ -18,7 +18,24 @@ build() {
 
   mkdir -p $pkgdir/usr/share/ $pkgdir/usr/bin/
   cp -r HERETIC $pkgdir/usr/share/$game || return 1
-  echo -e "#!/bin/sh\n\ndosbox -c 'mount c /usr/share/$game' -c 'c:' -c '$game' -c 'exit'" >$pkgdir/usr/bin/$game
+
+  cat >$pkgdir/usr/bin/$game <<EOF
+#!/bin/sh
+
+if [ ! -d ~/.dosbox/$game ]; then
+	mkdir -p ~/.dosbox/$game
+	cd ~/.dosbox/$game
+	ls -1 /usr/share/$game | while read A; do
+		ln -s /usr/share/$game/\$A \$A
+	done
+
+	rm -f HERETIC.CFG MODEM.CFG
+	cp /usr/share/$game/HERETIC.CFG /usr/share/$game/MODEM.CFG ./
+fi
+cd ~/.dosbox/$game
+dosbox -c 'mount c ~/.dosbox/$game' -c 'c:' -c '$game' -c 'exit'
+EOF
+
   chmod 0755 $pkgdir/usr/bin/$game
 }
 
