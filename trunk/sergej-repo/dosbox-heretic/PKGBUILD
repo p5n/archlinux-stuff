@@ -1,6 +1,6 @@
 pkgname=heretic
 pkgver=1.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Heretic 3D shooter game"
 arch=(any)
 url="http://oldgames.ru"
