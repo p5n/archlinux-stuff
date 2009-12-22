@@ -1,6 +1,6 @@
 pkgname=dune2
 pkgver=1.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Dune 2 strategy game"
 arch=(any)
 url="http://oldgames.ru"
