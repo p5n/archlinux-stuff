@@ -1,6 +1,6 @@
 pkgname=doom2
 pkgver=1.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Doom 2 shooter game"
 arch=(any)
 url="http://oldgames.ru"
