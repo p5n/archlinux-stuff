@@ -1,6 +1,6 @@
 pkgname=hmm2
 pkgver=1.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Heroes of might and magick II"
 arch=(any)
 url="http://www.nival.com"
