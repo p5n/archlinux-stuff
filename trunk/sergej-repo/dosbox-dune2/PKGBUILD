@@ -22,7 +22,41 @@ build() {
   mkdir -p $pkgdir/usr/share/ $pkgdir/usr/bin/
   cp -r "DUNE2" $pkgdir/usr/share/$game || return 1
   cp -r "Dune_2_RUS" $pkgdir/usr/share/$game-ru || return 1
-  echo -e "#!/bin/sh\n\ndosbox -c 'mount c /usr/share/$game' -c 'c:' -c '$game' -c 'exit'" >$pkgdir/usr/bin/$game
-  echo -e "#!/bin/sh\n\ndosbox -c 'mount c /usr/share/$game-ru' -c 'c:' -c '$game' -c 'exit'" >$pkgdir/usr/bin/$game-ru
+
+  cat >$pkgdir/usr/bin/$game-ru <<EOF
+#!/bin/sh
+
+if [ ! -d ~/.dosbox/$game-ru ]; then
+	mkdir -p ~/.dosbox/$game-ru
+	cd ~/.dosbox/$game-ru
+	ls -1 /usr/share/$game-ru | while read A; do
+		ln -s /usr/share/$game-ru/\$A \$A
+	done
+
+	rm -f DUNE.CFG
+	cp /usr/share/$game-ru/DUNE.CFG ./
+fi
+cd ~/.dosbox/$game-ru
+dosbox -c 'mount c ~/.dosbox/$game-ru' -c 'c:' -c '$game' -c 'exit'
+EOF
+
+  cat >$pkgdir/usr/bin/$game <<EOF
+#!/bin/sh
+
+if [ ! -d ~/.dosbox/$game ]; then
+	mkdir -p ~/.dosbox/$game
+	cd ~/.dosbox/$game
+	ls -1 /usr/share/$game | while read A; do
+		ln -s /usr/share/$game/\$A \$A
+	done
+
+	rm -f DUNE.CFG
+	cp /usr/share/$game/DUNE.CFG ./
+fi
+cd ~/.dosbox/$game
+dosbox -c 'mount c ~/.dosbox/$game' -c 'c:' -c '$game' -c 'exit'
+EOF
+
   chmod 0755 $pkgdir/usr/bin/$game*
 }
+
