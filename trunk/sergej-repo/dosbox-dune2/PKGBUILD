@@ -1,6 +1,6 @@
 pkgname=dune2
 pkgver=1.0
-pkgrel=2
+pkgrel=3
 pkgdesc="Dune 2 strategy game"
 arch=(any)
 url="http://oldgames.ru"
@@ -33,8 +33,8 @@ if [ ! -d ~/.dosbox/$game-ru ]; then
 		ln -s /usr/share/$game-ru/\$A \$A
 	done
 
-	rm -f DUNE.CFG
-	cp /usr/share/$game-ru/DUNE.CFG ./
+	rm -f DUNE.CFG SAVEFAME.DAT OPTIONS.CFG
+	cp /usr/share/$game-ru/DUNE.CFG /usr/share/$game-ru/SAVEFAME.DAT /usr/share/$game-ru/OPTIONS.CFG ./
 fi
 cd ~/.dosbox/$game-ru
 dosbox -c 'mount c ~/.dosbox/$game-ru' -c 'c:' -c '$game' -c 'exit'
@@ -50,8 +50,8 @@ if [ ! -d ~/.dosbox/$game ]; then
 		ln -s /usr/share/$game/\$A \$A
 	done
 
-	rm -f DUNE.CFG
-	cp /usr/share/$game/DUNE.CFG ./
+	rm -f DUNE.CFG SAVEFAME.DAT OPTIONS.CFG
+	cp /usr/share/$game/DUNE.CFG /usr/share/$game/SAVEFAME.DAT /usr/share/$game/OPTIONS.CFG ./
 fi
 cd ~/.dosbox/$game
 dosbox -c 'mount c ~/.dosbox/$game' -c 'c:' -c '$game' -c 'exit'
