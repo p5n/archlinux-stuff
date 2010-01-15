@@ -13,5 +13,5 @@ install:
 endif
 
 clean:
-	-rm *.o *.ko .*.cmd *.mod.c *~ Module.symvers modules.order
+	rm -rf *.o *.ko .*.cmd *.mod.c *~ Module.symvers modules.order .tmp_versions
 
