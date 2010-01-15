@@ -1,8 +1,7 @@
 /*
- *  linux/drivers/video/vfb.c -- Virtual frame buffer device
+ *  Virtual frame buffer device
  *
- *      Copyright (C) 2002 James Simmons
- *
+ *  Copyright (C) 2002 James Simmons
  *	Copyright (C) 1997 Geert Uytterhoeven
  *
  *  This file is subject to the terms and conditions of the GNU General Public
@@ -24,14 +23,14 @@
 #include <linux/fb.h>
 #include <linux/init.h>
 
-    /*
-     *  RAM we reserve for the frame buffer. This defines the maximum screen
-     *  size
-     *
-     *  The default can be overridden if the driver is compiled as a module
-     */
+/*
+ *  RAM we reserve for the frame buffer. This defines the maximum screen
+ *  size
+ *
+ *  The default can be overridden if the driver is compiled as a module
+ */
 
-#define VIDEOMEMSIZE	(1*1024*1024)	/* 1 MB */
+#define VIDEOMEMSIZE	(4*1024*1024)	/* 4 MB */
 
 static void *videomemory;
 static u_long videomemorysize = VIDEOMEMSIZE;
@@ -80,31 +79,31 @@ static void rvfree(void *mem, unsigned long size)
 }
 
 static struct fb_var_screeninfo vfb_default __initdata = {
-	.xres =		640,
-	.yres =		480,
+	.xres = 640,
+	.yres = 480,
 	.xres_virtual =	640,
 	.yres_virtual =	480,
-	.bits_per_pixel = 8,
-	.red =		{ 0, 8, 0 },
-      	.green =	{ 0, 8, 0 },
-      	.blue =		{ 0, 8, 0 },
-      	.activate =	FB_ACTIVATE_TEST,
-      	.height =	-1,
-      	.width =	-1,
-      	.pixclock =	20000,
-      	.left_margin =	64,
-      	.right_margin =	64,
-      	.upper_margin =	32,
-      	.lower_margin =	32,
-      	.hsync_len =	64,
-      	.vsync_len =	2,
-      	.vmode =	FB_VMODE_NONINTERLACED,
+	.bits_per_pixel = 32,
+	.red = { 8, 0, 0 },
+  .green = { 0, 8, 0 },
+  .blue = { 0, 0, 8 },
+  .activate =	FB_ACTIVATE_TEST,
+  .height =	-1,
+  .width =	-1,
+  .pixclock =	20000,
+  .left_margin =	64,
+  .right_margin =	64,
+  .upper_margin =	32,
+  .lower_margin =	32,
+  .hsync_len =	64,
+  .vsync_len =	2,
+  .vmode =	FB_VMODE_NONINTERLACED,
 };
 
 static struct fb_fix_screeninfo vfb_fix __initdata = {
 	.id =		"Virtual FB",
 	.type =		FB_TYPE_PACKED_PIXELS,
-	.visual =	FB_VISUAL_PSEUDOCOLOR,
+	.visual =	FB_VISUAL_DIRECTCOLOR,
 	.xpanstep =	1,
 	.ypanstep =	1,
 	.ywrapstep =	1,
@@ -115,14 +114,14 @@ static int vfb_enable __initdata = 0;	/* disabled by default */
 module_param(vfb_enable, bool, 0);
 
 static int vfb_check_var(struct fb_var_screeninfo *var,
-			 struct fb_info *info);
+                         struct fb_info *info);
 static int vfb_set_par(struct fb_info *info);
 static int vfb_setcolreg(u_int regno, u_int red, u_int green, u_int blue,
-			 u_int transp, struct fb_info *info);
+                         u_int transp, struct fb_info *info);
 static int vfb_pan_display(struct fb_var_screeninfo *var,
-			   struct fb_info *info);
+                           struct fb_info *info);
 static int vfb_mmap(struct fb_info *info,
-		    struct vm_area_struct *vma);
+                    struct vm_area_struct *vma);
 
 static struct fb_ops vfb_ops = {
 	.fb_read        = fb_sys_read,
@@ -137,9 +136,9 @@ static struct fb_ops vfb_ops = {
 	.fb_mmap	= vfb_mmap,
 };
 
-    /*
-     *  Internal routines
-     */
+/*
+ *  Internal routines
+ */
 
 static u_long get_line_length(int xres_virtual, int bpp)
 {
@@ -151,13 +150,13 @@ static u_long get_line_length(int xres_virtual, int bpp)
 	return (length);
 }
 
-    /*
-     *  Setting the video mode has been split into two parts.
-     *  First part, xxxfb_check_var, must not write anything
-     *  to hardware, it should only verify and adjust var.
-     *  This means it doesn't alter par but it does use hardware
-     *  data from it to check this var. 
-     */
+/*
+ *  Setting the video mode has been split into two parts.
+ *  First part, xxxfb_check_var, must not write anything
+ *  to hardware, it should only verify and adjust var.
+ *  This means it doesn't alter par but it does use hardware
+ *  data from it to check this var.
+ */
 
 static int vfb_check_var(struct fb_var_screeninfo *var,
 			 struct fb_info *info)
@@ -214,7 +213,7 @@ static int vfb_check_var(struct fb_var_screeninfo *var,
 
 	/*
 	 * Now that we checked it we alter var. The reason being is that the video
-	 * mode passed in might not work but slight changes to it might make it 
+	 * mode passed in might not work but slight changes to it might make it
 	 * work. This way we let the user know what is acceptable.
 	 */
 	switch (var->bits_per_pixel) {
@@ -280,8 +279,8 @@ static int vfb_check_var(struct fb_var_screeninfo *var,
 }
 
 /* This routine actually sets the video mode. It's in here where we
- * the hardware state info->par and fix which can be affected by the 
- * change in par. For this driver it doesn't do much. 
+ * the hardware state info->par and fix which can be affected by the
+ * change in par. For this driver it doesn't do much.
  */
 static int vfb_set_par(struct fb_info *info)
 {
@@ -290,11 +289,11 @@ static int vfb_set_par(struct fb_info *info)
 	return 0;
 }
 
-    /*
-     *  Set a single color register. The values supplied are already
-     *  rounded down to the hardware's capabilities (according to the
-     *  entries in the var structure). Return != 0 for invalid regno.
-     */
+/*
+ *  Set a single color register. The values supplied are already
+ *  rounded down to the hardware's capabilities (according to the
+ *  entries in the var structure). Return != 0 for invalid regno.
+ */
 
 static int vfb_setcolreg(u_int regno, u_int red, u_int green, u_int blue,
 			 u_int transp, struct fb_info *info)
@@ -381,11 +380,11 @@ static int vfb_setcolreg(u_int regno, u_int red, u_int green, u_int blue,
 	return 0;
 }
 
-    /*
-     *  Pan or Wrap the Display
-     *
-     *  This call looks only at xoffset, yoffset and the FB_VMODE_YWRAP flag
-     */
+/*
+ *  Pan or Wrap the Display
+ *
+ *  This call looks only at xoffset, yoffset and the FB_VMODE_YWRAP flag
+ */
 
 static int vfb_pan_display(struct fb_var_screeninfo *var,
 			   struct fb_info *info)
@@ -409,9 +408,9 @@ static int vfb_pan_display(struct fb_var_screeninfo *var,
 	return 0;
 }
 
-    /*
-     *  Most drivers don't need their own mmap function 
-     */
+/*
+ *  Most drivers don't need their own mmap function
+ */
 
 static int vfb_mmap(struct fb_info *info,
 		    struct vm_area_struct *vma)
@@ -475,9 +474,9 @@ static int __init vfb_setup(char *options)
 }
 #endif  /*  MODULE  */
 
-    /*
-     *  Initialisation
-     */
+/*
+ *  Initialisation
+ */
 
 static int __init vfb_probe(struct platform_device *dev)
 {
