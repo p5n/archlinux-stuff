@@ -1,7 +1,7 @@
 pkgname=firefox-noscript
 pkgver=1.9.9.35
-_firefox_ver=3.5
-pkgrel=1
+_firefox_ver=3.6
+pkgrel=2
 pkgdesc="plugin for firefox which disables script"
 arch=('any')
 url="http://noscript.net/"
