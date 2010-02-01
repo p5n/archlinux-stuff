@@ -1,7 +1,7 @@
 pkgname=firefox-scrapbook
 pkgver=1.3.6
-_firefox_ver=3.5
-pkgrel=1
+_firefox_ver=3.6
+pkgrel=2
 pkgdesc="plugin for firefox which can save and organize saved pages"
 arch=('any')
 url="http://amb.vis.ne.jp/mozilla/scrapbook/"
