@@ -6,7 +6,7 @@ pkgdesc="plugin for firefox which can save and organize saved pages"
 arch=('any')
 url="http://amb.vis.ne.jp/mozilla/scrapbook/"
 license=('GPL2')
-depends=(firefox)
+depends=("firefox=${_firefox_ver}")
 makedepends=('unzip')
 _addons_file=41964
 source=(scrapbook-$pkgver-fx.xpi::https://addons.mozilla.org/en-US/firefox/downloads/latest/427/)
