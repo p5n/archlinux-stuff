@@ -1,12 +1,12 @@
 pkgname=firefox-imglikeopera
 pkgver=0.6.18
 _firefox_ver=3.6
-pkgrel=3
+pkgrel=4
 pkgdesc="plugin for firefox which shows/hides images"
 arch=('any')
 url="http://imglikeopera.mozdev.org/"
 license=('GPL2')
-depends=(firefox)
+depends=("firefox=${_firefox_ver}")
 makedepends=('unzip')
 source=(http://downloads.mozdev.org/imglikeopera/imglikeopera-$pkgver.xpi)
 md5sums=('d419bbb15deb8d4391906580e0d31a14')
@@ -15,9 +15,9 @@ build() {
     cd $srcdir		|| return 1
     #this method comes from gentoo (http://kambing.ui.edu/gentoo-portage/eclass/mozextension.eclass):
     local emid='imglikeopera@imfo.ru'
-    local dstdir=$pkgdir/usr/lib/firefox-$_firefox_ver/extensions/${emid}
+    local dstdir=$pkgdir/usr/lib/firefox-${_firefox_ver}/extensions/${emid}
     install -d $dstdir		|| return 1
-    sed -i 's#<em:maxVersion>.*</em:maxVersion>#<em:maxVersion>3.*</em:maxVersion>#' install.rdf
+    sed -i 's#maxVersion=".*"#maxVersion="4.0.*"#' install.rdf
     cp -R * $dstdir		|| return 1
     rm $dstdir/imglikeopera-$pkgver.xpi
 }
