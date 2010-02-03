@@ -25,14 +25,18 @@ install=ziproxy.install
 source=(http://internap.dl.sourceforge.net/sourceforge/ziproxy/$pkgname-$pkgver.tar.bz2
 	ziproxy
 	ziproxy.logrotate
-	ziproxy.xinetd)
+	ziproxy.xinetd
+	png14.patch)
 md5sums=('a0bc2e60a9c9e29556245b3f38faca0b'
          '41108c6c91481053947c39615fd6f165'
          '286e7d17c9443be825a178d812668f31'
-         '3d2f9208b5ab6738c136049e1fd2e433')
+         '3d2f9208b5ab6738c136049e1fd2e433'
+         'f844576f735b83b62f570a740074aca3')
 
 build() {
   cd $srcdir/$pkgname-$pkgver
+
+  patch -p1 <$srcdir/png14.patch
 
   [ $NOEXTRACT -eq 1 ] || ./configure --prefix=/usr --with-jasper
   make || return 1
