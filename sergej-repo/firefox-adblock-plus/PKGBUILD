@@ -6,7 +6,7 @@ pkgdesc="plugin for firefox which block ads and banners"
 arch=('any')
 url="http://adblockplus.org/"
 license=('GPL')
-depends=("firefox=${_firefox_ver}")
+depends=("firefox")
 makedepends=('unzip')
 _addons_file=1865
 source=(https://addons.mozilla.org/downloads/latest/${_addons_file}/adblock_plus-$pkgver.xpi)
