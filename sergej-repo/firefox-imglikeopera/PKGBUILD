@@ -6,7 +6,7 @@ pkgdesc="plugin for firefox which shows/hides images"
 arch=('any')
 url="http://imglikeopera.mozdev.org/"
 license=('GPL2')
-depends=("firefox=${_firefox_ver}")
+depends=("firefox")
 makedepends=('unzip')
 source=(http://downloads.mozdev.org/imglikeopera/imglikeopera-$pkgver.xpi)
 md5sums=('d419bbb15deb8d4391906580e0d31a14')
