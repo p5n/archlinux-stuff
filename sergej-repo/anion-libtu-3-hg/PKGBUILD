@@ -1,0 +1,41 @@
+pkgname=anion-libtu-3-hg
+pkgver=11
+pkgrel=1
+pkgdesc="anion libtu 3"
+arch=(i686 x86_64)
+url="http://code.google.com/p/anion3/"
+license=('GPL2')
+depends=()
+makedepends=('mercurial')
+provides=(libtu libtu-3)
+conflicts=(libtu libtu-3)
+
+_hgroot="https://anion3.googlecode.com/hg/"
+_hgrepo="anion3"
+
+build() {
+  cd "$srcdir"
+  msg "Connecting to Mercurial server...."
+
+  if [ -d $_hgrepo ] ; then
+    cd $_hgrepo
+    hg pull -u || return 1
+    msg "The local files are updated."
+  else
+    hg clone $_hgroot $_hgrepo || return 1
+  fi
+
+  msg "Mercurial checkout done or server timeout"
+  msg "Starting make..."
+
+  rm -rf "$srcdir/$_hgrepo-build"
+  cp -r "$srcdir/$_hgrepo" "$srcdir/$_hgrepo-build"
+  cd "$srcdir/$_hgrepo-build"
+
+  #
+  # BUILD HERE
+  #
+  cd anionwm-3/libtu-3
+  make PREFIX=/usr || return 1
+  make DESTDIR="$pkgdir/" PREFIX=/usr install || return 1
+}
