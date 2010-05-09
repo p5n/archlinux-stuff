@@ -1,0 +1,170 @@
+# Contributor: Nicktian Lezver <nicktian@mail.ru>
+# updated pkg - Andrew Makarov <renya@welinux.ru>
+
+pkgname="psi+"
+pkgver=2370
+pkgrel=1
+pkgdesc="Psi Mod from psi-dev@conference.jabber.ru"
+url="http://code.google.com/p/psi-dev/"
+license=('GPL2')
+arch=('i686' 'x86_64')
+depends=('qt' 'aspell' 'libxss' 'openssl' 'dbus' 'zlib' 'qca' 'qca-ossl'
+'qca-gnupg')
+makedepends=("subversion" "git")
+conflicts=('psi' 'psi-svn' 'psi-git')
+provides=('psi-plus' 'psi+' 'psi')
+
+#source=('avcdisable.patch')
+#md5sums=('ebcd83751195b531e531219f3b46ff34')
+
+_svntrunk="http://psi-dev.googlecode.com/svn/trunk/patches"
+_svnmod="patches"
+_gitroot__="git://git.psi-im.org/psi.git"
+_gitname__="psi"
+_iconsetssvntrunk="http://psi-dev.googlecode.com/svn/trunk/iconsets"
+_iconsetssvnmod="iconsets"
+_certssvntrunk="http://psi-dev.googlecode.com/svn/trunk/certs"
+_certssvnmod="certs"
+_pluginssvntrunk="http://psi-dev.googlecode.com/svn/trunk/plugins"
+_pluginssvnmod="plugins"
+_langpacksvntrunk="http://psi-ru.googlecode.com/svn/trunk/"
+_langpacksvnmod="psi-ru"
+
+build() {
+  cd $srcdir
+
+  msg "Getting patches from SVN"
+  msg2 "connecting to $_svntrunk"
+    if [ -d $srcdir/$_svnmod ] ; then
+	svn up $_svnmod -r $pkgver
+	msg "$srcdir/$_svnmod"
+    else
+	svn checkout $_svntrunk $srcdir/$_svnmod -r $pkgver
+    fi
+    
+  msg "SVN Checkout done or server timeout"
+
+  msg "Getting iconsets from SVN"
+  msg2 "connecting to $_iconsetssvntrunk"
+    if [ -d $srcdir/$_iconsetssvnmod ] ; then
+	svn up $_iconsetssvnmod
+	msg "$srcdir/$_iconsetssvnmod"
+    else
+	svn checkout $_iconsetssvntrunk $srcdir/$_iconsetssvnmod
+    fi
+  msg "SVN Checkout done or server timeout"
+
+  msg "Getting certs from SVN"
+  msg2 "connecting to $_certssvntrunk"
+    if [ -d $srcdir/$_certssvnmod ] ; then
+	svn up $_certssvnmod
+	msg "$srcdir/$_certssvnmod"
+    else
+	svn checkout $_certssvntrunk $srcdir/$_certssvnmod
+    fi
+  msg "SVN Checkout done or server timeout"
+
+  msg "Getting plugins from SVN"
+  msg2 "connecting to $_pluginssvntrunk"
+    if [ -d $srcdir/$_pluginssvnmod ] ; then
+	svn up $_pluginssvnmod
+	msg "$srcdir/$_pluginssvnmod"
+	else
+	    svn checkout $_pluginssvntrunk $srcdir/$_pluginssvnmod
+	fi
+    msg "SVN Checkout done or server timeout"
+
+   msg "Getting langpack from SVN"
+
+   msg2 "connecting to $_langpacksvntrunk"
+	if [ -d $srcdir/$_langpacksvnmod ] ; then
+	    svn up $_langpacksvnmod
+	    msg "$srcdir/$_langpacksvnmod"
+	else
+	    svn checkout $_langpacksvntrunk $srcdir/$_langpacksvnmod
+	fi
+    msg "SVN Checkout done or server timeout"
+
+    msg2 "Connecting to $_gitroot__ ..."
+	if [ -d $srcdir/$_gitname__ ] ; then
+	    cd $_gitname__ && git pull origin
+		msg "Updating iris ..."
+		git submodule update
+		msg "The local files are updated."
+	  else
+		git clone $_gitroot__
+		cd psi
+		msg "Getting iris ..."
+		git submodule init
+		git submodule update
+	fi
+   msg "GIT checkout done or server timeout"
+   
+    [ -d $srcdir/$_gitname__-build ] && rm -r $srcdir/$_gitname__-build
+    cp -r $srcdir/$_gitname__ $srcdir/$_gitname__-build
+    msg "Copying patches to build directory"
+	mkdir $srcdir/$_gitname__-build/patches
+	cp -r $srcdir/patches/* $srcdir/$_gitname__-build/patches/
+    	
+msg "Applying patches"
+	cd $srcdir/$_gitname__-build/patches
+	rm -f *-psi-win32-*         #useless windows patches
+	rm -f *dirty-check*         #useless update check
+
+	cd $srcdir/$_gitname__-build
+
+	for i in $srcdir/$_gitname__-build/patches/*.diff; do
+	    pn=$(basename $i)
+	    msg2 "Applying '$pn'"
+	    patch -p1 < "$i"  2>&1
+	done
+
+msg2 "Get program version"
+    sed "s/\(.xxx\)/.$pkgver/" -i src/applicationinfo.cpp || return 1
+    sed 's/#CONFIG += psi_plugins/CONFIG += psi_plugins/' -i src/src.pro
+msg2 "Fix iconsets"
+    mkdir -p $srcdir/psi-build/iconsets/system/default/
+    cp -r $srcdir/iconsets/* $srcdir/psi-build/iconsets
+    msg "Building $pkgname ..."
+msg2 "Running configure ..."
+	./configure --prefix=/usr --disable-bundled-qca --disable-growl || return 1
+msg2 "Building ..."
+	make || return 1
+msg2 "Installing ..."
+	make INSTALL_ROOT="$pkgdir" install || return 1
+
+   # Copy Psi license
+	install -D COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
+	
+	cd $startdir/pkg/usr/share/psi
+	msg2 "Getting iconsets and certs from psi-dev svn..."
+	cp -rf $srcdir/iconsets ./
+	cp -rf $srcdir/certs ./
+
+  msg "Copying langpack ..."
+	install -D -m 644 $srcdir/$_langpacksvnmod/*.qm ./
+	install -D -m 644 $srcdir/$_langpacksvnmod/qt/*.qm ./
+   
+  msg "Adding extra plugins"
+    cp -rf $srcdir/$_pluginssvnmod $srcdir/$_gitname__-build/src
+  
+  msg "Building extra plugins ..."
+   cd $srcdir/$_gitname__-build/src/plugins/generic
+# Create project file for extra plugins and compile them
+	echo "TEMPLATE = subdirs" > extraplugins.pro
+	echo -n "SUBDIRS = " >> extraplugins.pro
+	ls -1 ../../../../plugins/* | sed -e :a -e '$b;N;s/\n/ /;ba' >> extraplugins.pro
+	qmake extraplugins.pro || return 1
+# Fix bad project name
+	sed 's/screenshot\.pro/screenshotplugin\.pro/' -i Makefile
+	make || return 1
+# Copy plugins
+	mkdir $startdir/pkg/usr/share/psi/plugins
+	find . -name "lib*plugin.so" -exec cp -f {} $startdir/pkg/usr/share/psi/plugins \;
+# Remove useless entries
+	find $startdir/pkg -name ".svn" -exec rm -rf {} > /dev/null 2>&1 \;	
+	
+	rm -rf $srcdir/$_gitname__-build
+
+  msg2 "Enjoy it =)"
+}
