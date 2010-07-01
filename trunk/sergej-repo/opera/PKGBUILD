@@ -5,10 +5,11 @@
 pkgname=opera
 pkgver=10.60
 _buildver=6386
-pkgrel=1
+pkgrel=2
 pkgdesc="The Opera web browser"
 url="http://www.opera.com"
-depends=('qt')
+[ "$CARCH" = "x86_64" ] && depends=(libx11 kdelibs lib32-libxt gtk2 lib32-gcc-libs lib32-libxext)
+[ "$CARCH" = "i686" ] && depends=(libx11 kdelibs libxt gtk2 gcc-libs libxext)
 license=('custom:opera')
 arch=('i686' 'x86_64')
 source=(http://ftp.opera.com/pub/opera/linux/${pkgver/./}/opera-$pkgver-${_buildver}.x86_64.linux.tar.bz2
