@@ -1,0 +1,42 @@
+# Maintainer: Daniel Isenmann <daniel@archlinux.org>
+# Contributor: dorphell <dorphell@archlinux.org>
+# Contributor: Sigitas Mazaliauskas <sigis@gmail.com>
+
+pkgname=opera
+pkgver=10.60
+_buildver=6386
+pkgrel=1
+pkgdesc="The Opera web browser"
+url="http://www.opera.com"
+depends=('qt')
+license=('custom:opera')
+arch=('i686' 'x86_64')
+source=(http://ftp.opera.com/pub/opera/linux/${pkgver/./}/opera-$pkgver-${_buildver}.x86_64.linux.tar.bz2
+	http://ftp.opera.com/pub/opera/linux/${pkgver/./}/opera-$pkgver-${_buildver}.i386.linux.tar.bz2)
+md5sums=('6415f21430bade3193d0d6c174e3bfb1'
+         'e86d604b2f9397a618e8ecf357748f55')
+
+build() {
+  [ "$CARCH" = "x86_64" ] && cd ${srcdir}/opera-${pkgver}-${_buildver}.x86_64.linux
+  [ "$CARCH" = "i686"   ] && cd ${srcdir}/opera-${pkgver}-${_buildver}.i386.linux
+
+  sed -i "s|PREFIX=/usr/local|PREFIX=$pkgdir/usr|" install
+  sed -i "s|PREFIX=\$HOME/.local|PREFIX=$pkgdir/usr|" install
+  ./install --user --unattended
+  sed -i "s|$pkgdir/usr|/usr|" $pkgdir/usr/bin/opera $pkgdir/usr/bin/opera-widget-manager
+
+  install -D -m 644 LICENSE ${pkgdir}/usr/share/licenses/opera/license.txt
+
+  rm -rf $pkgdir/usr/share/applications/mimeinfo.cache || true
+  rm -rf $pkgdir/usr/share/mime/XMLnamespaces || true
+  rm -rf $pkgdir/usr/share/mime/aliases || true
+  rm -rf $pkgdir/usr/share/mime/generic-icons || true
+  rm -rf $pkgdir/usr/share/mime/globs || true
+  rm -rf $pkgdir/usr/share/mime/globs2 || true
+  rm -rf $pkgdir/usr/share/mime/icons || true
+  rm -rf $pkgdir/usr/share/mime/magic || true
+  rm -rf $pkgdir/usr/share/mime/mime.cache || true
+  rm -rf $pkgdir/usr/share/mime/subclasses || true
+  rm -rf $pkgdir/usr/share/mime/treemagic || true
+  rm -rf $pkgdir/usr/share/mime/types || true
+}
