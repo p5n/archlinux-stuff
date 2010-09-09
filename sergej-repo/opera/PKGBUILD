@@ -1,43 +1,37 @@
-# Maintainer: Daniel Isenmann <daniel@archlinux.org>
+# Maintainer: ruario <arch_aur@ruari.com>
+# Contributor: BlackEagle < ike DOT devolder AT gmail DOT com >
+# Contributor: Daniel Isenmann <daniel@archlinux.org>
 # Contributor: dorphell <dorphell@archlinux.org>
 # Contributor: Sigitas Mazaliauskas <sigis@gmail.com>
 
 pkgname=opera
-pkgver=10.60
-_buildver=6386
-pkgrel=2
-pkgdesc="The Opera web browser"
-url="http://www.opera.com"
-[ "$CARCH" = "x86_64" ] && depends=(libx11 kdelibs lib32-libxt gtk2 lib32-gcc-libs lib32-libxext)
-[ "$CARCH" = "i686" ] && depends=(libx11 kdelibs libxt gtk2 gcc-libs libxext)
+pkgver=10.62
+_buildver=6438
+pkgrel=1
+pkgdesc="A fast and secure web browser and Internet suite."
+url="http://www.opera.com/browser/"
+depends=('gcc-libs' 'libxt' 'freetype2' 'libxext')
+optdepends=('gtk2: GTK integration'
+	    'kdebase-runtime: KDE4 integration'
+	    'gstreamer0.10-base-plugins: HTML5 open codecs support'
+	    'gstreamer0.10-good: HTML5 open codecs support'
+	    'gstreamer0.10-ffmpeg: HTML5 not so open codecs support'
+	    'gstreamer0.10-bad-plugins: HTML5 not so open codecs support')
+install=${pkgname}.install
+options=(!strip !zipman)
 license=('custom:opera')
 arch=('i686' 'x86_64')
-source=(http://ftp.opera.com/pub/opera/linux/${pkgver/./}/opera-$pkgver-${_buildver}.x86_64.linux.tar.bz2
-	http://ftp.opera.com/pub/opera/linux/${pkgver/./}/opera-$pkgver-${_buildver}.i386.linux.tar.bz2)
-md5sums=('6415f21430bade3193d0d6c174e3bfb1'
-         'e86d604b2f9397a618e8ecf357748f55')
+_arch=i386
+
+[ "$CARCH" = "x86_64" ] && _arch=x86_64
+source=(http://ftp.opera.com/pub/opera/linux/${pkgver/./}/opera-${pkgver}-${_buildver}.${_arch}.rpm)
+
+sha256sums=('600ba411db32534e32d2759e6493a2e670e260869f0620b921232cd2d9da6c6d')
+[ "$CARCH" = "x86_64" ] && sha256sums=('92c77ce5d69894fb59850fc933bb5c4d0fd15de7dd4b54fb54e1e3523800dbbe')
 
 build() {
-  [ "$CARCH" = "x86_64" ] && cd ${srcdir}/opera-${pkgver}-${_buildver}.x86_64.linux
-  [ "$CARCH" = "i686"   ] && cd ${srcdir}/opera-${pkgver}-${_buildver}.i386.linux
-
-  sed -i "s|PREFIX=/usr/local|PREFIX=$pkgdir/usr|" install
-  sed -i "s|PREFIX=\$HOME/.local|PREFIX=$pkgdir/usr|" install
-  ./install --user --unattended
-  sed -i "s|$pkgdir/usr|/usr|" $pkgdir/usr/bin/opera $pkgdir/usr/bin/opera-widget-manager
-
-  install -D -m 644 LICENSE ${pkgdir}/usr/share/licenses/opera/license.txt
-
-  rm -rf $pkgdir/usr/share/applications/mimeinfo.cache || true
-  rm -rf $pkgdir/usr/share/mime/XMLnamespaces || true
-  rm -rf $pkgdir/usr/share/mime/aliases || true
-  rm -rf $pkgdir/usr/share/mime/generic-icons || true
-  rm -rf $pkgdir/usr/share/mime/globs || true
-  rm -rf $pkgdir/usr/share/mime/globs2 || true
-  rm -rf $pkgdir/usr/share/mime/icons || true
-  rm -rf $pkgdir/usr/share/mime/magic || true
-  rm -rf $pkgdir/usr/share/mime/mime.cache || true
-  rm -rf $pkgdir/usr/share/mime/subclasses || true
-  rm -rf $pkgdir/usr/share/mime/treemagic || true
-  rm -rf $pkgdir/usr/share/mime/types || true
+	cd ${pkgdir}
+	bsdcpio -id < ${srcdir}/opera-${pkgver}-${_buildver}.${_arch}.rpm
+	sed -i usr/share/opera/package-id.ini -e "s|\(Package Type=\)rpm|\1tar|"
+	install -D -m 644 usr/share/opera/defaults/license.txt usr/share/licenses/${pkgname}/license.txt
 }
