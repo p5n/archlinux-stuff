@@ -2,7 +2,7 @@
 # Maintainer: Sergej Pupykin <pupykin.s+arch@gmail.com>
 
 pkgname="psi+"
-pkgver=2626
+pkgver=3068
 pkgrel=1
 pkgdesc="Psi IM Mod by psi-dev@conference.jabber.ru"
 url="http://code.google.com/p/psi-dev/"
@@ -58,7 +58,7 @@ build() {
   cd $srcdir
   [ -z $revision ] && revision=$pkgver
   msg2 "SVN revision $revision will be used"
-
+if true; then
   msg "Getting patches from SVN"
   msg "Connecting to $_svntrunk/$_svnmod ..."
   if [ -d $srcdir/$_svnmod ] ; then
@@ -133,6 +133,7 @@ build() {
     git submodule update
   fi
   msg "GIT checkout done or server timeout"
+fi
 
   [ -d $srcdir/$_gitname__-build ] && rm -r $srcdir/$_gitname__-build
   cp -r $srcdir/$_gitname__ $srcdir/$_gitname__-build
@@ -154,7 +155,7 @@ build() {
   for i in $srcdir/$_gitname__-build/patches/*.diff; do
     pn=$(basename $i)
     msg2 "Applying '$pn'"
-    patch -p1 < "$i" >> $log  2>&1
+    patch -p1 < "$i" >> $log  2>&1 || { echo "$i FAILED"; true; }
     if [ "$?" -ne 0 ]; then
       error "Patching failed. Please, see log at '$log'."
       return 1
@@ -163,7 +164,7 @@ build() {
 
   # Get program version
   ver=$(cat src/applicationinfo.cpp | awk 'BEGIN {} { ver = match($0, /PROG_VERSION "..../); if (ver) { print substr($0,RSTART+14,4); exit; }}')
-  [ $usewebkit -eq "1" ] && revision=$revision"webkit"
+  [ $usewebkit -eq "1" ] && revision=$revision"webkit" || true
   pkgver="$ver.$revision"
   sed "s/\(.xxx\)/.$revision/" -i src/applicationinfo.cpp
   msg "Adding extra plugins"
