@@ -1,13 +1,13 @@
 # Contributor: Yejun Yang yejunx AT gmail DOT com
 
 pkgname=ziproxy
-pkgver=2.7.2
-pkgrel=2
-pkgdesc="Ziproxy is forwarding, non-caching, compressing HTTP proxy server."
+pkgver=3.2.0
+pkgrel=1
+pkgdesc="forwarding, non-caching, compressing HTTP proxy server"
 arch=('i686' 'x86_64')
 url="http://ziproxy.sourceforge.net/"
 license=('GPLv2')
-depends=('giflib' 'libpng' 'libjpeg' 'zlib')
+depends=('giflib' 'libpng' 'libjpeg' 'zlib' 'jasper')
 backup=(etc/ziproxy/ziproxy.conf
 	etc/ziproxy/bo_exception.list
 	etc/ziproxy/http.passwd
@@ -25,33 +25,28 @@ install=ziproxy.install
 source=(http://internap.dl.sourceforge.net/sourceforge/ziproxy/$pkgname-$pkgver.tar.bz2
 	ziproxy
 	ziproxy.logrotate
-	ziproxy.xinetd
-	png14.patch)
-md5sums=('a0bc2e60a9c9e29556245b3f38faca0b'
+	ziproxy.xinetd)
+md5sums=('fb5fd0ba0ddd8412cd3a767ac63075ff'
          '41108c6c91481053947c39615fd6f165'
          '286e7d17c9443be825a178d812668f31'
-         '3d2f9208b5ab6738c136049e1fd2e433'
-         'f844576f735b83b62f570a740074aca3')
+         '3d2f9208b5ab6738c136049e1fd2e433')
 
 build() {
   cd $srcdir/$pkgname-$pkgver
 
-  patch -p1 <$srcdir/png14.patch
-
   [ $NOEXTRACT -eq 1 ] || ./configure --prefix=/usr --with-jasper
-  make || return 1
-  make DESTDIR=$pkgdir install || return 1
+  make
+  make DESTDIR=$pkgdir install
 
-  install -d $pkgdir/etc/ziproxy
   install -d $pkgdir/var/lib/ziproxy/error
   install -d $pkgdir/etc/conf.d
   install -d $pkgdir/etc/rc.d
 
-  sed -i 's#var/ziproxy#var/lib/ziproxy#' etc/ziproxy/ziproxy.conf && \
-  install -m644 etc/ziproxy/* $pkgdir/etc/ziproxy && \
-  install -m644 var/ziproxy/error/* $pkgdir/var/lib/ziproxy/error && \
-  echo "ZIPROXY_ARGS=\"-c /etc/ziproxy/ziproxy.conf\"" >$pkgdir/etc/conf.d/ziproxy && \
-  install -m755 $srcdir/ziproxy $pkgdir/etc/rc.d && \
-  install -Dm0644 $srcdir/ziproxy.logrotate $pkgdir/etc/logrotate.d/ziproxy && \
+  sed -i 's#var/ziproxy#var/lib/ziproxy#' etc/ziproxy/ziproxy.conf
+  cp -a etc/ziproxy $pkgdir/etc/ziproxy
+  install -m644 var/ziproxy/error/* $pkgdir/var/lib/ziproxy/error
+  echo "ZIPROXY_ARGS=\"-c /etc/ziproxy/ziproxy.conf\"" >$pkgdir/etc/conf.d/ziproxy
+  install -m755 $srcdir/ziproxy $pkgdir/etc/rc.d
+  install -Dm0644 $srcdir/ziproxy.logrotate $pkgdir/etc/logrotate.d/ziproxy
   install -Dm0644 $srcdir/ziproxy.xinetd $pkgdir/etc/xinetd.d/ziproxy
 }
