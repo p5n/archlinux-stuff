@@ -7,6 +7,6 @@
 	ifempty
 	nomail
 	postrotate
-		/etc/rc.d/ziproxy restart 1>/dev/null 2>/dev/null || true
+		killall -HUP ziproxy 1>/dev/null 2>/dev/null || true
 	endscript
 }
