@@ -22,13 +22,13 @@ backup=(etc/ziproxy/ziproxy.conf
 	var/lib/ziproxy/error/500.html
 	var/lib/ziproxy/error/503.html)
 install=ziproxy.install
-source=(http://internap.dl.sourceforge.net/sourceforge/ziproxy/$pkgname-$pkgver.tar.bz2
+source=(http://downloads.sourceforge.net/project/ziproxy/ziproxy/ziproxy-$pkgver/ziproxy-$pkgver.tar.bz2
 	ziproxy
 	ziproxy.logrotate
 	ziproxy.xinetd)
 md5sums=('fb5fd0ba0ddd8412cd3a767ac63075ff'
          '41108c6c91481053947c39615fd6f165'
-         '286e7d17c9443be825a178d812668f31'
+         '89a6728369715aff18bc0863f3e62fe5'
          '3d2f9208b5ab6738c136049e1fd2e433')
 
 build() {
