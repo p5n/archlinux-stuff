@@ -2,7 +2,7 @@
 # Maintainer: Sergej Pupykin <pupykin.s+arch@gmail.com>
 
 pkgname="psi+"
-pkgver=3068
+pkgver=3132
 pkgrel=1
 pkgdesc="Psi IM Mod by psi-dev@conference.jabber.ru"
 url="http://code.google.com/p/psi-dev/"
@@ -164,7 +164,7 @@ fi
 
   # Get program version
   ver=$(cat src/applicationinfo.cpp | awk 'BEGIN {} { ver = match($0, /PROG_VERSION "..../); if (ver) { print substr($0,RSTART+14,4); exit; }}')
-  [ $usewebkit -eq "1" ] && revision=$revision"webkit" || true
+#  [ $usewebkit -eq "1" ] && revision=$revision"webkit" || true
   pkgver="$ver.$revision"
   sed "s/\(.xxx\)/.$revision/" -i src/applicationinfo.cpp
   msg "Adding extra plugins"
