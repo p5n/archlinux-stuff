@@ -1,0 +1,91 @@
+diff -wbBur sxe/sxeedit.cpp /home/sergej/sergej-repo.svn/psi-plus/src/psi-build/src/sxe/sxeedit.cpp
+--- sxe/sxeedit.cpp	2010-07-02 13:59:42.000000000 +0000
++++ /home/sergej/sergej-repo.svn/psi-plus/src/psi-build/src/sxe/sxeedit.cpp	2010-10-29 14:16:05.000000000 +0000
+@@ -69,7 +69,6 @@
+ 
+     // Can't compare edits to different records
+     if(rid() != other.rid())  {
+-        qDebug() << QString("Comparing SxeEdits to %1 an %2.").arg(rid()).arg(other.rid()).toAscii();
+         return false;
+     }
+ 
+diff -wbBur sxe/sxerecord.cpp /home/sergej/sergej-repo.svn/psi-plus/src/psi-build/src/sxe/sxerecord.cpp
+--- sxe/sxerecord.cpp	2010-07-02 13:59:42.000000000 +0000
++++ /home/sergej/sergej-repo.svn/psi-plus/src/psi-build/src/sxe/sxerecord.cpp	2010-10-29 14:20:20.000000000 +0000
+@@ -50,7 +50,6 @@
+         else if (edit->type() == SxeEdit::Record)
+             applySxeRecordEdit(dynamic_cast<SxeRecordEdit*>(edit));
+     } else {
+-        qDebug() << QString("Tried to apply an edit meant for %1 to %2.").arg(edit->rid()).arg(rid()).toAscii();
+     }
+ }
+ 
+@@ -64,7 +63,6 @@
+ 
+ bool SxeRecord::applySxeNewEdit(QDomDocument &doc, SxeNewEdit* edit) {
+     if(!(edits_.size() == 0 && node_.isNull())) {
+-        qDebug("Someone's not behaving! Tried to apply a SxeNewEdit to an existing node.");
+         emit nodeRemovalRequired(node_);
+         return false;
+     }
+@@ -113,17 +111,11 @@
+ }
+ 
+ void SxeRecord::revertToZero() {
+-#ifndef NDEBUG
+-    if (edits_[0]->type() != SxeEdit::New)
+-        qDebug() << QString("First edit is of type %1!").arg(edits_[0]->type());
+-#endif
+-
+-    const SxeNewEdit* edit = dynamic_cast<const SxeNewEdit*>(edits_[0]);
+-
+-    parent_ = edit->parent();
+-    primaryWeight_ = edit->primaryWeight();
+-    identifier_ = edit->name();
+-    data_ = edit->chdata();
++    const SxeNewEdit* xedit = dynamic_cast<const SxeNewEdit*>(edits_[0]);
++    parent_ = xedit->parent();
++    primaryWeight_ = xedit->primaryWeight();
++    identifier_ = xedit->name();
++    data_ = xedit->chdata();
+ }
+ 
+ bool SxeRecord::applySxeRemoveEdit(SxeRemoveEdit* edit) {
+@@ -215,16 +207,11 @@
+                     data_.replace(from, n, edit->value(key));
+ 
+                 } else {
+-                    if(!ok1)
+-                        qDebug() << QString("Could not convert 'replacefrom' = '%1' to int.").arg(edit->value(SxeRecordEdit::ReplaceFrom));
+-                    if(!ok2)
+-                        qDebug() << QString("Could not convert 'replacen' = '%1' to int.").arg(edit->value(SxeRecordEdit::ReplaceN));
+-                    if(from < 0)
+-                        qDebug() << QString("'replacefrom' = '%1' is negative.").arg(edit->value(SxeRecordEdit::ReplaceFrom));
+-                    if(n < 0)
+-                        qDebug() << QString("'replacen' = '%1' is negative.").arg(edit->value(SxeRecordEdit::ReplaceN));
+-                    if(from + n > data_.length())
+-                        qDebug() << QString("from (%1) + n (%2) > data_.length() (%3).").arg(from).arg(n).arg(data_.length());
++//                    if(!ok1)
++//                    if(!ok2)
++//                    if(from < 0)
++//                    if(n < 0)
++//                    if(from + n > data_.length())
+                 }
+ 
+             } else {
+@@ -256,7 +243,6 @@
+                 edit->nullify();  // There's no way the edit could be applied anymore
+ 
+         } else {
+-            qDebug() << QString("Edit of type %1 at %2!").arg(edits_[i]->type()).arg(i).toAscii();
+         }
+ 
+     }
+@@ -287,7 +273,6 @@
+ 
+     if(data_ != lastData_) {
+ 
+-        // qDebug() << QString("Setting '%1' to \"%2\"").arg(node_.nodeName()).arg(data_).toAscii();
+ 
+         if((node_.isText() || node_.isAttr() || node_.isComment())) {
+ 

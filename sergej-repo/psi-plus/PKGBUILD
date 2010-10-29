@@ -3,7 +3,7 @@
 
 pkgname="psi+"
 pkgver=3132
-pkgrel=1
+pkgrel=2
 pkgdesc="Psi IM Mod by psi-dev@conference.jabber.ru"
 url="http://code.google.com/p/psi-dev/"
 license=('GPL2')
@@ -29,7 +29,7 @@ usecrash=0
 
 # Use whiteboarding
 # CAUTION: you may see build error if you say "1" here :)
-whiteboarding=0
+whiteboarding=1
 
 # Use WebKit
 # CAUTION: webkit is EXPERIMENTAL feature! Use it at your own risk!
@@ -52,7 +52,8 @@ _langpacksvnmod="psi-plus"
 
 # Options for 'make' utility for parallel compilation
 MAKEOPT=${MAKEOPT:--j$((`cat /proc/cpuinfo | grep processor | wc -l`+1))}
-md5sums=()
+source=(whiteboard-build-fix.patch)
+md5sums=(76a56a433e36a705657feeddf9a9563e)
 
 build() {
   cd $srcdir
@@ -193,8 +194,7 @@ fi
   if [ $whiteboarding -eq "1" ] ; then
     sed 's/#CONFIG += whiteboarding/CONFIG += whiteboarding/' -i src/src.pro
     # Fix undefined qdebug
-    sed '/qDebug/d' -i ../src/sxe/sxeedit.cpp || true
-    sed '/qDebug/d' -i ../src/sxe/sxerecord.cpp || true
+    (cd src/sxe && patch -p1 <$srcdir/whiteboard-build-fix.patch)
     msg2 "Using whiteboarding: yes"
     warning "Whiteboarding is very unstable thing. Don't post bug reports about it!"
   else
