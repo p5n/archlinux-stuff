@@ -1,3 +1,5 @@
+# $Id$
+# Maintainer: Sergej Pupykin <pupykin.s+arch@gmail.com>
 # Maintainer: ruario <arch_aur@ruari.com>
 # Contributor: BlackEagle < ike DOT devolder AT gmail DOT com >
 # Contributor: Daniel Isenmann <daniel@archlinux.org>
@@ -5,8 +7,8 @@
 # Contributor: Sigitas Mazaliauskas <sigis@gmail.com>
 
 pkgname=opera
-pkgver=10.62
-_buildver=6438
+pkgver=10.63
+_buildver=6450
 pkgrel=1
 pkgdesc="A fast and secure web browser and Internet suite."
 url="http://www.opera.com/browser/"
@@ -21,13 +23,14 @@ install=${pkgname}.install
 options=(!strip !zipman)
 license=('custom:opera')
 arch=('i686' 'x86_64')
+
 _arch=i386
-
 [ "$CARCH" = "x86_64" ] && _arch=x86_64
-source=(http://ftp.opera.com/pub/opera/linux/${pkgver/./}/opera-${pkgver}-${_buildver}.${_arch}.rpm)
 
-sha256sums=('600ba411db32534e32d2759e6493a2e670e260869f0620b921232cd2d9da6c6d')
-[ "$CARCH" = "x86_64" ] && sha256sums=('92c77ce5d69894fb59850fc933bb5c4d0fd15de7dd4b54fb54e1e3523800dbbe')
+source=(http://ftp.opera.com/pub/opera/linux/${pkgver/./}/opera-${pkgver}-${_buildver}.i386.rpm
+	http://ftp.opera.com/pub/opera/linux/${pkgver/./}/opera-${pkgver}-${_buildver}.x86_64.rpm)
+md5sums=('e1478710c8e5bb009fcdb6a1853b8fe2'
+         '16295bb008cc754369d2f46914e49a8f')
 
 build() {
 	cd ${pkgdir}
