@@ -1,5 +1,5 @@
 pkgname=anion-wm-3-hg
-pkgver=25
+pkgver=44
 pkgrel=1
 pkgdesc="anion wm 3"
 arch=(i686 x86_64)
