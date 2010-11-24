@@ -18,7 +18,7 @@ use I18N::Langinfo qw(langinfo CODESET);
 use POSIX qw(locale_h);
 use Digest::MD5 qw(md5_hex);
 
-my $Version = "0.7.4";
+my $Version = "0.7.5";
 
 my $DefaultAppDirs;
 my $DefaultDirectoryDirs;
@@ -63,6 +63,89 @@ sub check_file ($)
         push @accessed_files, "F $file";
         return 'F';
     }
+}
+
+sub findicon
+{
+
+#       my $theme = "hicolor";
+
+        my $iconname = shift;
+
+
+        my $home = $ENV{"HOME"};
+        my $xdg_data_dirs = $ENV{"XDG_DATA_DIRS"};
+
+        my (@xdg_data_dirs);
+        @xdg_data_dirs = split(":",$xdg_data_dirs);
+
+        my (@icon_search_path);
+
+        my (@categorylist);
+        @categorylist = ("apps", "places", "devices", "actions", "animations", "categories", "emblems", "emotes", "filesystems", "intl", "mimetypes", "status", "stock");
+
+        my (@sizelist);
+        @sizelist = (16, 22, 24, 26, 32, 36, 48, 64, 72, 128, 192, 256);
+
+        my $thisdir = $home."/.icons";
+        ( -d $thisdir ) && push @icon_search_path, $thisdir;
+        foreach my $dir (@xdg_data_dirs)
+        {
+                my $theme = "hicolor";
+                my $size;
+                my $category;
+                foreach $size (@sizelist)
+                {
+                        foreach $category (@categorylist)
+                        {
+                                $thisdir = $dir."/icons/".$theme."/".$size."x".$size."/".$category;
+                                ( -d $thisdir ) && push @icon_search_path, $thisdir;
+                        }
+                }
+                $thisdir = $dir."/icons/mini";
+                ( -d $thisdir ) && push @icon_search_path, $thisdir;
+                $thisdir = $dir."/icons";
+                ( -d $thisdir ) && push @icon_search_path, $thisdir;
+                $thisdir = $dir."/icons/large";
+                ( -d $thisdir ) && push @icon_search_path, $thisdir;
+                $theme = "gnome";
+                foreach $size (@sizelist)
+                {
+                        foreach $category (@categorylist)
+                        {
+                                $thisdir = $dir."/icons/".$theme."/".$size."x".$size."/".$category;
+                                ( -d $thisdir ) && push @icon_search_path, $thisdir;
+
+                        }
+                }
+        }
+
+        push @icon_search_path, "/usr/share/pixmaps";
+
+        my $filename;
+
+        #if ( -f $iconname )
+        #{
+        #        return $iconname;
+        #}
+        #else
+        {
+
+                foreach my $dir (@icon_search_path)
+                {
+                        foreach my $ext ('','.png','.xpm')
+                        {
+                                $filename = $dir."/".$iconname.$ext;
+                                ( -f $filename ) && return $filename;
+                        }
+                }
+        }
+}
+
+sub add_png_extension_if_needed ($)
+{
+        my ($f) = @_;
+        return $f =~ /\.(png|xpm|svg)$/ ? $f : "$f.png";
 }
 
 sub scan_AppDir ($$;$)
@@ -1565,11 +1648,13 @@ sub output_icewm_menu ($;$)
     $indent = 0 unless defined $indent;
 
     my $menu_name = $menu->{'PrepName'};
+    #my $menu_icon = $menu->{'PrepIcon'} || "folder" ;
+    my $menu_icon = findicon($menu->{'PrepIcon'} || "folder");
 
     if($indent)
     {
 	$output .= ' ' x $indent;
-	$output .= "menu \"$menu_name\" folder {\n";
+	$output .= "menu \"$menu_name\" $menu_icon {\n";
     }
 
     foreach my $entry (@{$menu->{'entries'}})
@@ -1580,9 +1665,10 @@ sub output_icewm_menu ($;$)
 
             my $name = $desktop->{'PrepName'};
             my $exec = $desktop->{'PrepExec'};
+            my $icon = findicon(add_png_extension_if_needed($desktop->{'Icon'})) || "-";
 
             $output .= ' ' x $indent;
-            $output .= " prog \"$name\" none $exec\n";
+            $output .= " prog \"$name\" $icon $exec\n";
         }
         elsif ($entry->{type} eq 'menu')
         {
