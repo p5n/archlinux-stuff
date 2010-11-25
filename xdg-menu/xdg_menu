@@ -1649,7 +1649,7 @@ sub output_icewm_menu ($;$)
 
     my $menu_name = $menu->{'PrepName'};
     #my $menu_icon = $menu->{'PrepIcon'} || "folder" ;
-    my $menu_icon = findicon($menu->{'PrepIcon'} || "folder");
+    my $menu_icon = findicon($menu->{'PrepIcon'}) || "folder";
 
     if($indent)
     {
