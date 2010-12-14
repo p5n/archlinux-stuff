@@ -1,206 +1,247 @@
-# $Id$
-# Maintainer: Sergej Pupykin <pupykin.s+arch@gmail.com>
+# Contributor: Roman Ustyugov <qtdevel@gmail.com>
+# Contributor: Joker-jar <joker-jar@yandex.ru>
 
-pkgname="psi+"
-pkgver=3132
-pkgrel=2
+pkgname="psi-plus"
+pkgver=3392
+pkgrel=1
 pkgdesc="Psi IM Mod by psi-dev@conference.jabber.ru"
-url="http://code.google.com/p/psi-dev/"
+url="http://psi-plus.com"
 license=('GPL2')
 arch=('i686' 'x86_64')
 depends=('qt' 'qca' 'qca-ossl' 'qca-gnupg' 'aspell' 'libxss' 'openssl' 'dbus' 'zlib')
-makedepends=("subversion" "git")
-conflicts=('psi' 'psi-svn' 'psi-git')
-provides=('psi-plus' 'psi+' 'psi')
-options=(force)
-
-# Use desired number here or put empty string to get HEAD
-revision=""
-
-# Make quietly (say "0" here if you want to see all output)
-quietmake=1
-
+makedepends=('subversion' 'git' 'patch')
+conflicts=('psi' 'psi-svn' 'psi-git' 'psi-plus-svn')
+provides=('psi+' 'psi-plus-svn' 'psi')
+ 
+# Make quietly (say "0" here if you want to see all output, "1" - only stderr, "2" - nothing)
+# values: (0|1|2)
+quietmake=0
+# Include plugins to package
+# values: (0|1)
+incplugins=1
+# Include skins to package
+# values: (0|1)
+incskins=0
+# Plugins list. Excludes/includes certain plugins (if incplugins=1)
+# Available plugins: attentionplugin, autoreplyplugin, birthdayreminderplugin, captchaformsplugin, chessplugin,
+#                    cleanerplugin, conferenceloggerplugin, contentdownloaderplugin, extendedoptionsplugin, gmailnotifyplugin,
+#                    historykeeperplugin, icqdieplugin, imageplugin, juickplugin, qipxstatusesplugin,
+#                    screenshotplugin, skinsplugin, stopspamplugin, storagenotesplugin, translateplugin,
+#                    videostatusplugin, watcherplugin
+# Example: plugins_list=('imageplugin' 'translateplugin')
+#          plugins_list_rule='include'
+# includes only imageplugin and translateplugin to package
+plugins_list=()
+# Say "include" to include only specified in the plugins_list section plugins (if incplugins=1)
+# values: (exclude|include)
+plugins_list_rule='exclude'
+# Use mva's russian langpack
+# values: (0|1)
+usemvalang=0
+# Use WebKit (http://code.google.com/p/psi-dev/wiki/webkit)
+# CAUTION: webkit is EXPERIMENTAL feature! Use it at your own risk!
+# values: (0|1)
+usewebkit=1
 # Use powersave
+# values: (0|1)
 powersave=0
-
 # Use crash handling dialog (only for KDE)
 # (Not useful yet, so you may safely say 0 here)
+# values: (0|1)
 usecrash=0
-
 # Use whiteboarding
 # CAUTION: you may see build error if you say "1" here :)
+# values: (0|1)
 whiteboarding=1
-
-# Use WebKit
-# CAUTION: webkit is EXPERIMENTAL feature! Use it at your own risk!
-usewebkit=1
-
+ 
 _svntrunk="http://psi-dev.googlecode.com/svn/trunk"
 _svnmod="patches"
+_iconsetssvnmod="iconsets"
+_skinssvnmod="skins"
+_certssvnmod="certs"
+_pluginssvnmod="plugins"
+# ----------
+_langpacksvntrunk="http://psi-ru.googlecode.com/svn/branches"
+_langpacksvnmod="psi-plus"
+# ----------
+_langpackgitroot="git://mva.name" # mva's langpack
+_langpackgitname="psi-l10n-ru"
+# ----------
 _gitroot__="git://git.psi-im.org/psi.git"
 _gitname__="psi"
-_iconsetssvntrunk="http://psi-dev.googlecode.com/svn/trunk/iconsets"
-_iconsetssvnmod="iconsets"
-_skinssvntrunk="http://psi-dev.googlecode.com/svn/trunk/skins"
-_skinssvnmod="skins"
-_certssvntrunk="http://psi-dev.googlecode.com/svn/trunk/certs"
-_certssvnmod="certs"
-_pluginssvntrunk="http://psi-dev.googlecode.com/svn/trunk/plugins"
-_pluginssvnmod="plugins"
-_langpacksvntrunk="http://psi-ru.googlecode.com/svn/branches/psi-plus" # newer than trunk?
-_langpacksvnmod="psi-plus"
-
+ 
 # Options for 'make' utility for parallel compilation
 MAKEOPT=${MAKEOPT:--j$((`cat /proc/cpuinfo | grep processor | wc -l`+1))}
-source=(whiteboard-build-fix.patch)
-md5sums=(76a56a433e36a705657feeddf9a9563e)
-
+ 
 build() {
-  cd $srcdir
-  [ -z $revision ] && revision=$pkgver
-  msg2 "SVN revision $revision will be used"
 if true; then
+  cd $srcdir
+  # Fix package info (not for aur.archlinux.org)
+  #pkgrel=archlinux
+  
+  revision=$pkgver
+  msg2 "SVN revision $revision will be used"
+
   msg "Getting patches from SVN"
   msg "Connecting to $_svntrunk/$_svnmod ..."
   if [ -d $srcdir/$_svnmod ] ; then
     svn up $_svnmod -r $revision
-    msg "$srcdir/$_svnmod"
   else
-    svn checkout $_svntrunk/$_svnmod $srcdir/$_svnmod -r $revision
+    svn checkout $_svntrunk/$_svnmod -r $revision
   fi
   msg "SVN Checkout done or server timeout"
-
+  
   msg "Getting iconsets from SVN"
-  msg "Connecting to $_iconsetssvntrunk ..."
+  msg "Connecting to $_svntrunk/$_iconsetssvnmod ..."
   if [ -d $srcdir/$_iconsetssvnmod ] ; then
     svn up $_iconsetssvnmod -r $revision
-    msg "$srcdir/$_iconsetssvnmod"
   else
-    svn checkout $_iconsetssvntrunk $srcdir/$_iconsetssvnmod -r $revision
+    svn checkout $_svntrunk/$_iconsetssvnmod -r $revision
   fi
   msg "SVN Checkout done or server timeout"
-
-  msg "Getting skins from SVN"
-  msg "Connecting to $_skinssvntrunk ..."
-  if [ -d $srcdir/$_skinssvnmod ] ; then
-    svn up $_skinssvnmod -r $revision
-    msg "$srcdir/$_skinssvnmod"
-  else
-    svn checkout $_skinssvntrunk $srcdir/$_skinssvnmod -r $revision
+  
+  if [ $incskins -eq "1" ] ; then
+    msg "Getting skins from SVN"
+    msg "Connecting to $_svntrunk/$_skinssvnmod ..."
+    if [ -d $srcdir/$_skinssvnmod ] ; then
+      svn up $_skinssvnmod -r $revision
+    else
+      svn checkout $_svntrunk/$_skinssvnmod -r $revision
+    fi
+    msg "SVN Checkout done or server timeout"
   fi
-  msg "SVN Checkout done or server timeout"
-
+  
   msg "Getting certs from SVN"
-  msg "Connecting to $_certssvntrunk ..."
+  msg "Connecting to $_svntrunk/$_certssvnmod ..."
   if [ -d $srcdir/$_certssvnmod ] ; then
-    svn up $_certssvnmod -r $revision
-    msg "$srcdir/$_certssvnmod"
+    svn up $_svntrunk/$_certssvnmod -r $revision
   else
-    svn checkout $_certssvntrunk $srcdir/$_certssvnmod -r $revision
+    svn checkout $_svntrunk/$_certssvnmod -r $revision
   fi
   msg "SVN Checkout done or server timeout"
-
-  msg "Getting plugins from SVN"
-  msg "Connecting to $_pluginssvntrunk ..."
-  if [ -d $srcdir/$_pluginssvnmod ] ; then
-    svn up $_pluginssvnmod -r $revision
-    msg "$srcdir/$_pluginssvnmod"
-  else
-    svn checkout $_pluginssvntrunk $srcdir/$_pluginssvnmod -r $revision
+ 
+  if [ $incplugins -eq "1" ] ; then
+    msg "Getting plugins from SVN"
+    msg "Connecting to $_svntrunk/$_pluginssvnmod ..."
+    if [ -d $srcdir/$_pluginssvnmod ] ; then
+      svn up $_pluginssvnmod -r $revision
+    else
+      svn checkout $_svntrunk/$_pluginssvnmod -r $revision
+    fi
+    msg "SVN Checkout done or server timeout"
   fi
-  msg "SVN Checkout done or server timeout"
-
-  msg "Getting langpack from SVN"
-  msg "Connecting to $_langpacksvntrunk ..."
-  if [ -d $srcdir/$_langpacksvnmod ] ; then
-    svn up $_langpacksvnmod
-    msg "$srcdir/$_langpacksvnmod"
+ 
+  if [ $usemvalang -eq "1" ] ; then
+    msg "Connecting to $_langpackgitroot/$_langpackgitname ..."
+    if [ -d $srcdir/$_langpackgitname ] ; then
+      cd $srcdir/$_langpackgitname && git pull origin
+      msg "Updating iris ..."
+      git submodule update
+      msg "The local files are updated."
+    else
+      git clone $_langpackgitroot/$_langpackgitname
+      cd $srcdir/$_langpackgitname
+      msg "Getting iris ..."
+      git submodule init
+      git submodule update
+    fi
+    msg "GIT checkout done or server timeout"
+    cd $srcdir
   else
-    svn checkout $_langpacksvntrunk $srcdir/$_langpacksvnmod
-  fi
-  msg "SVN Checkout done or server timeout"
-
+    msg "Getting langpack from SVN"
+    msg "Connecting to $_langpacksvntrunk/$_langpacksvnmod ..."
+    if [ -d $srcdir/$_langpacksvnmod ] ; then
+      svn up $_langpacksvnmod
+    else
+      svn checkout $_langpacksvntrunk/$_langpacksvnmod
+    fi
+    msg "SVN Checkout done or server timeout"
+  fi  
+ 
   msg "Connecting to $_gitroot__ ..."
   if [ -d $srcdir/$_gitname__ ] ; then
-    cd $_gitname__ && git pull origin
+    cd $srcdir/$_gitname__ && git pull origin
     msg "Updating iris ..."
     git submodule update
     msg "The local files are updated."
   else
     git clone $_gitroot__
-    cd psi
+    cd $srcdir/$_gitname__
     msg "Getting iris ..."
     git submodule init
     git submodule update
   fi
   msg "GIT checkout done or server timeout"
-fi
-
+ 
   [ -d $srcdir/$_gitname__-build ] && rm -r $srcdir/$_gitname__-build
   cp -r $srcdir/$_gitname__ $srcdir/$_gitname__-build
-
+ 
   msg "Copying patches to build directory"
   mkdir $srcdir/$_gitname__-build/patches
-  cp -r $srcdir/patches/* $srcdir/$_gitname__-build/patches/
-
+  cp -r $srcdir/$_svnmod/* $srcdir/$_gitname__-build/patches/
+ 
   msg "Applying patches"
   cd $srcdir/$_gitname__-build/patches
-  rm -f *-psi-win32-*         #useless windows patches
-  rm -f *dirty-check*         #useless update check
+  #rm -f *-psi-win32-*         #useless windows patches
+  #rm -f *dirty-check*         #useless update check
   if [ $powersave -eq "1" ] ; then
     cp dev/psi-reduce-power-consumption.patch psi-reduce-power-consumption.diff
   fi
-
+ 
   cd $srcdir/$_gitname__-build
   log=$srcdir/$_gitname__-build/PATCHING.log
+  : > $log
   for i in $srcdir/$_gitname__-build/patches/*.diff; do
     pn=$(basename $i)
     msg2 "Applying '$pn'"
-    patch -p1 < "$i" >> $log  2>&1 || { echo "$i FAILED"; true; }
-    if [ "$?" -ne 0 ]; then
-      error "Patching failed. Please, see log at '$log'."
-      return 1
-    fi
+    echo "Applying '$pn'" >> $log
+    patch -p1 < "$i" >> $log 2>&1
   done
-
+ 
   # Get program version
   ver=$(cat src/applicationinfo.cpp | awk 'BEGIN {} { ver = match($0, /PROG_VERSION "..../); if (ver) { print substr($0,RSTART+14,4); exit; }}')
-#  [ $usewebkit -eq "1" ] && revision=$revision"webkit" || true
-  pkgver="$ver.$revision"
   sed "s/\(.xxx\)/.$revision/" -i src/applicationinfo.cpp
-  msg "Adding extra plugins"
-  cp -rf $srcdir/$_pluginssvnmod $srcdir/$_gitname__-build/src
-
+  [ $usewebkit -eq "1" ] && revision=$revision"webkit"
+  sleep 0;pkgver="$ver.$revision"
+  
+  if [ $incplugins -eq "1" ] ; then
+    msg "Adding extra plugins"
+    cp -rf $srcdir/$_pluginssvnmod/* $srcdir/$_gitname__-build/src/plugins/
+  fi
+ 
   msg "Building $pkgname ..."
-  # We use system libraries
+  # We'll use system libraries
   rm -rf third-party/qca
-
-  # Enable plugins if disabled
+  
+  # Enable plugins support if disabled
   sed 's/#CONFIG += psi_plugins/CONFIG += psi_plugins/' -i src/src.pro
+ 
   if [ $usecrash -eq "1" ] ; then
     sed 's/#CONFIG += use_crash/CONFIG += use_crash/' -i src/src.pro
     msg2 "Using crash handler: yes"
   else
     msg2 "Using crash handler: no"
   fi
-
+ 
   if [ $powersave -eq "1" ] ; then
     msg2 "Using powersave: yes"
   else
     msg2 "Using powersave: no"
   fi
-
+ 
   # Enable whiteboarding
   if [ $whiteboarding -eq "1" ] ; then
     sed 's/#CONFIG += whiteboarding/CONFIG += whiteboarding/' -i src/src.pro
     # Fix undefined qdebug
-    (cd src/sxe && patch -p1 <$srcdir/whiteboard-build-fix.patch)
+#    sed '/qDebug/d' -i src/sxe/sxeedit.cpp
+#    sed '/qDebug/d' -i src/sxe/sxerecord.cpp
+    (cd src/sxe && patch -p1 <$srcdir/whiteboard-build-fix.patch) || true
     msg2 "Using whiteboarding: yes"
     warning "Whiteboarding is very unstable thing. Don't post bug reports about it!"
   else
     msg2 "Using whiteboarding: no"
   fi
-
+ 
   # Webkit setup
   if [ $usewebkit -eq "1" ] ; then
     msg2 "Using webkit: yes"
@@ -208,59 +249,94 @@ fi
   else
     msg2 "Using webkit: no"
   fi
-
+ 
   msg2 "Fixing iconsets..."
   mkdir -p $srcdir/$_gitname__-build/iconsets/system/default
-  cp -r $srcdir/iconsets/* $srcdir/$_gitname__-build/iconsets/
-
+  cp -r $srcdir/$_iconsetssvnmod/* $srcdir/$_gitname__-build/iconsets/
+ 
   msg2 "Running configure ..."
   ./configure --prefix=/usr --release --disable-bundled-qca --disable-growl
-
+ 
   # Enable webkit support
   [ $usewebkit -eq "1" ] && echo "CONFIG += webkit" >> conf.pri
-
+else
+  cd $srcdir/psi-build
+fi
   msg2 "Building ..."
   if [ $quietmake -eq "1" ] ; then
     make $MAKEOPT > /dev/null
   else
-    make $MAKEOPT
+    if [ $quietmake -eq "2" ] ; then
+      make $MAKEOPT > /dev/null 2>&1
+    else
+      make $MAKEOPT
+    fi
   fi
   msg2 "Installing ..."
   make INSTALL_ROOT="$pkgdir" install
-
+ 
   # Copy Psi license
   install -D COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
 
   cd $pkgdir/usr/share/psi
-  msg2 "Copying iconsets, skins and certs ..."
-  cp -rf $srcdir/iconsets ./
-  cp -rf $srcdir/skins ./
-  cp -rf $srcdir/certs ./
-
+  msg2 "Copying additional files ..."
+  cp -rf $srcdir/$_iconsetssvnmod ./
+  if [ $incskins -eq "1" ] ; then
+    mkdir skins
+    cp $srcdir/$_skinssvnmod/default_skin.* ./skins
+    cp -rf $srcdir/$_skinssvnmod/universal/* ./skins
+  fi
+  
+  cp -rf $srcdir/$_certssvnmod ./
+ 
   # Copy langpack
   msg "Copying langpack ..."
-  install -D -m 644 $srcdir/$_langpacksvnmod/*.qm ./
-  install -D -m 644 $srcdir/$_langpacksvnmod/qt/*.qm ./
-
-  msg "Building extra plugins ..."
-  cd $srcdir/$_gitname__-build/src/plugins/generic
-  # Create project file for extra plugins and compile them
-  echo "TEMPLATE = subdirs" > extraplugins.pro
-  echo -n "SUBDIRS = " >> extraplugins.pro
-  ls -1 ../../../../plugins/* | grep -v testoptplugin | sed -e :a -e '$b;N;s/\n/ /;ba' >> extraplugins.pro
-  qmake extraplugins.pro
-  # Fix bad project name
-  sed 's/screenshot\.pro/screenshotplugin\.pro/' -i Makefile
-  if [ $quietmake -eq "1" ] ; then
-    make $MAKEOPT > /dev/null
+  if [ $usemvalang -eq "1" ] ; then
+    install -D -m 644 $srcdir/$_langpackgitname/*.qm ./
   else
-    make $MAKEOPT
+    install -D -m 644 $srcdir/$_langpacksvnmod/*.qm ./
+    install -D -m 644 $srcdir/$_langpacksvnmod/qt/*.qm ./
   fi
-  # Copy plugins
-  mkdir $pkgdir/usr/share/psi/plugins
-  find . -name "lib*plugin.so" -exec cp -f {} $pkgdir/usr/share/psi/plugins \;
+ 
+  if [ $incplugins -eq "1" ] ; then
+    msg "Building extra plugins ..."
+    cd $srcdir/$_gitname__-build/src/plugins/generic
+    # Create project file for extra plugins and compile them
+    echo "TEMPLATE = subdirs" > extraplugins.pro
+    echo -n "SUBDIRS = " >> extraplugins.pro 
+    for pl in ${plugins_list[@]}; do
+      if [ -z $matchexp ] ; then
+        matchexp=\^$pl\$
+      else
+        matchexp=$matchexp"|"\^$pl\$
+      fi
+    done
+    matchexp=" ($matchexp)"
+    [[ $plugins_list_rule == "exclude" && ${#plugins_list[@]} -ne 0 ]] && matchexp="v$matchexp"
+    [[ $plugins_list_rule == "include" && ${#plugins_list[@]} -eq 0 ]] && matchexp="v$matchexp"
+    ls -1 $srcdir/$_pluginssvnmod/* | grep -E$matchexp | sed -e :a -e '$b;N;s/\n/ /;ba' >> extraplugins.pro
+    qmake extraplugins.pro
+    # Fix bad project name
+    sed 's/screenshot\.pro/screenshotplugin\.pro/' -i Makefile
+    if [ $quietmake -eq "1" ] ; then
+      make $MAKEOPT > /dev/null
+    else
+      if [ $quietmake -eq "2" ] ; then
+        make $MAKEOPT > /dev/null 2>&1
+        else
+      make $MAKEOPT
+      fi
+    fi
+    # Copy plugins
+    mkdir $pkgdir/usr/share/psi/plugins
+    find . -name "lib*plugin.so" -exec cp -f {} $pkgdir/usr/share/psi/plugins \;
+  fi
+  
   # Remove useless entries
   find $pkgdir -name ".svn" -type d | xargs rm -rf
   rm -f $pkgdir/usr/bin/*.debug
   rm -rf $srcdir/$_gitname__-build
+  # Force locale for russian spellcheck
+  #sed 's/Exec=psi/Exec=env LANG=ru_RU\.UTF-8 psi/' -i $pkgdir/usr/share/applications/psi.desktop
 }
+md5sums=()
