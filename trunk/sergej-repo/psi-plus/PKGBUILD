@@ -1,7 +1,7 @@
 # Contributor: Roman Ustyugov <qtdevel@gmail.com>
 # Contributor: Joker-jar <joker-jar@yandex.ru>
 
-pkgname="psi-plus"
+pkgname="psi+"
 pkgver=3392
 pkgrel=1
 pkgdesc="Psi IM Mod by psi-dev@conference.jabber.ru"
@@ -339,4 +339,5 @@ fi
   # Force locale for russian spellcheck
   #sed 's/Exec=psi/Exec=env LANG=ru_RU\.UTF-8 psi/' -i $pkgdir/usr/share/applications/psi.desktop
 }
+md5sums=()
 md5sums=()
