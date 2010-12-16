@@ -7,8 +7,8 @@
 # Contributor: Sigitas Mazaliauskas <sigis@gmail.com>
 
 pkgname=opera
-pkgver=10.63
-_buildver=6450
+pkgver=11.00
+_buildver=1156
 pkgrel=1
 pkgdesc="A fast and secure web browser and Internet suite."
 url="http://www.opera.com/browser/"
@@ -29,12 +29,12 @@ _arch=i386
 
 source=(http://ftp.opera.com/pub/opera/linux/${pkgver/./}/opera-${pkgver}-${_buildver}.i386.rpm
 	http://ftp.opera.com/pub/opera/linux/${pkgver/./}/opera-${pkgver}-${_buildver}.x86_64.rpm)
-md5sums=('e1478710c8e5bb009fcdb6a1853b8fe2'
-         '16295bb008cc754369d2f46914e49a8f')
+md5sums=('09d6fa437d8c6ceb7c04225131c63a35'
+         '73aa217d705c34e54d2767edb3801116')
 
 build() {
-	cd ${pkgdir}
-	bsdcpio -id < ${srcdir}/opera-${pkgver}-${_buildver}.${_arch}.rpm
-	sed -i usr/share/opera/package-id.ini -e "s|\(Package Type=\)rpm|\1tar|"
-	install -D -m 644 usr/share/opera/defaults/license.txt usr/share/licenses/${pkgname}/license.txt
+  cd ${pkgdir}
+  bsdcpio -id < ${srcdir}/opera-${pkgver}-${_buildver}.${_arch}.rpm
+  sed -i usr/share/opera/package-id.ini -e "s|\(Package Type=\)rpm|\1tar|"
+  install -D -m 644 usr/share/opera/defaults/license.txt usr/share/licenses/${pkgname}/license.txt
 }
