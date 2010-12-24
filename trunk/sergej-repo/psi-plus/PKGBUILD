@@ -2,7 +2,7 @@
 # Contributor: Joker-jar <joker-jar@yandex.ru>
 
 pkgname="psi+"
-pkgver=3392
+pkgver=3446
 pkgrel=1
 pkgdesc="Psi IM Mod by psi-dev@conference.jabber.ru"
 url="http://psi-plus.com"
@@ -41,7 +41,7 @@ usemvalang=0
 # Use WebKit (http://code.google.com/p/psi-dev/wiki/webkit)
 # CAUTION: webkit is EXPERIMENTAL feature! Use it at your own risk!
 # values: (0|1)
-usewebkit=1
+usewebkit=0
 # Use powersave
 # values: (0|1)
 powersave=0
