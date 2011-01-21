@@ -1,38 +1,25 @@
-# Contributor: Jaroslav Lichtblau <tu@dragonlord.cz>
+# Maintainer: Jaroslav Lichtblau <dragonlord@aur.archlinux.org>
 
 pkgname=beecrypt
-pkgver=4.1.2
+pkgver=4.2.1
 pkgrel=4
-pkgdesc="A strong and fast cryptography toolkit."
+pkgdesc="A strong and fast cryptography toolkit"
 arch=('i686' 'x86_64')
 url="http://beecrypt.sourceforge.net/"
 license=('LGPL')
 depends=('icu')
-makedepends=('python>=2.5' 'automake' 'patch')
-options=(!libtool)
-source=(http://downloads.sourceforge.net/sourceforge/$pkgname/$pkgname-$pkgver.tar.gz \
-        $pkgname-$pkgver-base64.patch $pkgname-$pkgver-threads.patch \
-        $pkgname-$pkgver-python-debug-py-c.patch $pkgname-$pkgver-gcc4.patch)
-
-md5sums=('820d26437843ab0a6a8a5151a73a657c'
-         '58541cb2c40b2d1ac431eaac1261bad9'
-         '5ac8b6646bab83fbc83c29ee89b55a4c'
-         'fdd692868cf8ae58fc39b626ea5bcb4f'
-         'c51e24fe71df262f6775083a94d03ee4')
+makedepends=('automake' 'python2')
+options=('!libtool')
+source=(http://downloads.sourceforge.net/sourceforge/$pkgname/$pkgname-$pkgver.tar.gz)
+md5sums=('8441c014170823f2dff97e33df55af1e')
 
 build() {
-  cd "${srcdir}/$pkgname-$pkgver"
+  cd ${srcdir}/$pkgname-$pkgver
+  ./configure --prefix=/usr --sysconfdir=/etc --without-java --disable-openmp --with-python=python2
+  make
+}
 
-  patch -Np1 -i ${srcdir}/$pkgname-$pkgver-python-debug-py-c.patch || return 1
-  patch -Np1 -i ${srcdir}/$pkgname-$pkgver-gcc4.patch || return 1
-  patch -Np1 -i ${srcdir}/$pkgname-$pkgver-threads.patch || return 1
-  patch -Np1 -i ${srcdir}/$pkgname-$pkgver-base64.patch || return 1
-
-  sed -i -e 's|bc_libalt=\"64\"| bc_libalt=|' configure.ac
-
-  autoreconf -if
-  ./configure --prefix=/usr --sysconfdir=/etc --enable-shared --enable-static \
-              --with-python --with-cplusplus --without-java
-  make || return 1
-  make DESTDIR=${pkgdir} install || return 1
+package() {
+  cd ${srcdir}/$pkgname-$pkgver
+  make DESTDIR=${pkgdir} install
 }
