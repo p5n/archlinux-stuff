@@ -2,7 +2,7 @@
 # Maintainer:Stefan Husmann <stefan-husmann@t-online.de>
 
 pkgname=pigz
-pkgver=2.1.5
+pkgver=2.1.6
 pkgrel=1
 pkgdesc="Parallel implementation of the bzip2 block-sorting file compressor"
 arch=('i686' 'x86_64')
@@ -10,15 +10,15 @@ url="http://www.zlib.net/pigz/"
 license=('GPL')
 depends=(gzip gcc-libs)
 source=(http://www.zlib.net/$pkgname/$pkgname-$pkgver.tar.gz)
-md5sums=('580873165ef3a369674f0c0af4c96d67')
+md5sums=('cbe9030c4be3d0ef2438ee5f8b169ca4')
 
 build() {
   cd ${srcdir}/$pkgname-$pkgver
-  make || return 1
+  make
   install -Dm755 ${srcdir}/${pkgname}-${pkgver}/${pkgname} \
-    ${pkgdir}/usr/bin/${pkgname} || return 1
+    ${pkgdir}/usr/bin/${pkgname}
   install -Dm755 ${srcdir}/${pkgname}-${pkgver}/${pkgname}.1 \
-    ${pkgdir}/usr/share/man/man1/${pkgname}.1 || return 1
+    ${pkgdir}/usr/share/man/man1/${pkgname}.1
   install -Dm755 ${srcdir}/${pkgname}-${pkgver}/${pkgname}.pdf \
-    ${pkgdir}/usr/share/doc/${pkgname}/${pkgname}.pdf || return 1
+    ${pkgdir}/usr/share/doc/${pkgname}/${pkgname}.pdf
 }
