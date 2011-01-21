@@ -1,7 +1,7 @@
 # Contributor: Andrea Scarpino <andrea@archlinux.org>
 
 pkgname=mysql-docs
-pkgver=5.1
+pkgver=5.5
 pkgrel=1
 pkgdesc="Set of HTML documentation for MySQL."
 arch=('any')
@@ -9,10 +9,10 @@ url="http://dev.mysql.com/doc/"
 license=('GPL')
 options=('docs')
 source=(http://downloads.mysql.com/docs/refman-$pkgver-en.html-chapter.tar.gz)
-md5sums=('4e10c43a6fabee9ab5f3f5e46a6b2294')
+md5sums=('9e318e7442b1d922aae1e86e9f5065b6')
 
 build(){
   cd "$srcdir"
   install -d ${pkgdir}/usr/share/doc
-  cp -rf refman-$pkgver-en.html-chapter ${pkgdir}/usr/share/doc/mysql/ || return 1
+  cp -rf refman-$pkgver-en.html-chapter ${pkgdir}/usr/share/doc/mysql/
 }

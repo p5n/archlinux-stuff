@@ -1,7 +1,8 @@
 # $Id$
 # Maintainer: Sergej Pupykin <pupykin.s+arch@gmail.com>
+
 pkgname=firefox-noscript
-pkgver=2.0.2.3
+pkgver=2.0.9.6
 _firefox_ver=3.6
 pkgrel=1
 pkgdesc="plugin for firefox which disables script"
@@ -11,15 +12,14 @@ license=('GPL2')
 depends=("firefox")
 makedepends=('unzip')
 source=(http://software.informaction.com/data/releases/noscript-$pkgver.xpi)
-md5sums=('315737c64c8788dfaf438ed2b36571c6')
+md5sums=('c4ef5dd3977d7a66f35ccc5319b2c762')
 
 build() {
-    cd $srcdir		|| return 1
-    #this method comes from gentoo (http://kambing.ui.edu/gentoo-portage/eclass/mozextension.eclass):
-    local emid=$(sed -n -e '/<\?em:id>\?/!d; s/.*\([\"{].*[}\"]\).*/\1/; s/\"//g; p; q' install.rdf) || return 1
+    cd $srcdir
+    local emid=$(sed -n -e '/<\?em:id>\?/!d; s/.*\([\"{].*[}\"]\).*/\1/; s/\"//g; p; q' install.rdf)
     local dstdir=$pkgdir/usr/lib/firefox-$_firefox_ver/extensions/${emid}
-    install -d $dstdir		|| return 1
+    install -d $dstdir
     sed -i 's#<em:maxVersion>.*</em:maxVersion>#<em:maxVersion>3.*</em:maxVersion>#' install.rdf
-    cp -R * $dstdir		|| return 1
+    cp -R * $dstdir
     rm $dstdir/noscript-$pkgver.xpi
 }

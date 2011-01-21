@@ -1,18 +1,19 @@
 # Contributor: Andrea Scarpino <bash.lnx@gmail.com>
 
 pkgname=jdk-docs
-pkgver=6u10
-pkgrel=4
+pkgver=6u18
+pkgrel=1
 pkgdesc="Java SE Development Kit Documentation 6"
 arch=('any')
 url="http://java.sun.com/"
 license=('custom')
 options=('docs')
-source=('ftp://ftp.cs.wcupa.edu/pub/rkline/general/jdk-6u10-docs.zip')
+source=("ftp://ftp.cs.wcupa.edu/pub/rkline/general/jdk-$pkgver-docs.zip")
 md5sums=('01a8f6b06f6a5396a96dd656162710e6')
 
 build(){
-  cd "$srcdir/docs" || return 1
-  mkdir -p "$pkgdir/usr/share/doc/java" || return 1
-  cp -rf * "$pkgdir/usr/share/doc/java" || return 1
+  cd "$srcdir/docs"
+  mkdir -p "$pkgdir/usr/share/doc/java"
+  cp -rf * "$pkgdir/usr/share/doc/java"
 }
+
