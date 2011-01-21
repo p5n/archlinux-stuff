@@ -1,5 +1,6 @@
 # $Id$
 # Maintainer: Sergej Pupykin <pupykin.s+arch@gmail.com>
+
 pkgname=firefox-xmarks
 pkgver=3.8.7
 _firefox_ver=3.6
@@ -14,14 +15,14 @@ source=(https://static.xmarks.com/clients/firefox/xmarks-$pkgver.xpi)
 md5sums=('188b7aaf34a7b760c19d57236387d04c')
 
 build() {
-    cd $srcdir		|| return 1
+    cd $srcdir
     #this method comes from gentoo (http://kambing.ui.edu/gentoo-portage/eclass/mozextension.eclass):
-    local emid=$(sed -n -e '/<\?em:id>\?/!d; s/.*\([\"{].*[}\"]\).*/\1/; s/\"//g; p; q' install.rdf) || return 1
+    local emid=$(sed -n -e '/<\?em:id>\?/!d; s/.*\([\"{].*[}\"]\).*/\1/; s/\"//g; p; q' install.rdf)
     local dstdir=$pkgdir/usr/lib/firefox-$_firefox_ver/extensions/${emid}
     mkdir -p $pkgdir/usr/share/licenses/$pkgname/
-    install -d $dstdir		|| return 1
+    install -d $dstdir
     sed -i 's#<em:maxVersion>.*</em:maxVersion>#<em:maxVersion>3.*</em:maxVersion>#' install.rdf
-    cp -R * $dstdir		|| return 1
+    cp -R * $dstdir
     rm $dstdir/xmarks-$pkgver.xpi
 
     cat <<EOF >$pkgdir/usr/share/licenses/$pkgname/license

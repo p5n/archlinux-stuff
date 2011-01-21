@@ -1,7 +1,7 @@
 # Contributor: Andrea Scarpino <bash.lnx@gmail.com>
 
 pkgname=css-docs
-pkgver=2.1
+pkgver=20110121
 pkgrel=1
 pkgdesc="Set of HTML documentation for CSS."
 arch=('any')
@@ -13,7 +13,7 @@ md5sums=('4dc0c96b49591199f75373afd2463226')
 
 build(){
   cd "$srcdir"
-  rm css2.tgz || return 1
+  rm css2.tgz
   mkdir -p $startdir/pkg/usr/share/doc/css
-  cp -rf * $startdir/pkg/usr/share/doc/css || return 1
+  cp -rf * $startdir/pkg/usr/share/doc/css
 }

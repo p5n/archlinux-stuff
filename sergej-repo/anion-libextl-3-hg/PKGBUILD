@@ -1,5 +1,5 @@
 pkgname=anion-libextl-3-hg
-pkgver=12
+pkgver=31
 pkgrel=1
 pkgdesc="anion libextl 3"
 arch=(i686 x86_64)

@@ -1,5 +1,5 @@
 pkgname=anion-libtu-3-hg
-pkgver=11
+pkgver=31
 pkgrel=1
 pkgdesc="anion libtu 3"
 arch=(i686 x86_64)
