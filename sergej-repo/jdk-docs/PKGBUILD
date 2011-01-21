@@ -9,11 +9,10 @@ url="http://java.sun.com/"
 license=('custom')
 options=('docs')
 source=("ftp://ftp.cs.wcupa.edu/pub/rkline/general/jdk-$pkgver-docs.zip")
-md5sums=('01a8f6b06f6a5396a96dd656162710e6')
+md5sums=('722df1b49add4499c933b8c0f2fe2af9')
 
 build(){
   cd "$srcdir/docs"
   mkdir -p "$pkgdir/usr/share/doc/java"
   cp -rf * "$pkgdir/usr/share/doc/java"
 }
-
