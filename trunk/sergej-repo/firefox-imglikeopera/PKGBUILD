@@ -1,7 +1,7 @@
 pkgname=firefox-imglikeopera
 pkgver=0.6.20
-_firefox_ver=3.6
-pkgrel=1
+_firefox_ver=4.0
+pkgrel=2
 pkgdesc="plugin for firefox which shows/hides images"
 arch=('any')
 url="http://imglikeopera.mozdev.org/"
