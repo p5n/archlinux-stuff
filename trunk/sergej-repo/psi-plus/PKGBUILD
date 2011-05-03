@@ -2,7 +2,7 @@
 # Contributor: Joker-jar <joker-jar@yandex.ru>
 
 pkgname="psi+"
-pkgver=3746
+pkgver=3835
 pkgrel=1
 pkgdesc="Psi IM Mod by psi-dev@conference.jabber.ru"
 url="http://psi-plus.com"
