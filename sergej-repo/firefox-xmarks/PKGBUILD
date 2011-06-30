@@ -3,8 +3,8 @@
 
 pkgname=firefox-xmarks
 pkgver=3.8.7
-_firefox_ver=4.0
-pkgrel=2
+_firefox_ver=5.0
+pkgrel=3
 pkgdesc="plugin for firefox which synchronizes bookmarks and passwords"
 arch=('any')
 url="http://www.xmarks.com/"
@@ -21,7 +21,7 @@ build() {
     local dstdir=$pkgdir/usr/lib/firefox-$_firefox_ver/extensions/${emid}
     mkdir -p $pkgdir/usr/share/licenses/$pkgname/
     install -d $dstdir
-    sed -i 's#<em:maxVersion>.*</em:maxVersion>#<em:maxVersion>4.*</em:maxVersion>#' install.rdf
+    sed -i 's#<em:maxVersion>.*</em:maxVersion>#<em:maxVersion>7.*</em:maxVersion>#' install.rdf
     cp -R * $dstdir
     rm $dstdir/xmarks-$pkgver.xpi
 
