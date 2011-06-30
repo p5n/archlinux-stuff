@@ -1,7 +1,7 @@
 pkgname=firefox-imglikeopera
 pkgver=0.6.20
-_firefox_ver=4.0
-pkgrel=2
+_firefox_ver=5.0
+pkgrel=3
 pkgdesc="plugin for firefox which shows/hides images"
 arch=('any')
 url="http://imglikeopera.mozdev.org/"
@@ -16,7 +16,7 @@ build() {
     local emid='imglikeopera@imfo.ru'
     local dstdir=$pkgdir/usr/lib/firefox-${_firefox_ver}/extensions/${emid}
     install -d $dstdir
-    sed -i 's#maxVersion=".*"#maxVersion="4.0.*"#' install.rdf
+    sed -i 's#maxVersion=".*"#maxVersion="7.*"#' install.rdf
     cp -R * $dstdir
     rm $dstdir/imglikeopera-$pkgver.xpi
 }
