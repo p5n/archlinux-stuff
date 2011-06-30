@@ -3,8 +3,8 @@
 
 pkgname=firefox-scrapbook
 pkgver=1.3.7
-_firefox_ver=4.0
-pkgrel=2
+_firefox_ver=5.0
+pkgrel=3
 pkgdesc="plugin for firefox which can save and organize saved pages"
 arch=('any')
 url="http://amb.vis.ne.jp/mozilla/scrapbook/"
@@ -13,7 +13,7 @@ depends=("firefox")
 makedepends=('unzip')
 _addons_file=41964
 source=(scrapbook-$pkgver-fx.xpi::https://addons.mozilla.org/en-US/firefox/downloads/latest/427/)
-md5sums=('869eacd543b4731b109d76f9413957ba')
+md5sums=('6c54abfc8fefd3ed3d97773cfe0ae9fc')
 
 build() {
     cd $srcdir
