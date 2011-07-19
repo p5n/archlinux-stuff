@@ -1,3 +1,6 @@
+# $Id$
+# Maintainer: Sergej Pupykin <pupykin.s+arch@gmail.com>
+
 pkgname=firefox-imglikeopera
 pkgver=0.6.20
 _firefox_ver=5.0
