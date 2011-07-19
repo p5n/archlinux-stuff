@@ -2,9 +2,9 @@
 # Maintainer: Sergej Pupykin <pupykin.s+arch@gmail.com>
 
 pkgname=firefox-xmarks
-pkgver=4.0.0
+pkgver=4.0.1
 _firefox_ver=5.0
-pkgrel=3
+pkgrel=1
 pkgdesc="plugin for firefox which synchronizes bookmarks and passwords"
 arch=('any')
 url="http://www.xmarks.com/"
@@ -12,7 +12,7 @@ license=('custom')
 depends=("firefox")
 makedepends=('unzip')
 source=(https://static.xmarks.com/clients/firefox/xmarks-$pkgver-release.xpi)
-md5sums=('5c5ab5fe1df747b972a04c6aebb3e307')
+md5sums=('72f499e7c756932be35b4e8843697ae6')
 
 build() {
     cd $srcdir
