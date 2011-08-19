@@ -13,7 +13,7 @@ source $LIBEXEC_DIR/common.inc
 
 source $1
 
-SSH_COMMAND="ssh -l $SSH_USER -i $SSH_KEY $HOST -C"
+SSH_COMMAND="ssh -x -l $SSH_USER -i $SSH_KEY $HOST -C"
 
 [ "x$SSH_PORT" != "x" ] && SSH_COMMAND="$SSH_COMMAND -p $SSH_PORT"
 
