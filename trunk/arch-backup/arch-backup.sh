@@ -58,8 +58,8 @@ if [ "x$1" == "x" ]; then
 	    else
 		echo -e "${MSG_ERROR}"
 	    fi
-	    echo -n "Executing \"$AFTER_BACKUP\" after backup:"
-    	    $AFTER_BACKUP && echo -e "${MSG_OK}" || echo -e "${MSG_ERROR}"
+	    echo -n "Executing \"$AFTER_BACKUP\" after backup..."
+	    $AFTER_BACKUP && echo -e "${MSG_OK}" || echo -e "${MSG_ERROR}"
 	fi
     done
 else
@@ -67,7 +67,7 @@ else
 	if [ "$config" != "arch-backup.conf" ]; then
 	    echo "${C_SEL}BACKUP $1${C_NORM}"
 	    unset TYPE USERS PACKAGES DIRS AFTER_BACKUP BEFORE_BACKUP COMMANDS HOST SMB_USER SMB_PASSWD SSH_PORT SSH_USER SSH_KEY
-    	    source $CONFIG_DIR/$1
+	    source $CONFIG_DIR/$1
 
 	    [ "x$BEFORE_BACKUP" == "x" ] && BEFORE_BACKUP=true
 	    [ "x$AFTER_BACKUP" == "x" ] && AFTER_BACKUP=true
@@ -80,8 +80,8 @@ else
 	    else
 		echo -e "${MSG_ERROR}"
 	    fi
-	    echo -n "Executing \"$AFTER_BACKUP\" after backup:"
-    	    $AFTER_BACKUP && echo -e "${MSG_OK}" || echo -e "${MSG_ERROR}"
+	    echo -n "Executing \"$AFTER_BACKUP\" after backup..."
+	    $AFTER_BACKUP && echo -e "${MSG_OK}" || echo -e "${MSG_ERROR}"
 
 	    shift 1
 	fi
