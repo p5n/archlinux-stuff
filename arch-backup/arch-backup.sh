@@ -50,7 +50,7 @@ if [ "x$1" == "x" ]; then
 	    [ "x$BEFORE_BACKUP" == "x" ] && BEFORE_BACKUP=true
 	    [ "x$AFTER_BACKUP" == "x" ] && AFTER_BACKUP=true
 
-	    echo -n "Executing \"$BEFORE_BACKUP\" before backup:"
+	    echo -n "Executing \"$BEFORE_BACKUP\" before backup..."
 	    $BEFORE_BACKUP
 	    if [ $? -eq 0 ]; then
 		echo -e "${MSG_OK}"
@@ -72,7 +72,7 @@ else
 	    [ "x$BEFORE_BACKUP" == "x" ] && BEFORE_BACKUP=true
 	    [ "x$AFTER_BACKUP" == "x" ] && AFTER_BACKUP=true
 
-	    echo -n "Executing \"$BEFORE_BACKUP\" before backup:"
+	    echo -n "Executing \"$BEFORE_BACKUP\" before backup..."
 	    $BEFORE_BACKUP
 	    if [ $? -eq 0 ]; then
 		echo -e "${MSG_OK}"

@@ -16,7 +16,7 @@ source $1
 #
 # Save package list
 #
-echo ">>> Saving package list..."
+echo -n ">>> Saving package list..."
 case "$PACKAGES" in
     pacman)
 	pacman -Q >$BACKUP_DIR/_localhost-pkg-list.txt
@@ -35,9 +35,9 @@ case "$PACKAGES" in
 	;;
 esac
 if [ $? -eq 0 ];then
-    echo -e "...${MSG_OK}"
+    echo -e "${MSG_OK}"
 else
-    echo -e "...${MSG_ERROR}"
+    echo -e "${MSG_ERROR}"
 fi
 
 #
@@ -57,13 +57,13 @@ for user in ${USERS[@]}; do
 	done
 	echo
 	# arc
-	echo ">>> Saving $user's home..."
-	list=`cat $homedir/.backup-list | perl -ne "print \"'$homedir/\"; chomp; print; print \"' \";"`
-        sh -c "tar c $list" | $COMPRESS_CMD 1>$BACKUP_DIR/_localhost-user-$user.tar.$COMPRESSED_EXT
+	echo -n ">>> Saving $user's home..."
+	list=`cat $homedir/.backup-list | perl -ne "print \"'${homedir:1}/\"; chomp; print; print \"' \";"`
+	sh -c "cd / && tar c $list" | $COMPRESS_CMD 1>$BACKUP_DIR/_localhost-user-$user.tar.$COMPRESSED_EXT
 	if [ $? -eq 0 ];then
-            echo -e "...${MSG_OK}"
+	    echo -e "${MSG_OK}"
 	else
-    	    echo -e "...${MSG_ERROR}"
+	    echo -e "${MSG_ERROR}"
 	fi
     else
 	echo "Saving $user's home: .backup-list is absent"
@@ -74,12 +74,12 @@ done
 # Save dirs
 #
 for dir in ${DIRS[@]}; do
-    echo ">>> Saving $dir..."
-    [ -d $dir -o -f $dir ] && tar c $dir | $COMPRESS_CMD 1>$BACKUP_DIR/_localhost-dir-`echo $dir | tr '/' '_'`.tar.$COMPRESSED_EXT
+    echo -n ">>> Saving $dir..."
+    [ -d $dir -o -f $dir ] && cd / && tar c ${dir:1} | $COMPRESS_CMD 1>$BACKUP_DIR/_localhost-dir-`echo $dir | tr '/' '_'`.tar.$COMPRESSED_EXT
     if [ $? -eq 0 ];then
-        echo -e "...${MSG_OK}"
+        echo -e "${MSG_OK}"
     else
-        echo -e "...${MSG_ERROR}"
+        echo -e "${MSG_ERROR}"
     fi
 done
 
@@ -92,11 +92,11 @@ while [ "x${COMMANDS[$i]}" != "x" ]; do
     i=`expr $i + 1`
     CMD=${COMMANDS[$i]}
     i=`expr $i + 1`
-    echo ">>> Saving command to file $FILE..."
-    sh -c "$CMD" | $COMPRESS_CMD > $BACKUP_DIR/_localhost-cmd-$FILE.$COMPRESSED_EXT
+    echo -n ">>> Saving command to file $FILE..."
+    sh -c "cd / && $CMD" | $COMPRESS_CMD > $BACKUP_DIR/_localhost-cmd-$FILE.$COMPRESSED_EXT
     if [ $? -eq 0 ];then
-        echo -e "...${MSG_OK}"
+        echo -e "${MSG_OK}"
     else
-        echo -e "...${MSG_ERROR}"
+        echo -e "${MSG_ERROR}"
     fi
 done
