@@ -768,11 +768,15 @@ tcpdchk: $(TCPDCHK_OBJ) $(SHLIB)
 install: install-lib install-bin install-dev
 
 install-lib:
+	install -d -m 0755 ${DESTDIR}/usr/lib/
 	install -o root -g root -m 0755 $(SHLIB) ${DESTDIR}/usr/lib/
 	ln -sf $(notdir $(SHLIB)) ${DESTDIR}/usr/lib/$(notdir $(SHLIBSOMAJ))
 	ln -sf $(notdir $(SHLIBSOMAJ)) ${DESTDIR}/usr/lib/$(notdir $(SHLIBSO))
 
 install-bin:
+	install -d -m 0755 ${DESTDIR}/usr/sbin/
+	install -d -m 0755 ${DESTDIR}/usr/share/man/man5
+	install -d -m 0755 ${DESTDIR}/usr/share/man/man8
 	install -o root -g root -m 0755 tcpd ${DESTDIR}/usr/sbin/
 	install -o root -g root -m 0755 tcpdchk ${DESTDIR}/usr/sbin/
 	install -o root -g root -m 0755 tcpdmatch ${DESTDIR}/usr/sbin/
@@ -785,8 +789,12 @@ install-bin:
 	install -o root -g root -m 0644 safe_finger.8 ${DESTDIR}/usr/share/man/man8/
 	install -o root -g root -m 0644 hosts_access.5 ${DESTDIR}/usr/share/man/man5/
 	install -o root -g root -m 0644 hosts_options.5 ${DESTDIR}/usr/share/man/man5/
+	ln -s hosts_access.5.gz ${DESTDIR}/usr/share/man/man5/hosts.allow.5.gz
+	ln -s hosts_access.5.gz ${DESTDIR}/usr/share/man/man5/hosts.deny.5.gz
 
 install-dev:
+	install -d -m 0755 ${DESTDIR}/usr/include
+	install -d -m 0755 ${DESTDIR}/usr/share/man/man3
 	install -o root -g root -m 0644 hosts_access.3 ${DESTDIR}/usr/share/man/man3/
 	install -o root -g root -m 0644 tcpd.h ${DESTDIR}/usr/include/
 	install -o root -g root -m 0644 $(LIB) ${DESTDIR}/usr/lib/
