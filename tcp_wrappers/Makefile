@@ -678,7 +678,7 @@ SHELL	= /bin/sh
 .c.o:;	$(CC) $(CFLAGS) -o $*.o -c $*.c
 
 SOMAJOR = 0
-SOMINOR = 7.6
+SOMINOR = 7.7
 
 LIB	= libwrap.a
 SHLIB	= shared/libwrap.so.$(SOMAJOR).$(SOMINOR)
