@@ -3,7 +3,7 @@ configuration checker. See the `tcpdchk.8' manual page (`nroff -man'
 format) for instructions. `tcpdchk' automatically identifies the most
 common configuration problems, and will save you and me a lot of time.
 
-Changes per release 7.7 (Aug 2011)
+Changes per release 7.6+ (Aug 2011)
 ==================================
 
 - Applied patches from gentoo, fedora, redhat:
