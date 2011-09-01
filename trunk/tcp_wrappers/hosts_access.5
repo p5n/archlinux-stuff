@@ -145,6 +145,8 @@ input, output and error connected to \fI/dev/null\fR.  Specify an `&\'
 at the end of the command if you do not want to wait until it has
 completed.
 .PP
+All shell commands should be prepended by \fIspawn\fR keyword
+.PP
 Shell commands should not rely on the PATH setting of the inetd.
 Instead, they should use absolute path names, or they should begin with
 an explicit PATH=whatever statement.

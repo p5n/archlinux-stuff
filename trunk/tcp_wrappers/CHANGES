@@ -3,6 +3,26 @@ configuration checker. See the `tcpdchk.8' manual page (`nroff -man'
 format) for instructions. `tcpdchk' automatically identifies the most
 common configuration problems, and will save you and me a lot of time.
 
+Changes per release 7.7 (Aug 2011)
+==================================
+
+- Applied patches from gentoo, fedora, redhat:
+  * 01_all_redhat-bug11881.patch
+  * 02_all_redhat-bug17795.patch
+  * 03_all_wildcard.patch
+  * 04_all_fixgethostbyname.patch
+  * 07_all_sig.patch
+  * 08_all_strerror.patch
+  * 09_all_gcc-3.4.patch
+  * 10_all_more-headers.patch
+  * 11_inet6_fixes.patch
+  * shared_lib_plus_plus-1.patch
+  * tcp-wrappers-7.6-ipv6-1.14.patch
+
+- Makefile fixes
+
+- Manpage update
+
 Changes per release 7.6 (Mar 1997)
 ==================================
 
