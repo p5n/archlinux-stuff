@@ -18,7 +18,7 @@ use I18N::Langinfo qw(langinfo CODESET);
 use POSIX qw(locale_h);
 use Digest::MD5 qw(md5_hex);
 
-my $Version = "0.7.5.1";
+my $Version = "0.7.5.2";
 
 my $DefaultAppDirs;
 my $DefaultDirectoryDirs;
@@ -80,6 +80,7 @@ sub findicon
         @xdg_data_dirs = split(":",$xdg_data_dirs);
 
         my (@icon_search_path);
+        push @icon_search_path, "/";
 
         my (@categorylist);
         @categorylist = ("apps", "places", "devices", "actions", "animations", "categories", "emblems", "emotes", "filesystems", "intl", "mimetypes", "status", "stock");
@@ -133,7 +134,7 @@ sub findicon
 
                 foreach my $dir (@icon_search_path)
                 {
-                        foreach my $ext ('','.png','.xpm')
+                        foreach my $ext ('','.png','.xpm','.svg')
                         {
                                 $filename = $dir."/".$iconname.$ext;
                                 ( -f $filename ) && return $filename;
@@ -142,11 +143,11 @@ sub findicon
         }
 }
 
-sub add_png_extension_if_needed ($)
-{
-        my ($f) = @_;
-        return $f =~ /\.(png|xpm|svg)$/ ? $f : "$f.png";
-}
+# sub add_png_extension_if_needed ($)
+# {
+#         my ($f) = @_;
+#         return $f =~ /\.(png|xpm|svg)$/ ? $f : "$f.png";
+# }
 
 sub scan_AppDir ($$;$)
 {
@@ -1665,7 +1666,7 @@ sub output_icewm_menu ($;$)
 
             my $name = $desktop->{'PrepName'};
             my $exec = $desktop->{'PrepExec'};
-            my $icon = findicon(add_png_extension_if_needed($desktop->{'Icon'})) || "-";
+            my $icon = findicon($desktop->{'Icon'}) || "-";
 
             $output .= ' ' x $indent;
             $output .= " prog \"$name\" $icon $exec\n";
