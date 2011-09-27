@@ -1,14 +1,14 @@
 # Contributor: Evgenij Vdovin <evdovin@pochta.ru>
 
 pkgname=thunderbird-spell-ru-en
-pkgver=2.0
-pkgrel=3
+pkgver=3
+pkgrel=1
 pkgdesc="Russian+English spellchecker dictionary for Thunderbird"
 arch=('any')
 url="http://mozutil.mozilla-russia.org/dict/"
 license=('GPL')
 depends=('thunderbird')
-source=(http://mozutil.mozilla-russia.org/dict/spell-${pkgrel}.zip)
+source=(http://mozutil.mozilla-russia.org/dict/spell-${pkgver}.zip)
 md5sums=('75daff84bac8bf4ab62874d1b44527aa')
 
 build(){
