@@ -3,8 +3,7 @@
 
 pkgname=firefox-xmarks
 pkgver=4.0.2
-_firefox_ver=6.0
-pkgrel=1
+pkgrel=2
 pkgdesc="plugin for firefox which synchronizes bookmarks and passwords"
 arch=('any')
 url="http://www.xmarks.com/"
@@ -12,16 +11,16 @@ license=('custom')
 depends=("firefox")
 makedepends=('unzip')
 source=(https://static.xmarks.com/clients/firefox/xmarks-$pkgver-release.xpi)
-md5sums=('1c046ae754409d0a56504cc45fc253b9')
+md5sums=('0efc66608390f1e83865bfc46d0025d2')
 
 build() {
     cd $srcdir
     #this method comes from gentoo (http://kambing.ui.edu/gentoo-portage/eclass/mozextension.eclass):
     local emid=$(sed -n -e '/<\?em:id>\?/!d; s/.*\([\"{].*[}\"]\).*/\1/; s/\"//g; p; q' install.rdf)
-    local dstdir=$pkgdir/usr/lib/firefox-$_firefox_ver/extensions/${emid}
+    local dstdir=$pkgdir/usr/lib/firefox/extensions/${emid}
     mkdir -p $pkgdir/usr/share/licenses/$pkgname/
     install -d $dstdir
-    sed -i 's#<em:maxVersion>.*</em:maxVersion>#<em:maxVersion>7.*</em:maxVersion>#' install.rdf
+    sed -i 's#<em:maxVersion>.*</em:maxVersion>#<em:maxVersion>99.*</em:maxVersion>#' install.rdf
     cp -R * $dstdir
     rm $dstdir/xmarks-$pkgver-release.xpi
 
