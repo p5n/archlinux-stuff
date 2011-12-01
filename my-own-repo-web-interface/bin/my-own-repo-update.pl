@@ -115,7 +115,7 @@ opendir DIR, $DIR || die("cannot open packages dir");
 
 while($pkgfile = readdir DIR)
 {
-    unless($pkgfile =~ /^\./ or $pkgfile =~ /\.db\.tar\.gz/ or $pkgfile =~ /\.db/) # FIXME:
+    unless($pkgfile =~ /^\./ or $pkgfile =~ /\.db\.tar\.gz$/ or $pkgfile =~ /\.db$/ or $pkgfile =~ /\.files\.tar\.gz$/ or $pkgfile =~ /\.files$/) # FIXME:
     {
 	$packagefile = $DIR."/".$pkgfile;
 	# ($dev,$ino,$mode,$nlink,$uid,$gid,$rdev,$size,$atime,$mtime,$ctime,$blksize,$blocks)
