@@ -18,7 +18,7 @@ use I18N::Langinfo qw(langinfo CODESET);
 use POSIX qw(locale_h);
 use Digest::MD5 qw(md5_hex);
 
-my $Version = "0.7.5.2";
+my $Version = "0.7.5.3";
 
 my $DefaultAppDirs;
 my $DefaultDirectoryDirs;
@@ -1760,6 +1760,8 @@ sub output_awesome_menu ($;$)
         $menu_name = "xdgmenu";
     }
 
+    #my $menu_icon = findicon($menu->{'PrepIcon'}) || "folder";
+
     foreach my $entry (@{$menu->{'entries'}})
     {
         if ($entry->{type} eq 'menu')
@@ -1784,11 +1786,16 @@ sub output_awesome_menu ($;$)
 
             my $name = $desktop->{'PrepName'};
             my $exec = $desktop->{'PrepExec'};
+            my $icon = findicon($desktop->{'Icon'}) || "-";
 
             $exec =~ s/"/\\"/g;
 
             $output .= ' ' x $indent;
-            $output .= "    {\"$name\", \"$exec\"},\n";
+	    if ($icon eq "-") {
+              $output .= "    {\"$name\", \"$exec\"},\n";
+	    } else {
+              $output .= "    {\"$name\", \"$exec\", \"$icon\" },\n";
+	    }
         }
         elsif ($entry->{type} eq 'menu')
         {
