@@ -27,14 +27,9 @@ source $LIBEXEC_DIR/common.inc
 DATE=`date +%Y.%m.%d.%H.%M.%S`
 export BACKUP_DIR=$BACKUP_BASE_DIR/arch-backup-$DATE-$BACKUP_SUFFIX
 
-mkdir -p $BACKUP_DIR
-
 [ -z "$BACKUP_OWNER" ] && BACKUP_OWNER=root:root
 [ -z "$BACKUP_PERMS_DIR" ] && BACKUP_PERMS_DIR=0700
 [ -z "$BACKUP_PERMS_FILE" ] && BACKUP_PERMS_FILE=0600
-
-chown $BACKUP_OWNER $BACKUP_DIR
-chmod $BACKUP_PERMS_DIR $BACKUP_DIR
 
 #
 # Backup
@@ -46,6 +41,10 @@ if [ "x$1" == "x" ]; then
 	    # clean previous vars
 	    unset TYPE USERS PACKAGES DIRS AFTER_BACKUP BEFORE_BACKUP COMMANDS HOST SMB_USER SMB_PASSWD SSH_PORT SSH_USER SSH_KEY
 	    source $CONFIG_DIR/$config
+
+	    mkdir -p $BACKUP_DIR
+	    chown $BACKUP_OWNER $BACKUP_DIR
+	    chmod $BACKUP_PERMS_DIR $BACKUP_DIR
 
 	    [ "x$BEFORE_BACKUP" == "x" ] && BEFORE_BACKUP=true
 	    [ "x$AFTER_BACKUP" == "x" ] && AFTER_BACKUP=true
@@ -68,6 +67,10 @@ else
 	    echo "${C_SEL}BACKUP $1${C_NORM}"
 	    unset TYPE USERS PACKAGES DIRS AFTER_BACKUP BEFORE_BACKUP COMMANDS HOST SMB_USER SMB_PASSWD SSH_PORT SSH_USER SSH_KEY
 	    source $CONFIG_DIR/$1
+
+	    mkdir -p $BACKUP_DIR
+	    chown $BACKUP_OWNER $BACKUP_DIR
+	    chmod $BACKUP_PERMS_DIR $BACKUP_DIR
 
 	    [ "x$BEFORE_BACKUP" == "x" ] && BEFORE_BACKUP=true
 	    [ "x$AFTER_BACKUP" == "x" ] && AFTER_BACKUP=true
