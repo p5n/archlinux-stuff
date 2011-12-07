@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 #
 # Usage:
@@ -25,7 +25,6 @@ source /etc/arch-backup/arch-backup.conf
 source $LIBEXEC_DIR/common.inc
 
 DATE=`date +%Y.%m.%d.%H.%M.%S`
-export BACKUP_DIR=$BACKUP_BASE_DIR/arch-backup-$DATE-$BACKUP_SUFFIX
 
 [ -z "$BACKUP_OWNER" ] && BACKUP_OWNER=root:root
 [ -z "$BACKUP_PERMS_DIR" ] && BACKUP_PERMS_DIR=0700
@@ -40,6 +39,8 @@ if [ "x$1" == "x" ]; then
 	    echo "${C_SEL}BACKUP $config${C_NORM}"
 	    # clean previous vars
 	    unset TYPE USERS PACKAGES DIRS AFTER_BACKUP BEFORE_BACKUP COMMANDS HOST SMB_USER SMB_PASSWD SSH_PORT SSH_USER SSH_KEY
+	    export BACKUP_DIR=$BACKUP_BASE_DIR/arch-backup-$DATE-$BACKUP_SUFFIX
+
 	    source $CONFIG_DIR/$config
 
 	    mkdir -p $BACKUP_DIR
@@ -50,7 +51,7 @@ if [ "x$1" == "x" ]; then
 	    [ "x$AFTER_BACKUP" == "x" ] && AFTER_BACKUP=true
 
 	    echo -n "Executing \"$BEFORE_BACKUP\" before backup..."
-	    $BEFORE_BACKUP
+	    eval $BEFORE_BACKUP
 	    if [ $? -eq 0 ]; then
 		echo -e "${MSG_OK}"
 		$LIBEXEC_DIR/$TYPE $CONFIG_DIR/$config
@@ -58,7 +59,11 @@ if [ "x$1" == "x" ]; then
 		echo -e "${MSG_ERROR}"
 	    fi
 	    echo -n "Executing \"$AFTER_BACKUP\" after backup..."
-	    $AFTER_BACKUP && echo -e "${MSG_OK}" || echo -e "${MSG_ERROR}"
+	    eval $AFTER_BACKUP && echo -e "${MSG_OK}" || echo -e "${MSG_ERROR}"
+
+	    chown $BACKUP_OWNER $BACKUP_DIR/*
+	    chmod $BACKUP_PERMS_FILE $BACKUP_DIR/*
+
 	fi
     done
 else
@@ -66,6 +71,8 @@ else
 	if [ "$config" != "arch-backup.conf" ]; then
 	    echo "${C_SEL}BACKUP $1${C_NORM}"
 	    unset TYPE USERS PACKAGES DIRS AFTER_BACKUP BEFORE_BACKUP COMMANDS HOST SMB_USER SMB_PASSWD SSH_PORT SSH_USER SSH_KEY
+	    export BACKUP_DIR=$BACKUP_BASE_DIR/arch-backup-$DATE-$BACKUP_SUFFIX
+
 	    source $CONFIG_DIR/$1
 
 	    mkdir -p $BACKUP_DIR
@@ -76,7 +83,7 @@ else
 	    [ "x$AFTER_BACKUP" == "x" ] && AFTER_BACKUP=true
 
 	    echo -n "Executing \"$BEFORE_BACKUP\" before backup..."
-	    $BEFORE_BACKUP
+	    eval $BEFORE_BACKUP
 	    if [ $? -eq 0 ]; then
 		echo -e "${MSG_OK}"
 		$LIBEXEC_DIR/$TYPE $CONFIG_DIR/$1
@@ -84,7 +91,10 @@ else
 		echo -e "${MSG_ERROR}"
 	    fi
 	    echo -n "Executing \"$AFTER_BACKUP\" after backup..."
-	    $AFTER_BACKUP && echo -e "${MSG_OK}" || echo -e "${MSG_ERROR}"
+	    eval $AFTER_BACKUP && echo -e "${MSG_OK}" || echo -e "${MSG_ERROR}"
+
+	    chown $BACKUP_OWNER $BACKUP_DIR/*
+	    chmod $BACKUP_PERMS_FILE $BACKUP_DIR/*
 
 	    shift 1
 	fi
@@ -97,10 +107,4 @@ fi
 
 echo "${C_SEL}Cleanup${C_NORM}"
 
-cd $BACKUP_BASE_DIR && (ls -1 | sort | head -n -$NUM_BACKUPS | while read A; do
-    echo "Removing $A..."
-    rm -rf $A
-done)
-
-chown $BACKUP_OWNER $BACKUP_DIR/*
-chmod $BACKUP_PERMS_FILE $BACKUP_DIR/*
+cd $BACKUP_BASE_DIR && cleardir $NUM_BACKUPS
