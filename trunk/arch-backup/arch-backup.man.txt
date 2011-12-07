@@ -63,6 +63,17 @@ SAMBA BACKUP
 
     SMB_PASSWD="password" - Samba password to authorize
 
+COMMON OPTIONS
+    BACKUP_DIR="/path/to/YYYY-MM-DD/" - you may override default backup
+    directory from main config, but you need to clean up backups manualy
+    with cleardir <num> function.
+
+    For example:
+
+    BACKUP_DIR="/path/to/`date +%Y.%m.%d.%H.%M.%S`"
+
+    AFTER_BACKUP="cd /path/to/ && cleardir 7"
+
 EXAMPLES
     Backup all:
 	arch-backup
