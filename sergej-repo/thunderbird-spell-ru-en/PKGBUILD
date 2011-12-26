@@ -1,18 +1,21 @@
+# $Id$
+# Maintainer: Sergej Pupykin <pupykin.s+arch@gmail.com>
 # Contributor: Evgenij Vdovin <evdovin@pochta.ru>
 
 pkgname=thunderbird-spell-ru-en
 pkgver=3
-pkgrel=3
-pkgdesc="Russian+English spellchecker dictionary for Thunderbird"
+pkgrel=4
+pkgdesc="Hunspell Russian+English spellchecker dictionary for Thunderbird"
 arch=('any')
 url="http://mozutil.mozilla-russia.org/dict/"
 license=('GPL')
 depends=('thunderbird')
+provides=('hunspell-ru-en')
 source=(http://mozutil.mozilla-russia.org/dict/spell-${pkgver}.zip)
 md5sums=('75daff84bac8bf4ab62874d1b44527aa')
 
 build(){
-  cd $startdir/src/
-  install -D -m644 RU_US.aff $startdir/pkg/usr/lib/thunderbird/dictionaries/ru-us-RU.aff
-  install -D -m644 RU_US.dic $startdir/pkg/usr/lib/thunderbird/dictionaries/ru-us-RU.dic
+  cd $srcdir/
+  install -D -m644 RU_US.aff $pkgdir/usr/share/hunspell/ru-us-RU.aff
+  install -D -m644 RU_US.dic $pkgdir/usr/share/hunspell/ru-us-RU.dic
 }
