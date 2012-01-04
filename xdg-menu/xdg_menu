@@ -18,7 +18,7 @@ use I18N::Langinfo qw(langinfo CODESET);
 use POSIX qw(locale_h);
 use Digest::MD5 qw(md5_hex);
 
-my $Version = "0.7.5.3";
+my $Version = "0.7.5.4";
 
 my $DefaultAppDirs;
 my $DefaultDirectoryDirs;
@@ -38,7 +38,7 @@ my @language_keys;
 
 my @accessed_files;
 my @save_ARGV = @ARGV;
-
+my $kdeconfig = get_kde_config();
 
 my %Desktop_entries;
 my %Directory_entries;
@@ -2111,11 +2111,27 @@ sub get_root_menu
     return "";
 }
 
+sub get_kde_config
+{
+    my $ret = 'true';
+    if(-x '/usr/bin/kde4-config')
+    {
+        $ret = '/usr/bin/kde4-config';
+    }
+    elsif(-x '/opt/kde/bin/kde-config')
+    {
+        $ret = '/opt/kde/bin/kde-config';
+    }
+    return $ret;
+}
+
 sub get_app_dirs
 {
     my %used;
     my $ret = '';
-    my @kde_xdgdata = split(/:/, `kde-config --path xdgdata-apps`);
+
+
+    my @kde_xdgdata = split(/:/, `$kdeconfig --path xdgdata-apps`);
 
     foreach $_ (@kde_xdgdata)
     {
@@ -2154,7 +2170,7 @@ sub get_KDE_legacy_dirs
 {
     my %used;
     my @ret;
-    foreach my $d ("/etc/opt/kde3/share/applnk", "/opt/kde3/share/applnk", reverse(split(/:/, `kde-config --path apps`)))
+    foreach my $d ("/etc/opt/kde3/share/applnk", "/opt/kde3/share/applnk", reverse(split(/:/, `$kdeconfig --path apps`)))
     {
         my $dir = $d;
         chomp $dir;
@@ -2357,6 +2373,10 @@ sub write_cache ($)
     close(FILE);
 }
 
+
+#
+# ################################################
+#
 
 check_cache();
 
