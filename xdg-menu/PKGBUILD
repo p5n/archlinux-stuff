@@ -1,29 +1,30 @@
-# $Id: PKGBUILD,v 1.5 2008/01/16 16:09:47 sergej Exp $
+# $Id: PKGBUILD 61613 2012-01-04 21:38:03Z spupykin $
 # Maintainer: Sergej Pupykin <sergej@aur.archlinux.org>
 # Contributor: Sergej Pupykin <sergej@aur.archlinux.org>
 
 pkgname=archlinux-xdg-menu
 pkgver=0.7.5.4
-pkgrel=1
+pkgrel=2
 pkgdesc="automatic generate WM menu from xdg files"
-arch=('i686' 'x86_64')
+arch=('any')
 url="http://wiki.archlinux.org/index.php/XdgMenu"
 license=("GPL")
-depends=(perlxml)
-backup=(etc/update-menus.conf \
-	etc/xdg/menus/arch-applications.menu)
-source=(http://archlinux-stuff.googlecode.com/files/arch-xdg-menu-$pkgver.tar.gz)
+depends=('perl' 'perlxml')
+optdepends=('sux')
+backup=("etc/update-menus.conf"
+	"etc/xdg/menus/arch-applications.menu")
+source=("http://archlinux-stuff.googlecode.com/files/arch-xdg-menu-$pkgver.tar.gz")
 md5sums=('f3efc444d1d1a20fa93fa53eff96ef1b')
 
 build() {
-  cd $startdir/src
-  install -D -m 0755 xdg_menu $startdir/pkg/usr/bin/xdg_menu
-  install -D -m 0755 xdg_menu_su $startdir/pkg/usr/bin/xdg_menu_su
-  install -D -m 0755 update-menus $startdir/pkg/usr/sbin/update-menus
-  install -D -m 0644 update-menus.conf $startdir/pkg/etc/update-menus.conf
-  mkdir -p $startdir/pkg/usr/share/desktop-directories/
-  cp arch-desktop-directories/* $startdir/pkg/usr/share/desktop-directories/
-  mkdir -p $startdir/pkg/etc/xdg/menus/
-  cp arch-xdg-menu/* $startdir/pkg/etc/xdg/menus/
-  mkdir -p $startdir/pkg//var/cache/xdg-menu
+  cd $srcdir
+  install -D -m 0755 xdg_menu $pkgdir/usr/bin/xdg_menu
+  install -D -m 0755 xdg_menu_su $pkgdir/usr/bin/xdg_menu_su
+  install -D -m 0755 update-menus $pkgdir/usr/sbin/update-menus
+  install -D -m 0644 update-menus.conf $pkgdir/etc/update-menus.conf
+  mkdir -p $pkgdir/usr/share/desktop-directories/
+  cp arch-desktop-directories/* $pkgdir/usr/share/desktop-directories/
+  mkdir -p $pkgdir/etc/xdg/menus/
+  cp arch-xdg-menu/* $pkgdir/etc/xdg/menus/
+  mkdir -p $pkgdir//var/cache/xdg-menu
 }
