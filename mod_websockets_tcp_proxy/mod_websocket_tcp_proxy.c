@@ -359,10 +359,18 @@ void *CALLBACK tcp_proxy_on_connect(const WebSocketServer * server)
                     if (conf) {
                         tpd->base64 = conf->base64;
                         tpd->timeout = conf->timeout;
-                        if (conf->host)
-                            tpd->host = apr_pstrdup(pool, conf->host);
+                        char *p = apr_pstrdup(pool, strstr(r->args, "p="));
+                        if(p) {
+                            char *end = strchr(p, '&');
+                            if(end) *end = 0;
+                        }
+                        if (conf->host && p)
+                            tpd->host = apr_psprintf(pool, conf->host, p + 2);
+                        APACHELOG(APLOG_DEBUG, r, "tcp_proxy_on_connect: host is %s", tpd->host);
+
                         if (conf->port)
                             tpd->port = apr_pstrdup(pool, conf->port);
+
                         APACHELOG(APLOG_DEBUG, r,
                                   "tcp_proxy_on_connect: base64 is %d",
                                   conf->base64);
