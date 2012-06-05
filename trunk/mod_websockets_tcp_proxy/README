@@ -1,0 +1,14 @@
+What is it?
+-----------
+This is websockets tunnel for VNC.
+VNC port and host mask should be set in apache config.
+Variable part of host address can be passed with p= GET parameter.
+
+Usage
+-----
+1. Change host, port in novnc.php
+2. Put novnc.php into novnc web directory
+3. Adjust and add vncproxy.conf into apache configuration
+4. Go to http://example.com/novnc/novnc.php?p=123
+
+in default configuration you will get novnc screen to 192.168.1.123:10
