@@ -1,7 +1,9 @@
+ULOGD?=../ulogd-2.0.0
+
 all: ulogd_SQ.so
 
 ulogd_SQ.so: ulogd_SQ.c
-	gcc -fPIC -c -o ulogd_SQ.o ulogd_SQ.c -I.
+	gcc -fPIC -c -o ulogd_SQ.o ulogd_SQ.c -I$(ULOGD) -I$(ULOGD)/include
 	ld -fPIC -o ulogd_SQ.so ulogd_SQ.o -lc -shared
 
 clean:

@@ -1,16 +1,24 @@
 pkgname=ulogd-simple-log
 pkgver=1.1
+_ulogdver=2.0.0
 pkgrel=1
 pkgdesc="compact text logging module for ulogd"
 arch=(i686 x86_64)
 url="http://code.google.com/p/archlinux-stuff/"
 license=('GPL')
-depends=(ulogd)
-source=(http://archlinux-stuff.googlecode.com/files/ulogd-simple-log-$pkgver.tar.gz)
-md5sums=('012c5c4d70a2cd121c38127f571fb43b')
+depends=('ulogd')
+makedepends=('libmysqlclient' 'postgresql-libs' 'sqlite' 'libpcap' 'libdbi'
+     'libnetfilter_acct' 'libnetfilter_log' 'libnetfilter_conntrack')
+source=(http://archlinux-stuff.googlecode.com/files/ulogd-simple-log-$pkgver.tar.gz
+	http://www.netfilter.org/projects/ulogd/files/ulogd-${_ulogdver}.tar.bz2)
+md5sums=('012c5c4d70a2cd121c38127f571fb43b'
+         '211e68781e3860959606fc94b97cf22e')
 
 build() {
+  cd $srcdir/ulogd-${_ulogdver}
+  ./configure --prefix=/usr --sysconfdir=/etc --with-mysql --with-pgsql --with-dbi
+
   cd "$srcdir/ulogd-simple-log"
-  make
+  make ULOGD=$srcdir/ulogd-${_ulogdver}
   make install DESTDIR=$pkgdir
 }
