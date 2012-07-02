@@ -7,9 +7,10 @@ url="http://code.google.com/p/archlinux-stuff/"
 license=('GPL')
 depends=(ulogd)
 source=(http://archlinux-stuff.googlecode.com/files/ulogd-simple-log-$pkgver.tar.gz)
+md5sums=('012c5c4d70a2cd121c38127f571fb43b')
 
 build() {
   cd "$srcdir/ulogd-simple-log"
-  make && \
+  make
   make install DESTDIR=$pkgdir
 }
