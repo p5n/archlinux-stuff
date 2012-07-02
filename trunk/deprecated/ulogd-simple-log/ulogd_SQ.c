@@ -80,9 +80,8 @@ static int get_ids(void)
 }
 
 #define GET_VALUE(x)	ulogd_keyh[intr_ids[x].id].interp->result[ulogd_keyh[intr_ids[x].id].offset].value
-#define GET_FLAGS(x)	ulogd_keyh[intr_ids[x].id].interp->result[ulogd_keyh[intr_ids[x].id].offset].flags
 
-static config_entry_t sq_ce = {
+static struct config_entry sq_ce = {
 	.key = "file",
 	.type = CONFIG_TYPE_STRING,
 	.options = CONFIG_OPT_NONE,
