@@ -1392,6 +1392,7 @@ sub preprocess_menu ($)
     }
 
     $menu->{'PrepName'} = $menu_name;
+    $menu->{'PrepIcon'} = $menu->{"Directory"}->{"Icon"};
 
     my $i = 0;
     while (defined $menu->{'entries'}[$i])
@@ -2017,11 +2018,21 @@ sub output_openbox3_inner_menu ($;$)
 
     $indent = 0 unless defined $indent;
     my $menu_name = $menu->{'PrepName'};
+    my $menu_icon = findicon($menu->{'PrepIcon'});
 
     if($indent != 0)
     {
 	$output .= ' ' x $indent;
-	$output .= "<menu id=\"" . quote_xml($menu_name) . "\" label=\"".quote_xml($menu_name) . "\">\n";
+
+        if ($menu_icon eq "")
+        {
+            $output .= "<menu id=\"" . quote_xml($menu_name) . "\" label=\"".quote_xml($menu_name) . "\">\n";
+        }
+        else
+        {
+            $output .= "<menu id=\"" . quote_xml($menu_name) . "\" label=\"".quote_xml($menu_name) . "\" icon=\"" . quote_xml($menu_icon) . "\">\n";
+        }
+
 #       $output .= "<menu label=\"".quote_xml($menu_name) . "\">\n";
     }
 
@@ -2033,9 +2044,19 @@ sub output_openbox3_inner_menu ($;$)
 
             my $name = $desktop->{'PrepName'};
             my $exec = $desktop->{'PrepExec'};
+            my $icon = findicon($desktop->{'Icon'});
 
             $output .= ' ' x $indent;
-            $output .= "     <item label=\"". quote_xml($name)."\">\n";
+
+            if ($icon eq "")
+            {
+                $output .= "     <item label=\"". quote_xml($name)."\">\n";
+            }
+            else
+            {
+                $output .= "     <item label=\"". quote_xml($name)."\" icon=\"" . quote_xml($icon) . "\">\n";
+            }
+
             $output .= "       <action name=\"Execute\"><execute>$exec</execute></action>\n";
             $output .= "     </item>\n";
         }
