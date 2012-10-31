@@ -1,0 +1,14 @@
+post_install() {
+  echo "Add line into ahache conf file:"
+  echo "Include /etc/webapps/owncloud/owncloud.conf"
+  echo "and enable php module"
+  echo
+  echo "Uncomment extensions: "
+  echo "  zip.so, gd.so, iconv.so, xmlrpc.so, pdo_mysql.so, mysql.so, openssl.so"
+  echo "in /etc/php/php.ini"
+  echo "Add extension curl.so in /etc/php/php.ini if you use it"
+}
+
+post_upgrade() {
+  post_install
+}

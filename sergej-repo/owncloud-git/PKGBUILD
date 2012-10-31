@@ -1,0 +1,53 @@
+# Contributor: Alexander Ovsyannikov <ovsinc at ya.ru>
+
+pkgname=owncloud-git
+pkgver=20121031
+pkgrel=1
+pkgdesc="ownCloud is part of the Social Desktop, a project connecting you with your peers in the community"
+arch=('i686' 'x86_64')
+url="http://owncloud.org/index.php/Main_Page"
+license=('GPL')
+depends=('php-apache' 'mysql' 'php-gd')
+optdepends=('phpmyadmin: A PHP and hence web-based tool to administrate MySQL over the WWW'
+	    'php-curl: for using curl module for PHP')
+install=owncloud.install
+makedepends=('git')
+backup=('etc/webapps/owncloud/owncloud.conf')
+options=('!strip')
+
+_gitroot="https://github.com/owncloud/core"
+_git3rd="https://github.com/owncloud/3rdparty"
+_gitapps="https://github.com/owncloud/apps"
+
+source=(owncloud.conf)
+md5sums=('c0112de94a7d9bdb7b5d1705a344db81')
+
+build() {
+  cd "$srcdir"
+
+  rm -rf owncloud-build || true
+
+  msg "Connecting to GIT server...."
+  [ -d core ]     && (cd core     && git pull) || git clone --depth=1 ${_gitroot} core
+  [ -d apps ]     && (cd apps     && git pull) || git clone --depth=1 ${_gitapps} apps
+  [ -d 3rdparty ] && (cd 3rdparty && git pull) || git clone --depth=1 ${_git3rd} 3rdparty
+  cp -a core owncloud-build
+  cp -a apps/* owncloud-build/apps/
+  cp -a 3rdparty owncloud-build/
+
+  msg "Building and installing..."
+  rm -rf owncloud-build/{tests,autotest.sh,.git,*/.git}
+  find owncloud-build -type f -name .gitignore -exec rm -f '{}' \;
+}
+
+package() {
+  cd "$srcdir"
+
+  install -d  ${pkgdir}/usr/share/webapps/
+  cp -a owncloud-build  ${pkgdir}/usr/share/webapps/owncloud
+
+  install -Dm0644 owncloud-build/README  ${pkgdir}/usr/share/doc/$pkgname/README
+  rm -f ${pkgdir}/usr/share/webapps/owncloud/README
+
+  install -Dm0644 owncloud.conf  ${pkgdir}/etc/webapps/owncloud/owncloud.conf
+}
