@@ -18,7 +18,7 @@ use I18N::Langinfo qw(langinfo CODESET);
 use POSIX qw(locale_h);
 use Digest::MD5 qw(md5_hex);
 
-my $Version = "0.7.5.5";
+my $Version = "0.7.6";
 
 my $DefaultAppDirs;
 my $DefaultDirectoryDirs;
@@ -2239,13 +2239,23 @@ sub prepare_language_keys ($)
     return @keys;
 }
 
+sub get_cache_dir
+{
+    my $ret;
+    if($ENV{XDG_CACHE_HOME})
+    {
+        $ret = "$ENV{XDG_CACHE_HOME}/xdg_menu";
+    }
+    else
+    {
+        $ret = "$ENV{HOME}/.xdg_menu_cache";
+    }
+    return $ret;
+}
+
 sub check_cache
 {
-    my $cachedir = $ENV{HOME};
-
-    return unless -d $cachedir;
-
-    $cachedir .= "/.xdg_menu_cache";
+    my $cachedir = get_cache_dir;
 
     return unless -f "$cachedir/inputs" && -f "$cachedir/output";
 
@@ -2362,12 +2372,7 @@ sub check_cache
 sub write_cache ($)
 {
     my ($output) = @_;
-
-    my $cachedir = $ENV{HOME};
-
-    return unless -d $cachedir;
-
-    $cachedir .= "/.xdg_menu_cache";
+    my $cachedir = get_cache_dir;
 
     mkdir $cachedir;
     unlink "$cachedir/output";
