@@ -1777,7 +1777,11 @@ sub output_awesome_menu ($;$)
     }
 
     $output .= ' ' x $indent;
-    $output .= $menu_name." = {";
+    if($indent == 1)
+    {
+      $output .= 'local ';
+    }
+    $output .= $menu_name." = {\n";
 
     foreach my $entry (@{$menu->{'entries'}})
     {
