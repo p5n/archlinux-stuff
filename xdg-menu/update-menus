@@ -4,7 +4,23 @@ $XDG_CFG="/etc/xdg/menus/arch-applications.menu";
 $CACHE_DIR="/var/cache/xdg-menu";
 $LOG_FILE="/var/log/update-menus.log";
 
-system("rm -rf ~/.xdg_menu_cache/");
+sub get_cache_dir
+{
+    my $ret;
+    if($ENV{XDG_CACHE_HOME})
+    {
+        $ret = "$ENV{XDG_CACHE_HOME}/xdg_menu";
+    }
+    else
+    {
+        $ret = "$ENV{HOME}/.xdg_menu_cache";
+    }
+    return $ret;
+}
+
+my $cachedir = get_cache_dir;
+
+system("rm -rf $cachedir");
 (system("rm -rf $CACHE_DIR/*") == 0) || die("Cannot purge cache!");
 
 open(FH, "</etc/update-menus.conf") || die("No config file!");
