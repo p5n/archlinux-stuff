@@ -18,7 +18,7 @@ use I18N::Langinfo qw(langinfo CODESET);
 use POSIX qw(locale_h);
 use Digest::MD5 qw(md5_hex);
 
-my $Version = "0.7.6";
+my $Version = "0.7.6.1";
 
 my $DefaultAppDirs;
 my $DefaultDirectoryDirs;
@@ -2128,8 +2128,8 @@ sub get_root_menu
 {
     foreach my $dir (split(/:/, $ENV{XDG_CONFIG_DIRS}), "/etc/xdg")
     {
-        check_file("$dir/menus/applications.menu");
-        return "$dir/menus/applications.menu" if -f "$dir/menus/applications.menu";
+        check_file("$dir/menus/arch-applications.menu");
+        return "$dir/menus/arch-applications.menu" if -f "$dir/menus/arch-applications.menu";
     }
     return "";
 }
