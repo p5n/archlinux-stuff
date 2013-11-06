@@ -130,18 +130,19 @@ while($pkgfile = readdir DIR)
 	if($mtime > $lasttime)
 	{
 	    ($pkgname, $pkgver, $pkgdesc, $url, $builddate, $packager, $size, $arch, $license, $depend, $backup, $filelist) = add_package($packagefile);
+	    $pkgdesc = $db->quote($pkgdesc);
 	    $pkgtime = time;
 	    if(pkg_exist($db, $pkgname))
 	    {
 		print STDERR "Updating: $packagefile\n";
 		$db->do("INSERT INTO log VALUES (NULL, $pkgtime, $OP_UPD, '$pkgname')");
-		$db->do("UPDATE packages SET pkgfile='$pkgfile', pkgver='$pkgver', pkgdesc='$pkgdesc', url='$url', builddate='$builddate', packager='$packager', size=$size, arch='$arch', license='$license', depend='$depend', backup='$backup', filelist=\"$filelist\", lastupdated=$pkgtime, newver='' WHERE pkgname='$pkgname'");
+		$db->do("UPDATE packages SET pkgfile='$pkgfile', pkgver='$pkgver', pkgdesc=$pkgdesc, url='$url', builddate='$builddate', packager='$packager', size=$size, arch='$arch', license='$license', depend='$depend', backup='$backup', filelist=\"$filelist\", lastupdated=$pkgtime, newver='' WHERE pkgname='$pkgname'");
 	    }
 	    else
 	    {
 		print STDERR "Adding: $packagefile\n";
 		$db->do("INSERT INTO log VALUES (NULL, $pkgtime, $OP_ADD, '$pkgname')");
-		$db->do("INSERT INTO packages VALUES (NULL, '$pkgfile', '$pkgname', '$pkgver', '$pkgdesc', '$url', '$builddate', '$packager', $size, '$arch', '$license', '$depend', '$backup', \"$filelist\", $pkgtime, '')");
+		$db->do("INSERT INTO packages VALUES (NULL, '$pkgfile', '$pkgname', '$pkgver', $pkgdesc, '$url', '$builddate', '$packager', $size, '$arch', '$license', '$depend', '$backup', \"$filelist\", $pkgtime, '')");
 	    }
 	}
     }
