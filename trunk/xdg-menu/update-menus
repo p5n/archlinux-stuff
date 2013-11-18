@@ -76,6 +76,12 @@ while(<FH>)
 	print "Generating openbox\n";
 	mkdir("$CACHE_DIR/openbox") && system("xdg_menu --format openbox3-pipe --root-menu $XDG_CFG >$CACHE_DIR/openbox/menu.xml 2>>$LOG_FILE");
     }
+    elsif(/^jwm$/)
+    {
+	# jwm
+	print "Generating jwm\n";
+	mkdir("$CACHE_DIR/jwm") && system("xdg_menu --format jwm --fullmenu --root-menu $XDG_CFG >$CACHE_DIR/jwm/menu.xml 2>>$LOG_FILE");
+    }
     elsif(/^#.*$/)
     {
     }

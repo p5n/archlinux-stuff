@@ -18,7 +18,7 @@ use I18N::Langinfo qw(langinfo CODESET);
 use POSIX qw(locale_h);
 use Digest::MD5 qw(md5_hex);
 
-my $Version = "0.7.6.1";
+my $Version = "0.7.6.2";
 
 my $DefaultAppDirs;
 my $DefaultDirectoryDirs;
@@ -2124,6 +2124,69 @@ sub output_readable ($;$)
     return $output;
 }
 
+sub output_jwm_inner_menu ($;$)
+{
+    my ($menu, $indent) = @_;
+
+    my $output = '';
+
+    $indent = 0 unless defined $indent;
+
+    my $menu_name = $menu->{'PrepName'};
+    #my $menu_icon = $menu->{'PrepIcon'} || "folder" ;
+    my $menu_icon = findicon($menu->{'PrepIcon'}) || "folder";
+
+    if($indent)
+    {
+    $output .= ' ' x $indent;
+    $output .= "<Menu icon=\"$menu_icon\" label=\"$menu_name\">\n";
+    }
+
+    foreach my $entry (@{$menu->{'entries'}})
+    {
+        if ($entry->{type} eq 'desktop')
+        {
+            my $desktop = $entry->{desktop};
+
+            my $name = $desktop->{'PrepName'};
+            my $exec = $desktop->{'PrepExec'};
+            my $icon = findicon($desktop->{'Icon'}) || "";
+
+            $output .= ' ' x $indent;
+            $output .= " <Program icon=\"$icon\" label=\"$name\">$exec</Program>\n";
+        }
+        elsif ($entry->{type} eq 'menu')
+        {
+            $output .= output_jwm_inner_menu ($entry->{'menu'}, $indent + 1);
+        }
+        else
+        {
+            print STDERR "wrong menu entry type: $entry->{type}";
+        }
+
+    }
+
+    if($indent)
+    {
+    $output .= ' ' x $indent;
+    $output .= "</Menu>\n";
+    }
+
+    return $output;
+}
+
+sub output_jwm_menu ($;$)
+{
+    my ($menu, $indent) = @_;
+
+    my $output = '';
+
+    $output .= "<JWM>\n";
+    $output .= output_jwm_inner_menu ($menu, $indent);
+    $output .= "</JWM>\n";
+    return $output;
+}
+
 sub get_root_menu
 {
     foreach my $dir (split(/:/, $ENV{XDG_CONFIG_DIRS}), "/etc/xdg")
@@ -2459,7 +2522,7 @@ if ($help)
       possible formats: twm, WindowMaker, fvwm2, icewm,  ion3,
                         blackbox, fluxbox, openbox,
                         xfce4, openbox3, openbox3-pipe, awesome
-                        readable
+                        jwm, readable
                         default: WindowMaker
 
       fullmenu  - output a full menu and not only a submenu
@@ -2560,6 +2623,17 @@ elsif ($format eq 'openbox3')
 elsif ($format eq 'openbox3-pipe')
 {
     $output = output_openbox3_pipe_menu($menu)
+}
+elsif ($format eq 'jwm')
+{
+    if ($fullmenu)
+    {
+        $output = output_jwm_menu($menu)
+    }
+    else
+    {
+        $output = output_jwm_inner_menu($menu)
+    }
 }
 elsif ($format eq 'readable')
 {
