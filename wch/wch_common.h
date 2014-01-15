@@ -9,33 +9,6 @@
 #define KERNEL_VERSION(ver, rel, seq) ((ver << 16) | (rel << 8) | seq)
 #endif
 
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,0)) // for 2.4 kernel
-#ifdef MODULE
-#include <linux/config.h>
-#ifdef MODVERSIONS
-#include <linux/modversions.h>
-#endif
-#include <linux/module.h>
-#else
-#define	MOD_INC_USE_COUNT
-#define MOD_DEC_USE_COUNT
-#endif
-
-#include <linux/autoconf.h>
-#include <linux/sched.h>
-#include <linux/timer.h>
-#include <linux/major.h>
-#include <linux/string.h>
-#include <linux/fcntl.h>
-#include <linux/ptrace.h>
-#include <linux/delay.h>
-#include <asm/bitops.h>
-
-#ifndef PCI_ANY_ID
-#define PCI_ANY_ID (~0)
-#endif
-#endif
-
 #include <linux/errno.h>
 #include <linux/signal.h>
 #include <linux/tty.h>
@@ -44,11 +17,6 @@
 #include <linux/serial_reg.h>
 #include <linux/ioport.h>
 #include <linux/mm.h>
-
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,39))
-#include <linux/smp_lock.h>
-#endif
-
 #include <linux/kernel.h>
 #include <linux/init.h>
 #include <linux/slab.h>
@@ -56,15 +24,12 @@
 #include <linux/tty_driver.h>
 #include <linux/pci.h>
 #include <linux/circ_buf.h>
-
 #include <asm/uaccess.h>
 #include <asm/io.h>
 #include <asm/irq.h>
 #include <asm/segment.h>
 #include <asm/serial.h>
 #include <linux/interrupt.h>
-
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,0))
 #include <linux/module.h>
 #include <linux/workqueue.h>
 #include <linux/moduleparam.h>
@@ -72,21 +37,10 @@
 #include <linux/sysrq.h>
 #include <linux/delay.h>
 #include <linux/device.h>
-#endif
-
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,28))
 #include <linux/kref.h>
-#endif
-
 #include <linux/parport.h>
 #include <linux/ctype.h>
 #include <linux/poll.h>
-
-
-#if (LINUX_VERSION_CODE <= KERNEL_VERSION(2,6,17))
-#include <linux/devfs_fs_kernel.h>
-#endif
-
 #include <linux/sched.h>
 
 /*-------------------------------------------------------------------------------
@@ -385,11 +339,7 @@ enum {
 #define WAKEUP_CHARS 		0x100
 
 
-#if (LINUX_VERSION_CODE > KERNEL_VERSION(2,6,19))
 #define WCHTERMIOS  ktermios
-#else
-#define WCHTERMIOS  termios
-#endif
 
 // for ser_port->setserial_flag
 #define WCH_SER_BAUD_SETSERIAL	0x01
@@ -553,16 +503,8 @@ struct wch_board {
 #define WCH_UIF_NORMAL_ACTIVE (1 << 29)
 #define WCH_UIF_INITIALIZED (1 << 31)
 
-
 #define WCH_ENABLE_MS(port, cflag) ((port)->flags & WCH_UPF_HARDPPS_CD || (cflag) & CRTSCTS || !((cflag) & CLOCAL))
-
-
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,0))
 #define WCH_SER_DEVNUM(x) ((x)->index)
-#else
-#define WCH_SER_DEVNUM(x) (MINOR((x)->device) - (x)->driver.minor_start)
-#endif
-
 
 struct ser_info;
 struct ser_port;
