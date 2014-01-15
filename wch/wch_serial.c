@@ -1,10 +1,6 @@
 #include "wch_common.h"
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
 static DEFINE_SEMAPHORE(ser_port_sem);
-#else
-static DECLARE_MUTEX(ser_port_sem);
-#endif
 
 #define WCH_HIGH_BITS_OFFSET ((sizeof(long) - sizeof(int)) * 8)
 #define wch_ser_users(state) ((state)->count + ((state)->info ? (state)->info->blocked_open : 0))
@@ -28,13 +24,6 @@ static const struct serial_uart_config wch_uart_config[PORT_SER_MAX_UART + 1] = 
 };
 
 
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,0))
-static int ser_refcount;
-static struct tty_struct *ser_tty[WCH_SER_TOTAL_MAX + 1];
-static struct termios *ser_termios[WCH_SER_TOTAL_MAX + 1];
-static struct termios *ser_termios_locked[WCH_SER_TOTAL_MAX + 1];
-#endif
-
 static _INLINE_ void ser_handle_cts_change(struct ser_port *, unsigned int);
 static _INLINE_ void ser_update_mctrl(struct ser_port *, unsigned int, unsigned int);
 static void ser_write_wakeup(struct ser_port *);
@@ -45,11 +34,7 @@ static void ser_tasklet_action(unsigned long);
 static int ser_startup(struct ser_state *, int);
 static void ser_shutdown(struct ser_state *);
 static _INLINE_ void _ser_put_char(struct ser_port *, struct circ_buf *, unsigned char);
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,26))
 static int ser_put_char(struct tty_struct *, unsigned char);
-#else
-static void ser_put_char(struct tty_struct *, unsigned char);
-#endif
 static void ser_flush_chars(struct tty_struct *);
 static int ser_chars_in_buffer(struct tty_struct *);
 static void ser_flush_buffer(struct tty_struct *);
@@ -59,35 +44,15 @@ static void ser_unthrottle(struct tty_struct *);
 static int ser_get_info(struct ser_state *, struct serial_struct *);
 static int ser_set_info(struct ser_state *, struct serial_struct *);
 static int ser_write_room(struct tty_struct *);
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,10))
 static int ser_write(struct tty_struct *, const unsigned char *, int);
-#else
-static int ser_write(struct tty_struct *, int, const unsigned char *, int);
-#endif
 static int ser_get_lsr_info(struct ser_state *, unsigned int *);
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,39))
 static int ser_tiocmget(struct tty_struct *);
 static int ser_tiocmset(struct tty_struct *, unsigned int, unsigned int);
-#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,0))
-static int ser_tiocmget(struct tty_struct *, struct file *);
-static int ser_tiocmset(struct tty_struct *, struct file *, unsigned int, unsigned int);
-#else
-static int ser_get_modem_info(struct ser_state *, unsigned int *);
-static int ser_set_modem_info(struct ser_state *, unsigned int, unsigned int *);
-#endif
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,27))
 static int ser_break_ctl(struct tty_struct *, int);
-#else
-static void ser_break_ctl(struct tty_struct *, int);
-#endif
 static int ser_wait_modem_status(struct ser_state *, unsigned long);
 static int ser_get_count(struct ser_state *, struct serial_icounter_struct *);
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,39))
 static int ser_ioctl(struct tty_struct *, unsigned int, unsigned long);
-#else
-static int ser_ioctl(struct tty_struct *, struct file *, unsigned int, unsigned long);
-#endif
 static void ser_hangup(struct tty_struct *);
 unsigned int ser_get_divisor(struct ser_port *, unsigned int);
 unsigned int ser_get_baud_rate(struct ser_port *, struct WCHTERMIOS *, struct WCHTERMIOS *, unsigned int, unsigned int);
@@ -630,35 +595,16 @@ ser_start(
 }
 
 
-static void
-ser_tasklet_action(
-  unsigned long data
-  )
+static void ser_tasklet_action(unsigned long data)
 {
   struct ser_state *state = (struct ser_state *)data;
-  struct tty_struct *tty = NULL;
-  tty = state->info->tty;
+  struct tty_struct *tty = state->info->tty;
   if (tty)
   {
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,31))
     if ((tty->flags & (1 << TTY_DO_WRITE_WAKEUP)) && tty->ldisc->ops->write_wakeup)
     {
       tty->ldisc->ops->write_wakeup(tty);
     }
-
-#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,27) && LINUX_VERSION_CODE <= KERNEL_VERSION(2,6,30))
-    {
-      if ((tty->flags & (1 << TTY_DO_WRITE_WAKEUP)) && tty->ldisc.ops->write_wakeup)
-      {
-        tty->ldisc.ops->write_wakeup(tty);
-      }
-    }
-#else
-    if ((tty->flags & (1 << TTY_DO_WRITE_WAKEUP)) && tty->ldisc.write_wakeup)
-    {
-      tty->ldisc.write_wakeup(tty);
-    }
-#endif
     wake_up_interruptible(&tty->write_wait);
   }
 }
@@ -705,11 +651,7 @@ ser_startup(
 
     info->xmit.buf = (unsigned char *) page;
     info->tmpbuf = info->xmit.buf + WCH_UART_XMIT_SIZE;
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
     sema_init(&info->tmpbuf_sem,1);
-#else
-    init_MUTEX(&info->tmpbuf_sem);
-#endif
     ser_circ_clear(&info->xmit);
   }
 
@@ -772,9 +714,7 @@ ser_shutdown(
 
   wch_ser_shutdown(port);
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,0))
   synchronize_irq(port->irq);
-#endif
   if (info->xmit.buf)
   {
     free_page((unsigned long)info->xmit.buf);
@@ -824,44 +764,23 @@ _ser_put_char(
 }
 
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,26))
-static int
-ser_put_char(
-  struct tty_struct *tty,
-  unsigned char ch
-  )
-#else
-  static void
-  ser_put_char(
-    struct tty_struct *tty,
-    unsigned char ch
-    )
-#endif
+static int ser_put_char(struct tty_struct *tty, unsigned char ch)
 {
   struct ser_state *state = NULL;
   int line = WCH_SER_DEVNUM(tty);
   if (line >= WCH_SER_TOTAL_MAX)
   {
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,26))
     return 0;
-#else
-    return;
-#endif
   }
 
   state = tty->driver_data;
   _ser_put_char(state->port, &state->info->xmit, ch);
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,26))
   return 0;
-#endif
 }
 
 
-static void
-ser_flush_chars(
-  struct tty_struct *tty
-  )
+static void ser_flush_chars(struct tty_struct *tty)
 {
   int line = WCH_SER_DEVNUM(tty);
   if (line >= WCH_SER_TOTAL_MAX)
@@ -873,10 +792,7 @@ ser_flush_chars(
 }
 
 
-static int
-ser_chars_in_buffer(
-  struct tty_struct *tty
-  )
+static int ser_chars_in_buffer(struct tty_struct *tty)
 {
   struct ser_state *state = NULL;
   int line = WCH_SER_DEVNUM(tty);
@@ -890,10 +806,7 @@ ser_chars_in_buffer(
 }
 
 
-static void
-ser_flush_buffer(
-  struct tty_struct *tty
-  )
+static void ser_flush_buffer(struct tty_struct *tty)
 {
   struct ser_state *state = NULL;
   struct ser_port *port = NULL;
@@ -918,25 +831,10 @@ ser_flush_buffer(
 
   wake_up_interruptible(&tty->write_wait);
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,31))
   if ((tty->flags & (1 << TTY_DO_WRITE_WAKEUP)) && tty->ldisc->ops->write_wakeup)
   {
     (tty->ldisc->ops->write_wakeup)(tty);
   }
-
-#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,27) && LINUX_VERSION_CODE <= KERNEL_VERSION(2,6,30))
-
-  if ((tty->flags & (1 << TTY_DO_WRITE_WAKEUP)) && tty->ldisc.ops->write_wakeup)
-  {
-    (tty->ldisc.ops->write_wakeup)(tty);
-  }
-
-#else
-  if ((tty->flags & (1 << TTY_DO_WRITE_WAKEUP)) && tty->ldisc.write_wakeup)
-  {
-    (tty->ldisc.write_wakeup)(tty);
-  }
-#endif
 }
 
 
@@ -1100,9 +998,7 @@ ser_set_info(
     new_port += (unsigned long) new_serial.port_high << WCH_HIGH_BITS_OFFSET;
   }
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,0))
   new_serial.irq = irq_canonicalize(new_serial.irq);
-#endif
 
   close_delay = new_serial.close_delay;
   closing_wait = new_serial.closing_wait == ASYNC_CLOSING_WAIT_NONE ? WCH_USF_CLOSING_WAIT_NONE : new_serial.closing_wait;
@@ -1237,22 +1133,12 @@ ser_write_room(
 }
 
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,10))
 static int
 ser_write(
   struct tty_struct *tty,
   const unsigned char *buf,
   int count
   )
-#else
-  static int
-  ser_write(
-    struct tty_struct *tty,
-    int from_user,
-    const unsigned char *buf,
-    int count
-    )
-#endif
 {
   struct ser_state *state = tty->driver_data;
   struct ser_port *port = NULL;
@@ -1285,23 +1171,7 @@ ser_write(
     {
       break;
     }
-#if (LINUX_VERSION_CODE > KERNEL_VERSION(2,6,9))
     memcpy(circ->buf + circ->head, buf, c);
-#else
-    if (from_user)
-    {
-      if (copy_from_user((circ->buf + circ->head), buf, c) == c)
-      {
-        ret = -EFAULT;
-        break;
-      }
-    }
-    else
-    {
-      memcpy(circ->buf + circ->head, buf, c);
-    }
-#endif
-
 
     circ->head = (circ->head + c) & (WCH_UART_XMIT_SIZE - 1);
     buf += c;
@@ -1333,19 +1203,9 @@ ser_get_lsr_info(
   }
 
 
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,4,18))
-  if (copy_to_user(value, &result, sizeof(int)))
-  {
-    return -EFAULT;
-  }
-
-  return 0;
-#else
   return put_user(result, value);
-#endif
 }
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,39))
 static int
 ser_tiocmget(
   struct tty_struct *tty
@@ -1410,250 +1270,15 @@ ser_tiocmset(
   return ret;
 }
 
-#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,0))
-static int
-ser_tiocmget(
-  struct tty_struct *tty,
-  struct file *file
-  )
-{
-  struct ser_state *state = NULL;
-  struct ser_port *port = NULL;
-  int result = -EIO;
-  int line = WCH_SER_DEVNUM(tty);
-  if (line >= WCH_SER_TOTAL_MAX)
-  {
-    return 0;
-  }
 
-  state = tty->driver_data;
-  port = state->port;
-
-  down(&state->sem);
-
-  if ((!file || !tty_hung_up_p(file)) && !(tty->flags & (1 << TTY_IO_ERROR)))
-  {
-    result = port->mctrl;
-    result |= wch_ser_get_mctrl(port);
-  }
-
-  up(&state->sem);
-
-  return result;
-}
-
-
-static int
-ser_tiocmset(
-  struct tty_struct *tty,
-  struct file *file,
-  unsigned int set,
-  unsigned int clear
-  )
-{
-  struct ser_state *state = NULL;
-  struct ser_port *port = NULL;
-  int ret = -EIO;
-  int line = WCH_SER_DEVNUM(tty);
-  if (line >= WCH_SER_TOTAL_MAX)
-  {
-    return 0;
-  }
-
-  state = tty->driver_data;
-  port = state->port;
-
-  down(&state->sem);
-
-  if ((!file || !tty_hung_up_p(file)) && !(tty->flags & (1 << TTY_IO_ERROR)))
-  {
-    ser_update_mctrl(port, set, clear);
-    ret = 0;
-  }
-
-  up(&state->sem);
-
-  return ret;
-}
-
-
-#else
-static int
-ser_get_modem_info(
-  struct ser_state *state,
-  unsigned int *value
-  )
-{
-  struct ser_port *port = NULL;
-  int line;
-  unsigned int result;
-  if (!state)
-  {
-    return -EIO;
-  }
-
-  port = state->port;
-
-  if (!port)
-  {
-    return -EIO;
-  }
-
-  line = port->line;
-
-  if (line >= WCH_SER_TOTAL_MAX)
-  {
-    return -EIO;
-  }
-
-  result = port->mctrl;
-  result |= wch_ser_get_mctrl(port);
-
-  put_user(result, (unsigned long *)value);
-  return 0;
-}
-
-
-static int
-ser_set_modem_info(
-  struct ser_state *state,
-  unsigned int cmd,
-  unsigned int *value
-  )
-{
-  struct ser_port *port = NULL;
-  int line;
-  unsigned int set = 0;
-  unsigned int clr = 0;
-  unsigned int arg;
-  if (!state)
-  {
-    return -EIO;
-  }
-
-  port = state->port;
-
-  if (!port)
-  {
-    return -EIO;
-  }
-
-  line = port->line;
-
-  if (line >= WCH_SER_TOTAL_MAX)
-  {
-    return -EIO;
-  }
-
-  get_user(arg,(unsigned long *)value);
-
-  switch (cmd)
-  {
-    case TIOCMBIS:
-    {
-      if (arg & TIOCM_RTS)
-      {
-        set |= TIOCM_RTS;
-      }
-
-      if (arg & TIOCM_DTR)
-      {
-        set |= TIOCM_DTR;
-      }
-
-      if (arg & TIOCM_LOOP)
-      {
-        set |= TIOCM_LOOP;
-      }
-      break;
-    }
-
-    case TIOCMBIC:
-    {
-      if (arg & TIOCM_RTS)
-      {
-        clr |= TIOCM_RTS;
-      }
-
-      if (arg & TIOCM_DTR)
-      {
-        clr |= TIOCM_DTR;
-      }
-
-      if (arg & TIOCM_LOOP)
-      {
-        clr |= TIOCM_LOOP;
-      }
-      break;
-    }
-
-    case TIOCMSET:
-    {
-      if (arg & TIOCM_RTS)
-      {
-        set |= TIOCM_RTS;
-      }
-      else
-      {
-        clr |= TIOCM_RTS;
-      }
-
-      if (arg & TIOCM_DTR)
-      {
-        set |= TIOCM_DTR;
-      }
-      else
-      {
-        clr |= TIOCM_DTR;
-      }
-
-      if (arg & TIOCM_LOOP)
-      {
-        set |= TIOCM_LOOP;
-      }
-      else
-      {
-        clr |= TIOCM_LOOP;
-      }
-      break;
-    }
-
-    default:
-    {
-      return -EINVAL;
-    }
-  }
-
-  ser_update_mctrl(port, set, clr);
-  return 0;
-}
-#endif
-
-
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,27))
-static int
-ser_break_ctl(
-  struct tty_struct *tty,
-  int break_state
-  )
-#else
-  static void
-  ser_break_ctl(
-    struct tty_struct *tty,
-    int break_state
-    )
-#endif
+static int ser_break_ctl(struct tty_struct *tty, int break_state)
 {
   struct ser_state *state = NULL;
   struct ser_port *port = NULL;
   int line = WCH_SER_DEVNUM(tty);
   if (line >= WCH_SER_TOTAL_MAX)
   {
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,27))
     return 0;
-#else
-    return;
-#endif
   }
 
   state = tty->driver_data;
@@ -1668,9 +1293,7 @@ ser_break_ctl(
 
   up(&state->sem);
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,27))
   return 0;
-#endif
 }
 
 
@@ -1928,13 +1551,6 @@ ser_ioctl(
   if (line < WCH_SER_TOTAL_MAX)
   {
     down(&state->sem);
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,39))
-    if (tty_hung_up_p(filp))
-    {
-      ret = -EIO;
-      goto out_up;
-    }
-#endif
     switch (cmd)
     {
       case TIOCSERGETLSR:
@@ -1945,9 +1561,6 @@ ser_ioctl(
         break;
       }
     }
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,39))
-out_up:
-#endif
     up(&state->sem);
   }
 
@@ -2313,7 +1926,7 @@ ser_state *ser_get(
     }
   }
 
-  out:
+out:
   up(&ser_port_sem);
   return state;
 }
@@ -2464,11 +2077,7 @@ ser_open(
   struct file *filp
   )
 {
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,0))
   struct ser_driver *drv = (struct ser_driver *)tty->driver->driver_state;
-#else
-  struct ser_driver *drv = (struct ser_driver *)tty->driver.driver_state;
-#endif
   struct ser_state *state = NULL;
   int retval = 0;
   int line = WCH_SER_DEVNUM(tty);
@@ -2524,15 +2133,10 @@ ser_open(
       ser_update_termios(state);
     }
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,0))
     try_module_get(THIS_MODULE);
-#else
-    MOD_INC_USE_COUNT;
-#endif
-
   }
 
-  fail:
+fail:
   return retval;
 }
 
@@ -2560,13 +2164,11 @@ ser_close(
     {
       goto done;
     }
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,0))
     if ((tty->count == 1) && (state->count != 1))
     {
       printk("WCH Info : bad serial port count; tty->count is 1, state->count is %d\n", state->count);
       state->count = 1;
     }
-#endif
 
     if (--state->count < 0)
     {
@@ -2599,29 +2201,12 @@ ser_close(
     ser_shutdown(state);
     ser_flush_buffer(tty);
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,31))
 
     if (tty->ldisc->ops->flush_buffer)
     {
       tty->ldisc->ops->flush_buffer(tty);
     }
 
-
-#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,27)&& LINUX_VERSION_CODE <= KERNEL_VERSION(2,6,30) )
-    {
-      if (tty->ldisc.ops->flush_buffer)
-      {
-        tty->ldisc.ops->flush_buffer(tty);
-      }
-    }
-#else
-
-    if (tty->ldisc.flush_buffer)
-    {
-      tty->ldisc.flush_buffer(tty);
-    }
-
-#endif
     tty->closing = 0;
     state->info->tty = NULL;
 
@@ -2637,14 +2222,9 @@ ser_close(
     state->info->flags &= ~WCH_UIF_NORMAL_ACTIVE;
     wake_up_interruptible(&state->info->open_wait);
 
-    done:
+done:
     up(&state->sem);
-
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,0))
     module_put(THIS_MODULE);
-#else
-    MOD_DEC_USE_COUNT;
-#endif
   }
 }
 
@@ -2705,10 +2285,7 @@ wch_ser_tx_empty(
 }
 
 
-static unsigned int
-wch_ser_get_mctrl(
-  struct ser_port *port
-  )
+static unsigned int wch_ser_get_mctrl(struct ser_port *port)
 {
   struct wch_ser_port *sp = (struct wch_ser_port *)port;
   unsigned long flags;
@@ -3085,52 +2662,48 @@ ser_receive_chars(
     ch = READ_UART_RX(sp);
     flag = TTY_NORMAL;
     sp->port.icount.rx++;
-#if (LINUX_VERSION_CODE > KERNEL_VERSION(2,4,18))
     if (unlikely(lsr & (UART_LSR_BI | UART_LSR_PE | UART_LSR_FE | UART_LSR_OE)))
-#else
-      if (lsr & (UART_LSR_BI | UART_LSR_PE | UART_LSR_FE | UART_LSR_OE))
-#endif
+    {
+      if (lsr & UART_LSR_BI)
       {
-        if (lsr & UART_LSR_BI)
-        {
-          lsr &= ~(UART_LSR_FE | UART_LSR_PE);
-          sp->port.icount.brk++;
+        lsr &= ~(UART_LSR_FE | UART_LSR_PE);
+        sp->port.icount.brk++;
 
-          if (ser_handle_break(&sp->port))
-          {
-            goto ignore_char;
-          }
-        }
-        else if (lsr & UART_LSR_PE)
+        if (ser_handle_break(&sp->port))
         {
-          sp->port.icount.parity++;
-        }
-        else if (lsr & UART_LSR_FE)
-        {
-          sp->port.icount.frame++;
-        }
-
-        if (lsr & UART_LSR_OE)
-        {
-          sp->port.icount.overrun++;
-        }
-
-        lsr &= sp->port.read_status_mask;
-
-
-        if (lsr & UART_LSR_BI)
-        {
-          flag = TTY_BREAK;
-        }
-        else if (lsr & UART_LSR_PE)
-        {
-          flag = TTY_PARITY;
-        }
-        else if (lsr & UART_LSR_FE)
-        {
-          flag = TTY_FRAME;
+          goto ignore_char;
         }
       }
+      else if (lsr & UART_LSR_PE)
+      {
+        sp->port.icount.parity++;
+      }
+      else if (lsr & UART_LSR_FE)
+      {
+        sp->port.icount.frame++;
+      }
+
+      if (lsr & UART_LSR_OE)
+      {
+        sp->port.icount.overrun++;
+      }
+
+      lsr &= sp->port.read_status_mask;
+
+
+      if (lsr & UART_LSR_BI)
+      {
+        flag = TTY_BREAK;
+      }
+      else if (lsr & UART_LSR_PE)
+      {
+        flag = TTY_PARITY;
+      }
+      else if (lsr & UART_LSR_FE)
+      {
+        flag = TTY_FRAME;
+      }
+    }
 
 
     if ((I_IXOFF(tty)) || I_IXON(tty))
@@ -3395,35 +2968,7 @@ wch_ser_register_driver(
 
   normal->driver_state = drv;
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,0))
   tty_set_operations(normal, &wch_tty_ops);
-#else
-  normal->refcount = &ser_refcount;
-  normal->table = ser_tty;
-
-  normal->termios = ser_termios;
-  normal->termios_locked = ser_termios_locked;
-
-  normal->open = ser_open;
-  normal->close = ser_close;
-  normal->write = ser_write;
-  normal->put_char = ser_put_char;
-  normal->flush_chars = ser_flush_chars;
-  normal->write_room = ser_write_room;
-  normal->chars_in_buffer = ser_chars_in_buffer;
-  normal->flush_buffer = ser_flush_buffer;
-  normal->ioctl = ser_ioctl;
-  normal->throttle = ser_throttle;
-  normal->unthrottle = ser_unthrottle;
-  normal->send_xchar = ser_send_xchar;
-  normal->set_termios = ser_set_termios;
-  normal->stop = ser_stop;
-  normal->start = ser_start;
-  normal->hangup = ser_hangup;
-  normal->break_ctl = ser_break_ctl;
-  normal->wait_until_sent = ser_wait_until_sent;
-#endif
-
   kref_init(&normal->kref);
 
   ret = tty_register_driver(normal);
@@ -3456,7 +3001,6 @@ wch_ser_unregister_driver(
   printk("%s : %s\n", __FILE__, __FUNCTION__);
 #endif
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,0))
   normal = drv->tty_driver;
 
   if (!normal)
@@ -3468,16 +3012,6 @@ wch_ser_unregister_driver(
   put_tty_driver(normal);
   drv->tty_driver = NULL;
 
-#else
-  normal = &drv->tty_driver;
-  if (!normal)
-  {
-    return;
-  }
-
-  tty_unregister_driver(normal);
-#endif
-
   if (drv->state)
   {
     kfree(drv->state);
@@ -3485,10 +3019,7 @@ wch_ser_unregister_driver(
 }
 
 
-static void
-wch_ser_request_io(
-  struct ser_port *port
-  )
+static void wch_ser_request_io(struct ser_port *port)
 {
   struct wch_ser_port *sp = (struct wch_ser_port *)port;
   switch (sp->port.iotype)
@@ -3504,12 +3035,9 @@ wch_ser_request_io(
 }
 
 
-static void
-wch_ser_configure_port(
-  struct ser_driver *drv,
-  struct ser_state *state,
-  struct ser_port *port
-  )
+static void wch_ser_configure_port(struct ser_driver *drv,
+                                   struct ser_state *state,
+                                   struct ser_port *port)
 {
   unsigned long flags;
   if (!port->iobase)
@@ -3531,11 +3059,7 @@ wch_ser_configure_port(
 }
 
 
-static int
-wch_ser_add_one_port(
-  struct ser_driver *drv,
-  struct ser_port *port
-  )
+static int wch_ser_add_one_port(struct ser_driver *drv, struct ser_port *port)
 {
   struct ser_state *state = NULL;
   int ret = 0;
@@ -3561,16 +3085,13 @@ wch_ser_add_one_port(
 
   wch_ser_configure_port(drv, state, port);
 
-  out:
+out:
   up(&ser_port_sem);
   return ret;
 }
 
 
-extern int
-wch_ser_register_ports(
-  struct ser_driver *drv
-  )
+extern int wch_ser_register_ports(struct ser_driver *drv)
 {
   int i;
   int ret;
