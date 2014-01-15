@@ -602,11 +602,7 @@ struct ser_driver {
 	int minor;
 	int	nr;
 	struct ser_state *state;
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,0))
 	struct tty_driver *tty_driver;
-#else
-    struct tty_driver tty_driver;
-#endif
 };
 
 
@@ -660,10 +656,7 @@ struct ser_state {
 };
 
 
-static inline int
-ser_handle_break(
-				 struct ser_port *port
-				 )
+static inline int ser_handle_break(struct ser_port *port)
 {
 	struct ser_info *info = port->info;
 
@@ -675,11 +668,7 @@ ser_handle_break(
 }
 
 
-static inline void
-ser_handle_dcd_change(
-					  struct ser_port *port,
-					  unsigned int status
-					  )
+static inline void ser_handle_dcd_change(struct ser_port *port, unsigned int status)
 {
 	struct ser_info *info = port->info;
 
