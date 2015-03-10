@@ -1,0 +1,32 @@
+pkgname=apache-mod-websocket-vnc
+pkgver=1
+pkgrel=1
+pkgdesc="websockets vncproxy for apache"
+arch=('i686' 'x86_64')
+url=""
+license=('GPL')
+depends=()
+source=(Makefile
+	mod_websocket.c
+	mod_websocket_tcp_proxy.c
+	validate_utf8.h
+	websocket_plugin.h
+	vncproxy.conf)
+md5sums=('16d2930a62ed66baedb0168a5a9487b0'
+         '3e2ec884fa5c1df7213dd3f800c67ae8'
+         '93d8c79f9ca0937389a9b82b0e04951b'
+         '5f907891d2fdb1e1d61e3847ab54bd9e'
+         '7852a6ec51558423f1be677fb48d4099'
+         'dca4528133416d83ff38124ebb17c117')
+
+build() {
+  cd "$srcdir"
+  make
+}
+
+package() {
+  cd "$srcdir"
+  install -Dm0644 .libs/mod_websocket.so $pkgdir/usr/lib/httpd/modules/mod_websocket.so
+  install -Dm0644 .libs/mod_websocket_tcp_proxy.so $pkgdir/usr/lib/httpd/modules/mod_websocket_tcp_proxy.so
+  install -Dm0644 vncproxy.conf $pkgdir/etc/httpd/conf/extra/vncproxy.conf.example
+}
