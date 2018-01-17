@@ -6,9 +6,11 @@
 #
 
 # >> Copyright (c) 2003 SuSE Linux AG, Nuernberg, Germany. All rights reserved.
-# >> 
+# >>
 # >> Author: nadvornik@suse.cz
-# >> 
+# >>
+
+# SPDX-License-Identifier: GPL2+
 
 use strict;
 no warnings qw(uninitialized prototype);

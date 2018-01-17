@@ -1,5 +1,7 @@
 #!/usr/bin/perl -w
 
+# SPDX-License-Identifier: GPL2+
+
 $XDG_CFG="/etc/xdg/menus/arch-applications.menu";
 $CACHE_DIR="/var/cache/xdg-menu";
 $LOG_FILE="/var/log/update-menus.log";
