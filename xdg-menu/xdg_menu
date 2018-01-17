@@ -18,7 +18,7 @@ use I18N::Langinfo qw(langinfo CODESET);
 use POSIX qw(locale_h);
 use Digest::MD5 qw(md5_hex);
 
-my $Version = "0.7.6.2";
+my $Version = "0.7.6.3";
 
 my $DefaultAppDirs;
 my $DefaultDirectoryDirs;
@@ -1564,15 +1564,15 @@ sub output_fvwm2_menu ($;$$)
     return $output;
 }
 
-sub output_blackbox_menu ($;$)
+sub output_blackbox_menu ($;$;$)
 {
-    my ($menu, $indent) = @_;
+    my ($menu, $icon_needed, $indent) = @_;
 
     my $output = '';
 
     $output .= "[begin] (Menu)\n";
     $output .= "[exec] (xterm) {xterm}\n[separator]\n";
-    $output .= output_blackbox_inner_menu ($menu, $indent);
+    $output .= output_blackbox_inner_menu ($menu, $icon_needed, $indent);
     $output .= "[separator]\n";
     $output .= '[config] (Configuration)
                 [workspaces] (Workspace)
@@ -1598,9 +1598,9 @@ sub output_blackbox_menu ($;$)
 }
 
 
-sub output_blackbox_inner_menu ($;$)
+sub output_blackbox_inner_menu ($;$;$)
 {
-    my ($menu, $indent) = @_;
+    my ($menu, $icon_needed, $indent) = @_;
 
     my $output = '';
 
@@ -1621,11 +1621,19 @@ sub output_blackbox_inner_menu ($;$)
             my $exec = $desktop->{'PrepExec'};
 
             $output .= ' ' x $indent;
-            $output .= "    [exec] ($name) {$exec}\n";
+            if($icon_needed)
+            {
+                my $icon = findicon($desktop->{'Icon'}) || "-";
+                $output .= "    [exec] ($name) {$exec} <$icon>\n";
+            }
+            else
+            {
+                $output .= "    [exec] ($name) {$exec}\n";
+            }
         }
         elsif ($entry->{type} eq 'menu')
         {
-            $output .= output_blackbox_inner_menu ($entry->{'menu'}, $indent + 1);
+            $output .= output_blackbox_inner_menu ($entry->{'menu'}, $icon_needed, $indent + 1);
         }
         else
         {
@@ -2483,8 +2491,8 @@ my $root_menu = get_root_menu();
 $charset = langinfo(CODESET);
 $language = setlocale(LC_MESSAGES);
 
-$root_cmd = "/opt/gnome/bin/gnomesu" if -x '/opt/gnome/bin/gnomesu';
-$root_cmd = "/opt/kde3/bin/kdesu" if -x '/opt/kde3/bin/kdesu';
+$root_cmd = "/usr/bin/gnomesu" if -x '/usr/bin/gnomesu';
+$root_cmd = "/usr/bin/kdesu" if -x '/usr/bin/kdesu';
 
 my $help;
 
@@ -2572,15 +2580,15 @@ my $output;
 
 if ($format eq 'WindowMaker')
 {
-    $output = output_wmaker_menu($menu)
+    $output = output_wmaker_menu($menu);
 }
 elsif ($format eq 'fvwm2')
 {
-    $output = output_fvwm2_menu($menu)
+    $output = output_fvwm2_menu($menu);
 }
 elsif ($format eq 'icewm')
 {
-    $output = output_icewm_menu($menu)
+    $output = output_icewm_menu($menu);
 }
 elsif ($format eq 'ion3')
 {
@@ -2596,48 +2604,48 @@ elsif ($format eq 'twm')
 }
 elsif ($format eq 'xfce4')
 {
-    $output = output_xfce4_menu($menu)
+    $output = output_xfce4_menu($menu);
 }
-elsif ($format eq 'blackbox' || ($format eq 'openbox') || ($format eq 'fluxbox') )
+elsif ( ($format eq 'blackbox') || ($format eq 'openbox') || ($format eq 'fluxbox') )
 {
     if ($fullmenu)
     {
-        $output = output_blackbox_menu($menu)
+        $output = output_blackbox_menu($menu, $format eq 'fluxbox');
     }
     else
     {
-        $output = output_blackbox_inner_menu($menu)
+        $output = output_blackbox_inner_menu($menu, $format eq 'fluxbox');
     }
 }
 elsif ($format eq 'openbox3')
 {
     if ($fullmenu)
     {
-        $output = output_openbox3_menu($menu)
+        $output = output_openbox3_menu($menu);
     }
     else
     {
-        $output = output_openbox3_inner_menu($menu)
+        $output = output_openbox3_inner_menu($menu);
     }
 }
 elsif ($format eq 'openbox3-pipe')
 {
-    $output = output_openbox3_pipe_menu($menu)
+    $output = output_openbox3_pipe_menu($menu);
 }
 elsif ($format eq 'jwm')
 {
     if ($fullmenu)
     {
-        $output = output_jwm_menu($menu)
+        $output = output_jwm_menu($menu);
     }
     else
     {
-        $output = output_jwm_inner_menu($menu)
+        $output = output_jwm_inner_menu($menu);
     }
 }
 elsif ($format eq 'readable')
 {
-    $output = output_readable($menu)
+    $output = output_readable($menu);
 }
 else
 {
