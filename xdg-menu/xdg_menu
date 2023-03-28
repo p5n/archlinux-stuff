@@ -2234,7 +2234,8 @@ sub get_app_dirs
         s/\/applications\/*\s*$//;
     };
 
-    foreach my $d (split(/:/, $ENV{XDG_DATA_DIRS}), @kde_xdgdata, "/usr/share", "/opt/gnome/share")
+    my $home = $ENV{"HOME"};
+    foreach my $d (split(/:/, $ENV{XDG_DATA_DIRS}), @kde_xdgdata, "/usr/share", "$home/.local/share", "/opt/gnome/share")
     {
         my $dir = $d;
         $dir =~ s/\/*$//;
@@ -2251,7 +2252,8 @@ sub get_desktop_dirs
 {
     my %used;
     my $ret = '';
-    foreach my $dir (split(/:/, $ENV{XDG_DATA_DIRS}), "/usr/share", "/opt/kde3/share", "/opt/gnome/share")
+    my $home = $ENV{"HOME"};
+    foreach my $dir (split(/:/, $ENV{XDG_DATA_DIRS}), "/usr/share", "$home/.local/share", "/opt/kde3/share", "/opt/gnome/share")
     {
         next if defined $used{$dir};
         next if check_file("$dir/desktop-directories") ne 'D';
