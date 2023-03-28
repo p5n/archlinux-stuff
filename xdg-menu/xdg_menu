@@ -20,7 +20,7 @@ use I18N::Langinfo qw(langinfo CODESET);
 use POSIX qw(locale_h);
 use Digest::MD5 qw(md5_hex);
 
-my $Version = "0.7.6.4";
+my $Version = "0.7.6.5";
 
 my $DefaultAppDirs;
 my $DefaultDirectoryDirs;
@@ -74,7 +74,7 @@ sub findicon
         my $iconname = shift;
 
         my $home = $ENV{"HOME"};
-        my $xdg_data_dirs = $ENV{"XDG_DATA_DIRS"} || "/usr/local/share:/usr/share";
+        my $xdg_data_dirs = $ENV{"XDG_DATA_DIRS"} || "/usr/local/share:/usr/share:$home/.local/share";
 
         my (@xdg_data_dirs);
         @xdg_data_dirs = split(":",$xdg_data_dirs);
