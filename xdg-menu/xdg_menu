@@ -20,7 +20,7 @@ use I18N::Langinfo qw(langinfo CODESET);
 use POSIX qw(locale_h);
 use Digest::MD5 qw(md5_hex);
 
-my $Version = "0.7.6.5";
+my $Version = "0.7.6.6";
 
 my $DefaultAppDirs;
 my $DefaultDirectoryDirs;
@@ -1620,6 +1620,7 @@ sub output_blackbox_inner_menu ($;$;$)
             my $desktop = $entry->{desktop};
 
             my $name = $desktop->{'PrepName'};
+            $name =~ s/\)/\\\)/g;
             my $exec = $desktop->{'PrepExec'};
 
             $output .= ' ' x $indent;
