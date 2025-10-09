@@ -60,7 +60,7 @@ for user in ${USERS[@]}; do
 		# arc
 		echo -n ">>> Saving $user's home..."
 		list=`cat $homedir/.backup-list | perl -ne "print \"'${homedir:1}/\"; chomp; print; print \"' \";"`
-		sh -c "cd / && tar c $list" | $COMPRESS_CMD 1>$BACKUP_DIR/_localhost-user-$user.tar.$COMPRESSED_EXT
+		sh -c "cd / && tar --warning=no-file-ignored -c $list" | $COMPRESS_CMD 1>$BACKUP_DIR/_localhost-user-$user.tar.$COMPRESSED_EXT
 		if [ $? -eq 0 ];then
 			echo -e "${MSG_OK}"
 		else
@@ -76,7 +76,7 @@ done
 #
 for dir in ${DIRS[@]}; do
 	echo -n ">>> Saving $dir..."
-	[ -d $dir -o -f $dir ] && cd / && tar c ${dir:1} | $COMPRESS_CMD 1>$BACKUP_DIR/_localhost-dir-`echo $dir | tr '/' '_'`.tar.$COMPRESSED_EXT
+	[ -d $dir -o -f $dir ] && cd / && tar --warning=no-file-ignored -c ${dir:1} | $COMPRESS_CMD 1>$BACKUP_DIR/_localhost-dir-`echo $dir | tr '/' '_'`.tar.$COMPRESSED_EXT
 	if [ $? -eq 0 ];then
 		echo -e "${MSG_OK}"
 	else

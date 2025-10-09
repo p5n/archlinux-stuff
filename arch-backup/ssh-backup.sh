@@ -51,7 +51,7 @@ for user in ${USERS[@]}; do
 	homedir=`$SSH_COMMAND "cat /etc/passwd" | perl -ne "if(/^(.+):.*:.*:.*:.*:(.+):.*/ && \\$1 eq "$user"){print \\$2;}"`
 	echo -n ">>> Saving $user's home..."
 	list=`$SSH_COMMAND "cat $homedir/.backup-list" | perl -ne "print \"'${homedir:1}/\"; chomp; print; print \"' \";"`
-	$SSH_COMMAND "cd / && tar c $list | $COMPRESS_CMD" >$BACKUP_DIR/$HOST-user-$user.tar.$COMPRESSED_EXT
+	$SSH_COMMAND "cd / && tar --warning=no-file-ignored -c $list | $COMPRESS_CMD" >$BACKUP_DIR/$HOST-user-$user.tar.$COMPRESSED_EXT
 	if [ $? -eq 0 ];then
 		echo -e "${MSG_OK}"
 	else
@@ -64,7 +64,7 @@ done
 #
 for dir in ${DIRS[@]}; do
 	echo -n ">>> Saving $dir..."
-	$SSH_COMMAND "cd / && tar c ${dir:1} | $COMPRESS_CMD" >$BACKUP_DIR/$HOST-dir-`echo $dir | tr '/' '_'`.tar.$COMPRESSED_EXT
+	$SSH_COMMAND "cd / && tar --warning=no-file-ignored -c ${dir:1} | $COMPRESS_CMD" >$BACKUP_DIR/$HOST-dir-`echo $dir | tr '/' '_'`.tar.$COMPRESSED_EXT
 	if [ $? -eq 0 ];then
 		echo -e "${MSG_OK}"
 	else
