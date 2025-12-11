@@ -83,7 +83,7 @@ sub findicon
         push @icon_search_path, "/";
 
         my (@categorylist);
-        @categorylist = ("apps", "places", "devices", "actions", "animations", "categories", "emblems", "emotes", "filesystems", "intl", "mimetypes", "status", "stock");
+        @categorylist = ("apps", "places", "devices", "actions", "animations", "categories", "emblems", "emotes", "filesystems", "intl", "mimetypes", "status", "stock", "legacy");
 
         my (@sizelist);
         @sizelist = (16, 22, 24, 26, 32, 36, 48, 64, 72, 128, 192, 256);
@@ -109,7 +109,7 @@ sub findicon
                 ( -d $thisdir ) && push @icon_search_path, $thisdir;
                 $thisdir = $dir."/icons/large";
                 ( -d $thisdir ) && push @icon_search_path, $thisdir;
-                $theme = "gnome";
+                $theme = "AdwaitaLegacy";
                 foreach $size (@sizelist)
                 {
                         foreach $category (@categorylist)
