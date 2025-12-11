@@ -148,6 +148,6 @@ Comment[xh]=Iinkqubo ezingangeniyo kwezinye iindidi
 Comment[zh_CN]=无法分入其它类别的应用程序
 Comment[zh_HK]=不符合其它分類的軟件
 Comment[zh_TW]=不符合其它分類的軟體
-Icon=gnome-other
+Icon=applications-other
 Type=Directory
 Encoding=UTF-8

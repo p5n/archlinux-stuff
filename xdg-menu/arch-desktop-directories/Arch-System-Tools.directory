@@ -145,6 +145,6 @@ Comment[xh]=Umiselo-nkqubo lwendlela emisiweyo kunye nokuhlola
 Comment[zh_CN]=系统配置和监视
 Comment[zh_HK]=系統配置及監察
 Comment[zh_TW]=系統配置及監察
-Icon=gnome-system
+Icon=applications-system
 Type=Directory
 Encoding=UTF-8

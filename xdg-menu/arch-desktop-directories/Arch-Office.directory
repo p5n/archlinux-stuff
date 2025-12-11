@@ -148,6 +148,6 @@ Comment[xh]=Iinkqubo ze-Ofisi
 Comment[zh_CN]=办公应用程序
 Comment[zh_HK]=辦公室軟件
 Comment[zh_TW]=辦公室軟體
-Icon=gnome-applications
+Icon=applications-office
 Type=Directory
 Encoding=UTF-8

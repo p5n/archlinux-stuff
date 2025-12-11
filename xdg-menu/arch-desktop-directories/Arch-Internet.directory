@@ -148,6 +148,6 @@ Comment[xh]=Iinkqubo zokufikelela kwi-Intanethi ezinjenge-web ne-imeyile
 Comment[zh_CN]=访问 Internet 所用的程序，如 Web 和电子邮件
 Comment[zh_HK]=如瀏覽網頁及收發電郵等網絡軟件
 Comment[zh_TW]=如瀏覽網頁及收發電郵等網路軟體
-Icon=gnome-globe
+Icon=applications-internet
 Type=Directory
 Encoding=UTF-8

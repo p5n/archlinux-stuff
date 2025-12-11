@@ -149,5 +149,5 @@ Comment[zh_CN]=辅助功能设置
 Comment[zh_HK]=無障礙環境設定
 Comment[zh_TW]=無障礙環境設定
 Type=Directory
-Icon=accessibility-directory
+Icon=preferences-desktop-accessibility
 Encoding=UTF-8

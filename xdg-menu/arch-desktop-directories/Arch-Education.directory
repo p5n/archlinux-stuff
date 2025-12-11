@@ -70,6 +70,6 @@ Name[vi]=Giáo dục
 Name[zh_CN]=教育
 Name[zh_HK]=教育
 Name[zh_TW]=教育
-Icon=package_edutainment
+Icon=applications-science
 Type=Directory
 Encoding=UTF-8

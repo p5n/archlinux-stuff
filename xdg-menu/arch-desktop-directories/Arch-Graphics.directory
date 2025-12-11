@@ -148,6 +148,6 @@ Comment[xh]=Iinkqubo ngeemo zezibonakalisi-nkqubo
 Comment[zh_CN]=图像应用程序
 Comment[zh_HK]=繪圖工具
 Comment[zh_TW]=繪圖工具
-Icon=gnome-graphics
+Icon=applications-graphics
 Type=Directory
 Encoding=UTF-8

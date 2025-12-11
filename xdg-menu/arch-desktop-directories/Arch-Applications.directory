@@ -149,6 +149,6 @@ Comment[xh]=Iinkqubo
 Comment[zh_CN]=应用程序
 Comment[zh_HK]=應用程式
 Comment[zh_TW]=應用程式
-Icon=gnome-applications
+Icon=applications-other
 Type=Directory
 Encoding=UTF-8
