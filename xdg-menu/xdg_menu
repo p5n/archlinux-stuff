@@ -103,6 +103,11 @@ sub findicon
                                 ( -d $thisdir ) && push @icon_search_path, $thisdir;
                         }
                 }
+                foreach $category (@categorylist)
+                {
+                        $thisdir = $dir."/icons/".$theme."/scalable/".$category;
+                        ( -d $thisdir ) && push @icon_search_path, $thisdir;
+                }
                 $thisdir = $dir."/icons/mini";
                 ( -d $thisdir ) && push @icon_search_path, $thisdir;
                 $thisdir = $dir."/icons";
