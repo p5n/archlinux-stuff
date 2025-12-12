@@ -147,6 +147,6 @@ Comment[xh]=Izinto ezongezelelwayo ze-Desktop
 Comment[zh_CN]=桌面附件
 Comment[zh_HK]=桌面附屬應用程式
 Comment[zh_TW]=桌面附屬應用程式
-Icon=gnome-util
+Icon=applications-accessories
 Type=Directory
 Encoding=UTF-8
