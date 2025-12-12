@@ -145,6 +145,16 @@
   </Menu>
 
   <Menu>
+    <Name>Settings</Name>
+    <Directory>Arch-Settings.directory</Directory>
+    <Include>
+      <And>
+        <Category>Settings</Category>
+      </And>
+    </Include>
+  </Menu>
+
+  <Menu>
     <Name>Other</Name>
     <Directory>Arch-Other.directory</Directory>
     <OnlyUnallocated/>
