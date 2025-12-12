@@ -20,7 +20,7 @@ use I18N::Langinfo qw(langinfo CODESET);
 use POSIX qw(locale_h);
 use Digest::MD5 qw(md5_hex);
 
-my $Version = "0.7.6.6";
+my $Version = "0.7.6.7";
 
 my $DefaultAppDirs;
 my $DefaultDirectoryDirs;
