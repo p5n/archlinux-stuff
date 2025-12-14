@@ -1818,7 +1818,14 @@ sub output_awesome_menu ($;$)
         }
         elsif ($entry->{type} eq 'menu')
         {
-            $output .= "    {\"".$entry->{'menu'}->{'PrepName'}."\", "."menu".md5_hex($entry->{'menu'}->{'PrepName'})."},\n";
+            my $menu_name = $entry->{'menu'}->{'PrepName'};
+            my $menu_icon = findicon($entry->{'menu'}->{'PrepIcon'}) || "-";
+
+	    if ($menu_icon eq "-") {
+              $output .= "    {\"".$menu_name."\", "."menu".md5_hex($menu_name)."},\n";
+	    } else {
+              $output .= "    {\"".$menu_name."\", "."menu".md5_hex($menu_name).", \"$menu_icon\"},\n";
+	    }
         }
         else
         {
