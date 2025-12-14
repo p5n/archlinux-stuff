@@ -1615,8 +1615,19 @@ sub output_blackbox_inner_menu ($;$;$)
 
     my $menu_name = $menu->{'PrepName'};
 
-    $output .= ' ' x $indent;
-    $output .= "[submenu] ($menu_name)\n";
+    if($indent)
+    {
+        $output .= ' ' x $indent;
+        if($icon_needed)
+        {
+            my $menu_icon = findicon($menu->{'PrepIcon'}) || "-";
+            $output .= "[submenu] ($menu_name) <$menu_icon>\n";
+        }
+        else
+        {
+            $output .= "[submenu] ($menu_name)\n";
+        }
+    }
 
     foreach my $entry (@{$menu->{'entries'}})
     {
@@ -1649,8 +1660,11 @@ sub output_blackbox_inner_menu ($;$;$)
         }
 
     }
-    $output .= ' ' x $indent;
-    $output .= "[end] # ($menu_name)\n";
+    if($indent)
+    {
+        $output .= ' ' x $indent;
+        $output .= "[end] # ($menu_name)\n";
+    }
 
     return $output;
 }
