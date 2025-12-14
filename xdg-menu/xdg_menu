@@ -1988,31 +1988,27 @@ sub output_openbox3_menu ($;$)
 
     $output .= '<?xml version="1.0" encoding="UTF-8"?>
 
-<openbox_menu xmlns="http://openbox.org/"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://openbox.org/
-                file:///usr/share/openbox/menu.xsd">';
-    $output .= "<menu id=\"xdg\" label=\"xdg\">\n";
+<openbox_menu xmlns="http://openbox.org/3.4/menu">
+
+<menu id="root-menu" label="Openbox 3">
+  <separator label="Applications" />
+';
     $output .= output_openbox3_inner_menu ($menu, $indent);
-    $output .= "</menu>\n";
-    $output .= '    <menu id="root-menu" label="Openbox 3">
- <item label="xterm">
- <action name="Execute"><execute>xterm</execute></action> </item>
- <separator />
- <menu id="KDE Menu" label="KDE Menu" />
- <separator />
- <menu id="client-list-menu" />
- <separator />
- <menu id="ob-menu" label="openbox3">
-     <item label="ob conf"><action name="Execute"><execute>obconf</execute></action></item>
-     <item label="reconfigure"><action name="Reconfigure" /></item>
- </menu>
- <separator />
- <item label="lock screen"><action name="Execute"><execute>xlock -remote -nice 19 -mode blank -geometry 1x1 -enablesaver</execute></action></item>
- <separator />
- <item label="Exit"><action name="Exit" /></item>
- </menu>';
-    $output .= "</openbox_menu>\n";
+    $output .= '
+  <separator />
+  <menu id="client-list-menu" />
+  <item label="Reconfigure Openbox">
+    <action name="Reconfigure" />
+  </item>
+  <item label="Log Out">
+    <action name="Exit">
+      <prompt>yes</prompt>
+    </action>
+  </item>
+</menu>
+
+</openbox_menu>
+';
     return $output;
 }
 
