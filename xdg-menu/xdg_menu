@@ -19,6 +19,7 @@ use Encode;
 use I18N::Langinfo qw(langinfo CODESET);
 use POSIX qw(locale_h);
 use Digest::MD5 qw(md5_hex);
+use Unicode::Collate::Locale;
 
 my $Version = "0.7.6.7";
 
@@ -1447,7 +1448,13 @@ sub preprocess_menu ($)
         }
     }
 
-    $menu->{'entries'} = [ sort {$b->{'type'} cmp $a->{'type'} || $a->{'PrepName'} cmp $b->{'PrepName'}} @{$menu->{'entries'}} ];
+    my $collator = Unicode::Collate::Locale->new(level => 2);
+    $menu->{entries} = [
+        sort {
+            $b->{type} cmp $a->{type} ||
+            $collator->cmp(decode($charset, $a->{PrepName}), decode($charset, $b->{PrepName}))
+        } @{$menu->{entries}}
+    ];
 
     $i = 0;
     my $prev_entry;
