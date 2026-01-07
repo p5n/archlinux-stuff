@@ -21,7 +21,7 @@ use POSIX qw(locale_h);
 use Digest::MD5 qw(md5_hex);
 use Unicode::Collate::Locale;
 
-my $Version = "0.7.6.7";
+my $Version = "0.7.7";
 
 my $DefaultAppDirs;
 my $DefaultDirectoryDirs;
