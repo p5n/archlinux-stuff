@@ -2227,6 +2227,82 @@ sub output_jwm_menu ($;$)
     return $output;
 }
 
+sub output_pekwm_menu ($;$)
+{
+    my ($menu, $indent) = @_;
+
+    my $output = '';
+
+    $indent = 0 unless defined $indent;
+
+    my $menu_name = $menu->{'PrepName'};
+    my $menu_icon = findicon($menu->{'PrepIcon'}) || "-";
+
+    if ($indent)
+    {
+        $output .= ' ' x $indent;
+        if ($menu_icon eq "-")
+        {
+            $output .= "Submenu = \"$menu_name\" {\n";
+        }
+        else
+        {
+            $output .= "Submenu = \"$menu_name\" { Icon = \"$menu_icon\"\n";
+        }
+    }
+
+    foreach my $entry (@{$menu->{'entries'}})
+    {
+        if ($entry->{type} eq 'desktop')
+        {
+            my $desktop = $entry->{desktop};
+
+            my $name = $desktop->{'PrepName'};
+            my $exec = $desktop->{'PrepExec'};
+            my $icon = findicon($desktop->{'Icon'}) || "-";
+
+            $output .= ' ' x $indent;
+            if ($icon eq "-")
+            {
+                $output .= " Entry = \"$name\" { Actions = \"Exec $exec\" }\n";
+            }
+            else
+            {
+                $output .= " Entry = \"$name\" { Icon = \"$icon\"; Actions = \"Exec $exec\" }\n";
+            }
+        }
+        elsif ($entry->{type} eq 'menu')
+        {
+            $output .= output_pekwm_menu ($entry->{'menu'}, $indent + 1);
+        }
+        else
+        {
+            print STDERR "wrong menu entry type: $entry->{type}";
+        }
+
+    }
+
+    if ($indent)
+    {
+        $output .= ' ' x $indent;
+        $output .= "}\n";
+    }
+
+    return $output;
+}
+
+sub output_pekwm_dynamic_menu ($;$)
+{
+    my ($menu, $indent) = @_;
+
+    my $output = '';
+
+    $output .= "Dynamic {\n";
+    $output .= output_pekwm_menu ($menu, $indent);
+    $output .= "}\n";
+    return $output;
+}
+
 sub get_root_menu
 {
     foreach my $dir (split(/:/, $ENV{XDG_CONFIG_DIRS}), "/etc/xdg")
@@ -2564,7 +2640,7 @@ if ($help)
       possible formats: twm, WindowMaker, fvwm2, icewm,  ion3,
                         blackbox, fluxbox, openbox,
                         xfce4, openbox3, openbox3-pipe, awesome
-                        jwm, readable
+                        jwm, pekwm, pekwm-dynamic, readable
                         default: WindowMaker
 
       fullmenu  - output a full menu and not only a submenu
@@ -2680,6 +2756,14 @@ elsif ($format eq 'jwm')
 elsif ($format eq 'readable')
 {
     $output = output_readable($menu);
+}
+elsif ($format eq 'pekwm')
+{
+    $output = output_pekwm_menu($menu);
+}
+elsif ($format eq 'pekwm-dynamic')
+{
+    $output = output_pekwm_dynamic_menu($menu);
 }
 else
 {

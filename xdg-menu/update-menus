@@ -84,6 +84,12 @@ while(<FH>)
 	print "Generating jwm\n";
 	mkdir("$CACHE_DIR/jwm") && system("xdg_menu --format jwm --fullmenu --root-menu $XDG_CFG >$CACHE_DIR/jwm/menu.xml 2>>$LOG_FILE");
     }
+    elsif(/^pekwm$/)
+    {
+	# pekwm
+	print "Generating pekwm\n";
+	mkdir("$CACHE_DIR/pekwm") && system("xdg_menu --format pekwm --root-menu $XDG_CFG >$CACHE_DIR/pekwm/menu 2>>$LOG_FILE");
+    }
     elsif(/^#.*$/)
     {
     }
